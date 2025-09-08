@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Literary Club | ICT Mumbai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles for a more polished feel and animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Off-white background */
+            color: #1a1a1a; /* Dark text for contrast */
+        }
+
+        /* Frosted glass effect for the navbar */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(200, 200, 200, 0.3);
+        }
+
+        /* Hero section gradient text */
+        .hero-text-gradient {
+            background-image: linear-gradient(to right, #007cf0, #00dfd8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Section title underline animation */
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #007cf0;
+            margin: 8px auto 0;
+            transition: width 0.3s ease-in-out;
+        }
+        .section-title:hover::after {
+            width: 80px;
+        }
+
+        /* Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom button style */
+        .btn-primary {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 124, 240, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 124, 240, 0.3);
+        }
+        
+        /* Card hover effect */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">LitClub <span class="text-blue-600">ICT</span></div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
+                <a href="#about" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
+                <a href="#events" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a>
+                <a href="#gallery" class="text-gray-600 hover:text-blue-600 transition-colors">Gallery</a>
+                <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors shadow-md">Join Us</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/80 backdrop-blur-sm">
+            <a href="#home" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-50">Home</a>
+            <a href="#about" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-50">About</a>
+            <a href="#events" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-50">Events</a>
+            <a href="#gallery" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-50">Gallery</a>
+            <a href="#contact" class="block py-2 px-4 text-sm text-white bg-blue-600 hover:bg-blue-700">Join Us</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="h-screen flex items-center justify-center bg-white reveal">
+            <div class="text-center px-6">
+                <h1 class="text-5xl md:text-8xl font-extrabold text-gray-800 tracking-tight">
+                    Where Words Come to <span class="hero-text-gradient">Life</span>.
+                </h1>
+                <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-gray-500">
+                    Welcome to the Literary Club of ICT Mumbai, a vibrant community for thinkers, readers, and creators. Explore the power of stories with us.
+                </p>
+                <a href="#about" class="mt-10 inline-block bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold btn-primary">
+                    Discover Our Story
+                </a>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6 text-center">
+                <div class="reveal">
+                    <h2 class="section-title text-4xl font-bold text-gray-800">Who We Are</h2>
+                    <p class="mt-6 max-w-3xl mx-auto text-gray-600 text-lg">
+                        The Literary Club is more than just a club; it's a sanctuary for bibliophiles and aspiring wordsmiths at ICT Mumbai. We host a variety of events, from intense debates and poetry slams to relaxed reading sessions and author talks. Our mission is to foster a culture of literary appreciation and critical thinking within the campus.
+                    </p>
+                </div>
+                <div class="mt-16 grid md:grid-cols-3 gap-12 text-left">
+                    <div class="reveal p-6" style="transition-delay: 100ms;">
+                        <h3 class="text-2xl font-semibold text-blue-600">Engage</h3>
+                        <p class="mt-2 text-gray-600">Participate in stimulating discussions, workshops, and competitions that challenge your perspective.</p>
+                    </div>
+                    <div class="reveal p-6" style="transition-delay: 200ms;">
+                        <h3 class="text-2xl font-semibold text-blue-600">Create</h3>
+                        <p class="mt-2 text-gray-600">Unleash your creativity through creative writing sessions, open mic nights, and our annual magazine publication.</p>
+                    </div>
+                    <div class="reveal p-6" style="transition-delay: 300ms;">
+                        <h3 class="text-2xl font-semibold text-blue-600">Connect</h3>
+                        <p class="mt-2 text-gray-600">Meet like-minded individuals, network with authors, and build lasting friendships based on a shared love for literature.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Events Section -->
+        <section id="events" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <div class="reveal">
+                    <h2 class="section-title text-4xl font-bold text-gray-800">Upcoming Events</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">Mark your calendars for our upcoming literary adventures.</p>
+                </div>
+                <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Event Card 1 -->
+                    <div class="reveal bg-gray-50 rounded-xl overflow-hidden card-hover" style="transition-delay: 100ms;">
+                        <img src="https://placehold.co/600x400/007cf0/FFFFFF?text=Poetry+Slam" alt="Poetry Slam" class="w-full h-48 object-cover">
+                        <div class="p-6 text-left">
+                            <p class="text-blue-500 font-semibold text-sm">OCT 15, 2025</p>
+                            <h3 class="mt-2 text-xl font-bold text-gray-800">Annual Poetry Slam</h3>
+                            <p class="mt-3 text-gray-600">Witness an electrifying evening of spoken word poetry. Emotion, rhythm, and raw talent on full display.</p>
+                        </div>
+                    </div>
+                    <!-- Event Card 2 -->
+                    <div class="reveal bg-gray-50 rounded-xl overflow-hidden card-hover" style="transition-delay: 200ms;">
+                        <img src="https://placehold.co/600x400/34D399/FFFFFF?text=Author+Talk" alt="Author Talk" class="w-full h-48 object-cover">
+                        <div class="p-6 text-left">
+                            <p class="text-emerald-500 font-semibold text-sm">NOV 05, 2025</p>
+                            <h3 class="mt-2 text-xl font-bold text-gray-800">An Evening with a Bestselling Author</h3>
+                            <p class="mt-3 text-gray-600">Join us for an interactive session with a renowned author to discuss their latest work and creative process.</p>
+                        </div>
+                    </div>
+                    <!-- Event Card 3 -->
+                    <div class="reveal bg-gray-50 rounded-xl overflow-hidden card-hover" style="transition-delay: 300ms;">
+                        <img src="https://placehold.co/600x400/F59E0B/FFFFFF?text=Writing+Workshop" alt="Writing Workshop" class="w-full h-48 object-cover">
+                        <div class="p-6 text-left">
+                            <p class="text-amber-500 font-semibold text-sm">DEC 01, 2025</p>
+                            <h3 class="mt-2 text-xl font-bold text-gray-800">Creative Writing Workshop</h3>
+                            <p class="mt-3 text-gray-600">Hone your storytelling skills in our hands-on workshop covering plot, character, and dialogue.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6 text-center">
+                 <div class="reveal">
+                    <h2 class="section-title text-4xl font-bold text-gray-800">Glimpses of Our Journey</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">A collection of moments that define our club.</p>
+                </div>
+                <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="reveal grid gap-4">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/6366F1/FFFFFF?text=LitClub+1" alt="">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/F472B6/FFFFFF?text=LitClub+2" alt="">
+                    </div>
+                    <div class="reveal grid gap-4">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/10B981/FFFFFF?text=LitClub+3" alt="">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/8B5CF6/FFFFFF?text=LitClub+4" alt="">
+                    </div>
+                    <div class="reveal grid gap-4">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/F59E0B/FFFFFF?text=LitClub+5" alt="">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/EF4444/FFFFFF?text=LitClub+6" alt="">
+                    </div>
+                     <div class="reveal grid gap-4">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/3B82F6/FFFFFF?text=LitClub+7" alt="">
+                        <img class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/EC4899/FFFFFF?text=LitClub+8" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Contact/Join Us Section -->
+        <section id="contact" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <div class="reveal">
+                    <h2 class="section-title text-4xl font-bold text-gray-800">Become a Part of Our Story</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">
+                        Ready to join the conversation? Reach out to us, follow our social channels, or sign up for our newsletter to stay updated.
+                    </p>
+                    <div class="mt-10">
+                        <a href="mailto:litclub@ictmumbai.edu.in" class="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold btn-primary">
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="md:flex md:justify-between md:items-center text-center md:text-left">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold">LitClub ICT</h3>
+                    <p class="text-gray-400">Institute of Chemical Technology, Mumbai</p>
+                </div>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2zm-1.002 3.705a.75.75 0 10-1.5 0 .75.75 0 001.5 0zm1.728 1.605a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zm-3.25 5.25a3.25 3.25 0 116.5 0 3.25 3.25 0 01-6.5 0z" clip-rule="evenodd" /></svg>
+                    </a>
+                </div>
+            </div>
+            <hr class="my-8 border-gray-600">
+            <p class="text-center text-gray-400 text-sm">&copy; 2025 The Literary Club, ICT Mumbai. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Navigation Bar Logic ---
+            const header = document.getElementById('header');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // Toggle mobile menu
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu on link click
+            mobileMenu.addEventListener('click', (e) => {
+                if(e.target.tagName === 'A'){
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Sticky header with glass effect on scroll
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('glass-nav');
+                } else {
+                    header.classList.remove('glass-nav');
+                }
+            });
+
+            // --- Scroll Reveal Animation ---
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1, // Trigger when 10% of the element is visible
+            });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
+    </script>
+
+</body>
+</html>
