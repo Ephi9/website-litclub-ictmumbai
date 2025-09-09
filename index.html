@@ -47,14 +47,44 @@
         }
 
         /* Animation classes */
+        /* REPLACED: Animation classes for a magical reveal */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            /* Start with the element flipped up and slightly small */
+            transform-origin: bottom center; /* Ensures it flips up from the bottom */
+            transform: rotateX(-45deg) scale(0.95);
+            transition: opacity 1s ease-out, transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; /* Needed for the sparkle pseudo-element */
         }
         .reveal.active {
             opacity: 1;
-            transform: translateY(0);
+            /* End with the element flat and at its normal size */
+            transform: rotateX(0deg) scale(1);
+        }
+
+        /* NEW: Magical Sparkle Effect */
+        .reveal.active::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: inherit; /* Match the parent's border-radius (for cards) */
+            z-index: -1;
+            animation: magic-sparkle 0.8s ease-out forwards;
+        }
+
+        @keyframes magic-sparkle {
+            0% {
+                /* Start with no glow */
+                box-shadow: 0 0 0px rgba(252, 175, 69, 0);
+            }
+            30% {
+                /* A bright, golden-white magical glow appears */
+                box-shadow: 0 0 60px rgba(252, 175, 69, 0.7);
+            }
+            100% {
+                /* The glow fades away, leaving the revealed content */
+                box-shadow: 0 0 0px rgba(252, 175, 69, 0);
+            }
         }
 
         /* Custom button style */
