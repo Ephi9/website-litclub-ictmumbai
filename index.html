@@ -76,40 +76,45 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        
-        .animated-gradient {
-    /* This is the only line that needs to be changed */
+        /* NEW: All-in-one Gradient Glass Box */
+        .gradient-glass-box {
+            position: relative; /* Establishes a positioning context for the pseudo-element */
+            border-radius: 1.5rem; /* The curved edges */
+            overflow: hidden; /* Ensures the gradient stays within the curved edges */
+            padding: 3rem 2.5rem; /* Internal spacing */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            
+            /* The glass effect for the top layer */
+            background: rgba(255, 255, 255, 0.05); /* Very transparent white layer on top */
+            backdrop-filter: blur(12px); /* The blur effect */
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* This pseudo-element creates the animated gradient *behind* the glass layer */
+        .gradient-glass-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1; /* Places the gradient behind the text content */
+            
+            /* The gradient and animation from your logo's colors */
             background: linear-gradient(-45deg, #833ab4, #c13584, #f77737, #fcaf45);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
         }
 
+        /* You can keep the @keyframes gradientAnimation rule as it is */
         @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-
-        /* NEW: Glassmorphism Panel */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
-            backdrop-filter: blur(12px); /* This creates the blur effect! */
-            -webkit-backdrop-filter: blur(12px); /* For Safari browser compatibility */
-            border-radius: 1.5rem; /* This creates the curved corners */
-            border: 1px solid rgba(255, 255, 255, 0.2); /* A subtle border to catch the light */
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-            padding: 2.5rem 2rem; /* Adds space inside the panel */
-        }
+        
 
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-white">
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
 <div class="flex items-center">
@@ -141,9 +146,10 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Hero Section -->
-        <section id="home" class="h-screen flex items-center justify-center animated-gradient reveal">
-    <div class="text-center px-6">
+        <!-- NEW HERO SECTION -->
+<section id="home" class="h-screen flex items-center justify-center p-4">
+    <!-- This container now holds the gradient, glass, and content -->
+    <div class="w-full max-w-5xl mx-auto text-center gradient-glass-box reveal">
         <h1 class="text-5xl md:text-8xl font-extrabold text-white tracking-tight">
             Where Words Come to Life.
         </h1>
@@ -155,7 +161,6 @@
         </a>
     </div>
 </section>
-
         <!-- About Us Section -->
         <section id="about" class="py-20 bg-gray-50">
             <div class="container mx-auto px-6 text-center">
