@@ -76,6 +76,25 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
+        /* NEW: Animated Gradient Background */
+        .animated-gradient {
+            background: linear-gradient(-45deg, #007cf0, #00dfd8, #ff8a00, #e52e71);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
     </style>
 </head>
 <body class="bg-gray-50">
@@ -111,19 +130,19 @@
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
-        <section id="home" class="h-screen flex items-center justify-center bg-white reveal">
-            <div class="text-center px-6">
-                <h1 class="text-5xl md:text-8xl font-extrabold text-gray-800 tracking-tight">
-                    Where Words Come to <span class="hero-text-gradient">Life</span>.
-                </h1>
-                <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-gray-500">
-                    Welcome to the Literary Club of ICT Mumbai, a vibrant community for thinkers, readers, and creators. Explore the power of stories with us.
-                </p>
-                <a href="#about" class="mt-10 inline-block bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold btn-primary">
-                    Discover Our Story
-                </a>
-            </div>
-        </section>
+        <section id="home" class="h-screen flex items-center justify-center animated-gradient reveal">
+    <div class="text-center px-6">
+        <h1 class="text-5xl md:text-8xl font-extrabold text-white tracking-tight">
+            Where Words Come to Life.
+        </h1>
+        <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-gray-200">
+            Welcome to the Literary Club of ICT Mumbai, a vibrant community for thinkers, readers, and creators. Explore the power of stories with us.
+        </p>
+        <a href="#about" class="mt-10 inline-block bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold btn-primary shadow-2xl">
+            Discover Our Story
+        </a>
+    </div>
+</section>
 
         <!-- About Us Section -->
         <section id="about" class="py-20 bg-gray-50">
