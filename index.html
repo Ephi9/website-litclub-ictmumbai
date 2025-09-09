@@ -96,6 +96,17 @@
             }
         }
 
+        /* NEW: Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+            backdrop-filter: blur(12px); /* This creates the blur effect! */
+            -webkit-backdrop-filter: blur(12px); /* For Safari browser compatibility */
+            border-radius: 1.5rem; /* This creates the curved corners */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* A subtle border to catch the light */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            padding: 2.5rem 2rem; /* Adds space inside the panel */
+        }
+
     </style>
 </head>
 <body class="bg-gray-50">
