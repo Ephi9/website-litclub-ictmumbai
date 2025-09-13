@@ -1,0 +1,24 @@
+backend:
+  name: git-gateway
+  branch: main # Or master, depending on your repository's default branch
+
+# This line is not needed if you are not using Netlify's Identity service.
+# It can be removed if you are only using GitHub for authentication.
+# publish_mode: editorial_workflow
+
+media_folder: "assets/images" # Folder where uploaded images will be stored
+public_folder: "/assets/images" # The src attribute for uploaded images
+
+collections:
+  - name: "events" # Used in routes, e.g., /admin/collections/events
+    label: "Upcoming Events" # Used in the UI
+    folder: "_data/events" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Filename template, e.g., 2025-10-15-spirit-days.md
+    fields: # The fields for each document, usually in front matter
+      - {label: "Event Title", name: "title", widget: "string"}
+      - {label: "Event Date", name: "date", widget: "datetime"}
+      - {label: "Featured Image", name: "image", widget: "image"}
+      - {label: "Image Alt Text", name: "image_alt", widget: "string"}
+      - {label: "Short Description", name: "description", widget: "text"}
+      - {label: "Color", name: "color", widget: "select", options: ["blue", "emerald", "amber"]}
