@@ -12,7 +12,7 @@
         /* --- General Styles --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #ffffff; /* Set to white as per recent design */
+            background-color: #ffffff;
             color: #1a1a1a;
         }
 
@@ -23,7 +23,6 @@
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(200, 200, 200, 0.3);
         }
-
         .section-title::after {
             content: '';
             display: block;
@@ -36,7 +35,6 @@
         .section-title:hover::after {
             width: 80px;
         }
-
         .btn-primary {
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 124, 240, 0.2);
@@ -45,7 +43,6 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(0, 124, 240, 0.3);
         }
-        
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -54,7 +51,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- Gradient Glass Box (Hero Section) --- */
+        /* --- Card Styles (Front & Back) --- */
         .gradient-glass-box {
             position: relative;
             border-radius: 1.5rem;
@@ -74,6 +71,13 @@
             background: linear-gradient(-45deg, #833ab4, #c13584, #f77737, #fcaf45);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
+        }
+        /* NEW: Style for the solid white back of the card */
+        .back-card-style {
+            background-color: #f8f9fa; /* Off-white for a softer look */
+            border-radius: 1.5rem;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
         }
 
         /* --- Flip Card Animation --- */
@@ -177,7 +181,7 @@
         <section id="home" class="h-screen flex items-center justify-center p-4">
             <div class="w-full max-w-5xl h-auto flip-card">
                 <div id="hero-card-inner" class="flip-card-inner">
-                    <!-- Front Of The Card -->
+                    <!-- Front Of The Card (Gradient Glass) -->
                     <div class="flip-card-front gradient-glass-box">
                         <div class="text-center">
                             <h1 class="text-5xl md:text-8xl font-extrabold text-white tracking-tight">
@@ -194,18 +198,18 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Back Of The Card -->
-                    <div class="flip-card-back gradient-glass-box">
-                        <div class="text-center text-white">
+                    <!-- Back Of The Card (Solid White with Dark Text) -->
+                    <div class="flip-card-back back-card-style">
+                        <div class="text-center text-gray-800">
                             <h2 class="text-3xl font-bold">Our Mission</h2>
-                            <p class="mt-4 max-w-2xl mx-auto text-gray-200">
+                            <p class="mt-4 max-w-2xl mx-auto text-gray-600">
                                 To cultivate a dynamic literary environment that encourages creative expression, critical thinking, and a shared passion for the written word.
                             </p>
                             <div class="mt-8">
                                 <p class="font-semibold">Get in Touch:</p>
-                                <a href="mailto:litclub@ictmumbai.edu.in" class="text-lg text-yellow-300 hover:underline">litclub@ictmumbai.edu.in</a>
+                                <a href="mailto:litclub@ictmumbai.edu.in" class="text-lg text-blue-600 hover:underline">litclub@ictmumbai.edu.in</a>
                             </div>
-                             <div class="mt-8 text-white/70 text-sm md:hidden">
+                             <div class="mt-8 text-gray-500 text-sm md:hidden">
                                 <p>&larr; Swipe to go back</p>
                             </div>
                         </div>
@@ -294,25 +298,19 @@
     </footer>
 
     <script>
-        // This is the main function that runs after the HTML document is fully loaded.
-        // All JavaScript that interacts with the page MUST go inside this function.
         document.addEventListener('DOMContentLoaded', () => {
-
             // --- Navigation Bar Logic ---
             const header = document.getElementById('header');
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
-            
             mobileMenu.addEventListener('click', (e) => {
-                if(e.target.tagName === 'A'){
+                if (e.target.tagName === 'A') {
                     mobileMenu.classList.add('hidden');
                 }
             });
-
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
                     header.classList.add('glass-nav');
@@ -331,40 +329,30 @@
                     }
                 });
             }, { threshold: 0.1 });
-
             revealElements.forEach(el => {
                 revealObserver.observe(el);
             });
 
-            // --- Flip Card Logic (Moved to correct location) ---
+            // --- Flip Card Logic ---
             const heroCardInner = document.getElementById('hero-card-inner');
             const heroCardContainer = document.querySelector('.flip-card');
-
             if (heroCardInner && heroCardContainer) {
-                // Handle Click for Desktop
                 heroCardContainer.addEventListener('click', () => {
                     heroCardInner.classList.toggle('is-flipped');
                 });
-
-                // Handle Swipe for Mobile
                 let touchStartX = 0;
                 let touchMoveX = 0;
-                
                 heroCardContainer.addEventListener('touchstart', (e) => {
                     touchStartX = e.touches[0].clientX;
                 }, { passive: true });
-
                 heroCardContainer.addEventListener('touchmove', (e) => {
                     touchMoveX = e.touches[0].clientX;
                 }, { passive: true });
-
                 heroCardContainer.addEventListener('touchend', () => {
                     const swipeDistance = touchMoveX - touchStartX;
-                    // Trigger flip on a definite swipe (more than 50px)
                     if (Math.abs(swipeDistance) > 50) {
                         heroCardInner.classList.toggle('is-flipped');
                     }
-                    // Reset values for next swipe
                     touchStartX = 0;
                     touchMoveX = 0;
                 });
