@@ -65,33 +65,18 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- Card Styles (Front & Back) --- */
-        .gradient-glass-box {
-            position: relative;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            padding: 3rem 2.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .gradient-glass-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: -1;
-            background: linear-gradient(-45deg, #833ab4, #c13584, #f77737, #fcaf45);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
-        }
-        .back-card-style {
-            background-color: #f8f9fa; /* Off-white for a softer look */
-            border-radius: 1.5rem;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-        }
+        //* --- Card Styles (Front & Back) --- */
+.hero-glass-box { /* Renamed class */
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    padding: 3rem 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    background: rgba(255, 255, 255, 0.15); /* Made slightly more opaque */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
 
         /* --- Flip Card Animation --- */
         .flip-card {
