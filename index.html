@@ -121,8 +121,21 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         /* --- Core Team Section --- */
-        .team-card-photo { transition: transform 0.3s ease; cursor: pointer; }
-        .team-card:hover .team-card-photo { transform: scale(1.05); }
+        .team-scroller {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        .team-scroller::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        .team-card-photo { cursor: pointer; }
+        .scroll-arrow {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .team-slider-container:hover .scroll-arrow {
+            opacity: 1;
+        }
         
         /* --- Footer --- */
         .footer-link, .social-icon { transition: all 0.3s ease; }
@@ -181,7 +194,7 @@
                 <a href="#home" class="text-gray-600 hover:text-blue-500 transition-colors">Home</a>
                 <a href="#about" class="text-gray-600 hover:text-blue-500 transition-colors">About</a>
                 <a href="#events" class="text-gray-600 hover:text-blue-500 transition-colors">Upcoming</a>
-                <a href="#merch" class="text-gray-600 hover:text-blue-500 transition-colors">Merchandise</a>
+                <a href="./merchandise.html" class="text-gray-600 hover:text-blue-500 transition-colors">Merchandise</a>
                 <a href="#team" class="text-gray-600 hover:text-blue-500 transition-colors">Team</a>
                 <a href="./subscribe.html" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors shadow-md">Join Us</a>
                 <button id="notification-bell" class="text-gray-600 hover:text-blue-500" aria-label="View event notification">
@@ -198,7 +211,7 @@
             <a href="#home" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Home</a>
             <a href="#about" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">About</a>
             <a href="#events" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Upcoming</a>
-            <a href="#merch" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Merchandise</a>
+            <a href="./merchandise.html" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Merchandise</a>
             <a href="#team" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Team</a>
             <a href="./subscribe.html" class="block py-3 px-4 text-sm text-white bg-blue-500 hover:bg-blue-600">Join Us</a>
         </div>
@@ -280,48 +293,35 @@
             </div>
         </section>
 
-        <section id="merch" class="py-16 md:py-20 content-section">
-            <div class="container mx-auto px-4 sm:px-6 text-center">
-                <div class="reveal">
-                    <h2 class="section-title text-4xl font-bold text-gray-800">Club Merchandise</h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">Show your love for literature with our exclusive collection.</p>
-                </div>
-                <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="reveal bg-white/50 rounded-lg overflow-hidden card-hover" style="transition-delay: 100ms;"><img loading="lazy" src="https://placehold.co/600x600/f0e7db/4a2c2a?text=T-Shirt" alt="T-Shirt" class="w-full h-72 object-cover"><div class="p-6 text-center"><h3 class="text-xl font-serif font-bold text-gray-800">Classic LitClub Tee</h3><p class="mt-2 text-gray-600">Wear your passion.</p></div></div>
-                    <div class="reveal bg-white/50 rounded-lg overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="https://placehold.co/600x600/e6dace/4a2c2a?text=Mug" alt="Mug" class="w-full h-72 object-cover"><div class="p-6 text-center"><h3 class="text-xl font-serif font-bold text-gray-800">The Reader's Mug</h3><p class="mt-2 text-gray-600">For your favorite brew.</p></div></div>
-                    <div class="reveal bg-white/50 rounded-lg overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="https://placehold.co/600x600/d9ccc0/4a2c2a?text=Tote+Bag" alt="Tote Bag" class="w-full h-72 object-cover"><div class="p-6 text-center"><h3 class="text-xl font-serif font-bold text-gray-800">Book Lover's Tote</h3><p class="mt-2 text-gray-600">Carry your stories.</p></div></div>
-                </div>
-                <div class="mt-12 reveal">
-                    <a href="./merchandise.html" class="inline-block bg-gray-800 text-white px-8 py-3 rounded-full font-semibold btn-primary">View All Merchandise</a>
-                </div>
-            </div>
-        </section>
-        
         <section id="team" class="py-16 md:py-20 content-section">
-            <div class="container mx-auto px-4 sm:px-6 text-center">
-                <div class="reveal">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="reveal text-center">
                     <h2 class="section-title text-4xl font-bold text-gray-800">Meet the Core Team</h2>
                     <p class="mt-4 max-w-2xl mx-auto text-gray-500">The dedicated individuals leading our literary journey.</p>
                 </div>
-                <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
-                    <div class="reveal text-center team-card"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Anirudh K.jpeg"><img src="core pics/Anirudh K.jpeg" alt="Anirudh Kolli" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Anirudh Kolli</h3><p class="text-gray-500">Secretary</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 50ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Arhat B.jpeg"><img src="core pics/Arhat B.jpeg" alt="Arhat Bhuta" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Arhat Bhuta</h3><p class="text-gray-500">Overall Event Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 100ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Ananya K.jpeg"><img src="core pics/Ananya K.jpeg" alt="Ananya Kasat" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Ananya Kasat</h3><p class="text-gray-500">Editor</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 150ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Tanishq P.jpeg"><img src="core pics/Tanishq P.jpeg" alt="Tanishq Pawar" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Tanishq Pawar</h3><p class="text-gray-500">Editor</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 200ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Pratheep S.jpeg"><img src="core pics/Pratheep S.jpeg" alt="Pratheep Saravanan" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Pratheep Saravanan</h3><p class="text-gray-500">Editor</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 250ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Aayush D.jpeg"><img src="core pics/Aayush D.jpeg" alt="Aayush" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Aayush</h3><p class="text-gray-500">Technical Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 300ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Rohit P.jpeg"><img src="core pics/Rohit P.jpeg" alt="Rohit Patil" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Rohit Patil</h3><p class="text-gray-500">Technical Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 350ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Shobhit T.jpeg"><img src="core pics/Shobhit T.jpeg" alt="Shobhit Tandon" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shobhit Tandon</h3><p class="text-gray-500">R&L</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 400ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Manas K.jpeg"><img src="core pics/Manas K.jpeg" alt="Manas Kirtane" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Manas Kirtane</h3><p class="text-gray-500">R&L</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 450ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Shreeya G.jpeg"><img src="core pics/Shreeya G.jpeg" alt="Shreeya Giripunje" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shreeya Giripunje</h3><p class="text-gray-500">Design Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 500ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Yug G.jpeg"><img src="core pics/Yug G.jpeg" alt="Yug Gaikwad" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Yug Gaikwad</h3><p class="text-gray-500">Creatives Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 550ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Kajal R.jpeg"><img src="core pics/Kajal R.jpeg" alt="Kajal Rathod" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Kajal Rathod</h3><p class="text-gray-500">Creatives Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 600ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Labhesh B.jpeg"><img src="core pics/Labhesh B.jpeg" alt="Labhesh Bora" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Labhesh Bora</h3><p class="text-gray-500">Hospitality Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 650ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Gatha B.jpeg"><img src="core pics/Gatha B.jpeg" alt="Gatha Bodhare" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Gatha Bodhare</h3><p class="text-gray-500">Photography Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 700ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Janmjay B.jpeg"><img src="core pics/Janmjay B.jpeg" alt="Janmjay Basutkar" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Janmjay Basutkar</h3><p class="text-gray-500">Videography Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 750ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Dhruv K.jpeg"><img src="core pics/Dhruv K.jpeg" alt="Dhruv Kamani" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Dhruv Kamani</h3><p class="text-gray-500">PR Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 800ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Akansha L.jpeg"><img src="core pics/Akansha L.jpeg" alt="Akansha Lavate" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Akansha Lavate</h3><p class="text-gray-500">PR Head</p></div>
-                    <div class="reveal text-center team-card" style="transition-delay: 850ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Amol J.jpeg"><img src="core pics/Amol J.jpeg" alt="Amol Jain" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Amol Jain</h3><p class="text-gray-500">Spons Head</p></div>
+                <div class="mt-16 relative team-slider-container">
+                    <button id="scroll-left" class="scroll-arrow absolute left-0 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&lt;</button>
+                    <div id="team-scroller" class="flex overflow-x-auto snap-x snap-mandatory gap-8 px-4 team-scroller">
+                        <div class="reveal text-center team-card snap-center flex-shrink-0"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Anirudh K.jpeg"><img src="core pics/Anirudh K.jpeg" alt="Anirudh Kolli" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Anirudh Kolli</h3><p class="text-gray-500">Secretary</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 50ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Arhat B.jpeg"><img src="core pics/Arhat B.jpeg" alt="Arhat Bhuta" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Arhat Bhuta</h3><p class="text-gray-500">Overall Event Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 100ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Ananya K.jpeg"><img src="core pics/Ananya K.jpeg" alt="Ananya Kasat" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Ananya Kasat</h3><p class="text-gray-500">Editor</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 150ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Tanishq P.jpeg"><img src="core pics/Tanishq P.jpeg" alt="Tanishq Pawar" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Tanishq Pawar</h3><p class="text-gray-500">Editor</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 200ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Pratheep S.jpeg"><img src="core pics/Pratheep S.jpeg" alt="Pratheep Saravanan" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Pratheep Saravanan</h3><p class="text-gray-500">Editor</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 250ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Aayush D.jpeg"><img src="core pics/Aayush D.jpeg" alt="Aayush" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Aayush</h3><p class="text-gray-500">Technical Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 300ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Rohit P.jpeg"><img src="core pics/Rohit P.jpeg" alt="Rohit Patil" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Rohit Patil</h3><p class="text-gray-500">Technical Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 350ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Shobhit T.jpeg"><img src="core pics/Shobhit T.jpeg" alt="Shobhit Tandon" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shobhit Tandon</h3><p class="text-gray-500">R&L</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 400ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Manas K.jpeg"><img src="core pics/Manas K.jpeg" alt="Manas Kirtane" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Manas Kirtane</h3><p class="text-gray-500">R&L</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 450ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Shreeya G.jpeg"><img src="core pics/Shreeya G.jpeg" alt="Shreeya Giripunje" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shreeya Giripunje</h3><p class="text-gray-500">Design Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 500ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Yug G.jpeg"><img src="core pics/Yug G.jpeg" alt="Yug Gaikwad" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Yug Gaikwad</h3><p class="text-gray-500">Creatives Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 550ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Kajal R.jpeg"><img src="core pics/Kajal R.jpeg" alt="Kajal Rathod" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Kajal Rathod</h3><p class="text-gray-500">Creatives Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 600ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Labhesh B.jpeg"><img src="core pics/Labhesh B.jpeg" alt="Labhesh Bora" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Labhesh Bora</h3><p class="text-gray-500">Hospitality Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 650ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Gatha B.jpeg"><img src="core pics/Gatha B.jpeg" alt="Gatha Bodhare" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Gatha Bodhare</h3><p class="text-gray-500">Photography Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 700ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Janmjay B.jpeg"><img src="core pics/Janmjay B.jpeg" alt="Janmjay Basutkar" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Janmjay Basutkar</h3><p class="text-gray-500">Videography Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 750ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Dhruv K.jpeg"><img src="core pics/Dhruv K.jpeg" alt="Dhruv Kamani" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Dhruv Kamani</h3><p class="text-gray-500">PR Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 800ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Akansha L.jpeg"><img src="core pics/Akansha L.jpeg" alt="Akansha Lavate" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Akansha Lavate</h3><p class="text-gray-500">PR Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 850ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Amol J.jpeg"><img src="core pics/Amol J.jpeg" alt="Amol Jain" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Amol Jain</h3><p class="text-gray-500">Spons Head</p></div>
+                    </div>
+                    <button id="scroll-right" class="scroll-arrow absolute right-0 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&gt;</button>
                 </div>
             </div>
         </section>
@@ -437,7 +437,6 @@
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
                     if(targetId && targetId !== '#') {
-                        // Stop card flip on button click
                         if(this.id === 'discover-story-btn') {
                             e.stopPropagation();
                         }
@@ -456,6 +455,16 @@
                 heroCardContainer.addEventListener('touchend', (e) => {
                     if (Math.abs(e.changedTouches[0].clientX - touchStartX) > 50) flipCard();
                 });
+            }
+            
+            // --- Team Scroller ---
+            const scroller = document.getElementById('team-scroller');
+            const scrollLeftBtn = document.getElementById('scroll-left');
+            const scrollRightBtn = document.getElementById('scroll-right');
+            if (scroller && scrollLeftBtn && scrollRightBtn) {
+                const scrollAmount = 300;
+                scrollLeftBtn.addEventListener('click', () => scroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+                scrollRightBtn.addEventListener('click', () => scroller.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
             }
 
             // --- Scroll Reveal ---
