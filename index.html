@@ -20,6 +20,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
     
     <style>
         /* --- General Styles & Performance --- */
@@ -35,6 +37,7 @@
             color: #1a1a1a;
             overflow-x: hidden;
         }
+        .font-serif { font-family: 'Playfair Display', serif; }
 
         /* --- Components & UI Elements --- */
         .glass-nav {
@@ -137,7 +140,7 @@
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
-            position: relative; background: white; border-radius: 1rem;
+            position: relative; background: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             transform: scale(0.95); opacity: 0;
             transition: transform 0.3s ease, opacity 0.3s ease;
@@ -152,6 +155,14 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         .modal-close:hover { transform: scale(1.1); }
+
+        /* --- Notification Bell --- */
+        #notification-bell { animation: bell-ring 2s ease-in-out infinite; }
+        @keyframes bell-ring {
+            0%, 50%, 100% { transform: rotate(0); }
+            5%, 15%, 25%, 35%, 45% { transform: rotate(13deg); }
+            10%, 20%, 30%, 40% { transform: rotate(-13deg); }
+        }
     </style>
 </head>
 <body>
@@ -161,24 +172,21 @@
 
     <!-- Header & Navigation -->
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav">
-        <!-- Notification Banner -->
-        <div id="notification-banner" class="bg-blue-500 text-white text-center py-2 px-4 text-sm relative">
-            <span>Announcing our next big event! Click to see the flyer.</span>
-            <button id="close-notification" class="absolute top-1/2 right-4 -translate-y-1/2 font-bold">✕</button>
-        </div>
         <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center">
                 <img src="litclublogo.png" alt="LitClub Logo" class="h-8 mr-3">
                 <div class="text-xl sm:text-2xl font-bold text-gray-800">LitClub <span class="text-blue-500">ICT</span></div>
             </div>
-            <div class="hidden md:flex space-x-8 items-center">
+            <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
                 <a href="#home" class="text-gray-600 hover:text-blue-500 transition-colors">Home</a>
                 <a href="#about" class="text-gray-600 hover:text-blue-500 transition-colors">About</a>
-                <a href="#events" class="text-gray-600 hover:text-blue-500 transition-colors">Upcoming Events</a>
-                <a href="#past-events" class="text-gray-600 hover:text-blue-500 transition-colors">Past Events</a>
-                <a href="#gallery" class="text-gray-600 hover:text-blue-500 transition-colors">Gallery</a>
-                <a href="#team" class="text-gray-600 hover:text-blue-500 transition-colors">Core Team</a>
-                <a href="#contact" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors shadow-md">Join Us</a>
+                <a href="#events" class="text-gray-600 hover:text-blue-500 transition-colors">Upcoming</a>
+                <a href="#merch" class="text-gray-600 hover:text-blue-500 transition-colors">Merchandise</a>
+                <a href="#team" class="text-gray-600 hover:text-blue-500 transition-colors">Team</a>
+                <a href="./subscribe.html" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors shadow-md">Join Us</a>
+                <button id="notification-bell" class="text-gray-600 hover:text-blue-500" aria-label="View event notification">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </button>
             </div>
             <button id="mobile-menu-button" class="md:hidden text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -189,16 +197,14 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white/80 backdrop-blur-sm">
             <a href="#home" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Home</a>
             <a href="#about" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">About</a>
-            <a href="#events" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Upcoming Events</a>
-            <a href="#past-events" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Past Events</a>
-            <a href="#gallery" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Gallery</a>
-            <a href="#team" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Core Team</a>
-            <a href="#contact" class="block py-3 px-4 text-sm text-white bg-blue-500 hover:bg-blue-600">Join Us</a>
+            <a href="#events" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Upcoming</a>
+            <a href="#merch" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Merchandise</a>
+            <a href="#team" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Team</a>
+            <a href="./subscribe.html" class="block py-3 px-4 text-sm text-white bg-blue-500 hover:bg-blue-600">Join Us</a>
         </div>
     </header>
 
     <main>
-        <!-- Sections remain the same until the Core Team -->
         <section id="home" class="h-screen flex items-center justify-center p-4">
             <div class="w-full max-w-5xl h-auto flip-card">
                 <div id="hero-card-inner" class="flip-card-inner">
@@ -210,7 +216,7 @@
                             <p class="mt-6 text-lg max-w-3xl mx-auto text-gray-200">
                                 Welcome to the Literary Club of ICT Mumbai, a vibrant community for thinkers, readers, and creators.
                             </p>
-                            <a href="#about" class="mt-10 inline-block bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold btn-primary shadow-2xl">
+                            <a href="#about" id="discover-story-btn" class="mt-10 inline-block bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold btn-primary shadow-2xl">
                                 Discover Our Story
                             </a>
                             <div class="mt-8 text-white/70 text-sm md:hidden">
@@ -274,21 +280,23 @@
             </div>
         </section>
 
-        <section id="gallery" class="py-16 md:py-20 content-section">
+        <section id="merch" class="py-16 md:py-20 content-section">
             <div class="container mx-auto px-4 sm:px-6 text-center">
-                 <div class="reveal">
-                    <h2 class="section-title text-4xl font-bold text-gray-800">Glimpses of Our Journey</h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">A collection of moments that define our club.</p>
+                <div class="reveal">
+                    <h2 class="section-title text-4xl font-bold text-gray-800">Club Merchandise</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">Show your love for literature with our exclusive collection.</p>
                 </div>
-                <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/6366F1/FFFFFF?text=LitClub+1" alt="Gallery Image 1"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/F472B6/FFFFFF?text=LitClub+2" alt="Gallery Image 2"></div>
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/10B981/FFFFFF?text=LitClub+3" alt="Gallery Image 3"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/8B5CF6/FFFFFF?text=LitClub+4" alt="Gallery Image 4"></div>
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/F59E0B/FFFFFF?text=LitClub+5" alt="Gallery Image 5"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/EF4444/FFFFFF?text=LitClub+6" alt="Gallery Image 6"></div>
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/3B82F6/FFFFFF?text=LitClub+7" alt="Gallery Image 7"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/EC4899/FFFFFF?text=LitClub+8" alt="Gallery Image 8"></div>
+                <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="reveal bg-white/50 rounded-lg overflow-hidden card-hover" style="transition-delay: 100ms;"><img loading="lazy" src="https://placehold.co/600x600/f0e7db/4a2c2a?text=T-Shirt" alt="T-Shirt" class="w-full h-72 object-cover"><div class="p-6 text-center"><h3 class="text-xl font-serif font-bold text-gray-800">Classic LitClub Tee</h3><p class="mt-2 text-gray-600">Wear your passion.</p></div></div>
+                    <div class="reveal bg-white/50 rounded-lg overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="https://placehold.co/600x600/e6dace/4a2c2a?text=Mug" alt="Mug" class="w-full h-72 object-cover"><div class="p-6 text-center"><h3 class="text-xl font-serif font-bold text-gray-800">The Reader's Mug</h3><p class="mt-2 text-gray-600">For your favorite brew.</p></div></div>
+                    <div class="reveal bg-white/50 rounded-lg overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="https://placehold.co/600x600/d9ccc0/4a2c2a?text=Tote+Bag" alt="Tote Bag" class="w-full h-72 object-cover"><div class="p-6 text-center"><h3 class="text-xl font-serif font-bold text-gray-800">Book Lover's Tote</h3><p class="mt-2 text-gray-600">Carry your stories.</p></div></div>
+                </div>
+                <div class="mt-12 reveal">
+                    <a href="./merchandise.html" class="inline-block bg-gray-800 text-white px-8 py-3 rounded-full font-semibold btn-primary">View All Merchandise</a>
                 </div>
             </div>
         </section>
-
+        
         <section id="team" class="py-16 md:py-20 content-section">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <div class="reveal">
@@ -333,7 +341,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer id="footer" class="content-section">
         <div class="container mx-auto px-4 sm:px-6 py-16">
             <div class="grid md:grid-cols-3 gap-12 text-center md:text-left">
@@ -350,7 +357,7 @@
                         <a href="#home" class="text-gray-600 hover:text-blue-500 footer-link">Home</a>
                         <a href="#about" class="text-gray-600 hover:text-blue-500 footer-link">About</a>
                         <a href="#events" class="text-gray-600 hover:text-blue-500 footer-link">Upcoming</a>
-                        <a href="#past-events" class="text-gray-600 hover:text-blue-500 footer-link">Past Events</a>
+                        <a href="#merch" class="text-gray-600 hover:text-blue-500 footer-link">Merchandise</a>
                         <a href="#team" class="text-gray-600 hover:text-blue-500 footer-link">Team</a>
                         <a href="#gallery" class="text-gray-600 hover:text-blue-500 footer-link">Gallery</a>
                     </div>
@@ -372,59 +379,33 @@
         </div>
     </footer>
 
-    <!-- Event Flyer Modal -->
-    <div id="flyer-modal" class="modal-overlay">
-        <div class="modal-content w-11/12 max-w-lg">
-            <button id="flyer-modal-close" class="modal-close">✕</button>
-            <img src="https://placehold.co/600x800/3b82f6/ffffff?text=Event+Flyer" alt="Event Flyer" class="rounded-lg w-full">
-        </div>
-    </div>
+    <!-- Modals -->
+    <div id="flyer-modal" class="modal-overlay"><div class="modal-content w-11/12 max-w-lg"><button id="flyer-modal-close" class="modal-close">✕</button><img src="https://placehold.co/600x800/3b82f6/ffffff?text=Event+Poster" alt="Event Poster" class="rounded-lg w-full"></div></div>
+    <div id="photo-modal" class="modal-overlay"><div class="modal-content w-11/12 max-w-sm p-2 rounded-full"><button id="photo-modal-close" class="modal-close">✕</button><img id="photo-modal-img" src="" alt="Core Team Member" class="rounded-full w-full aspect-square object-cover"></div></div>
 
-    <!-- Team Photo Viewer Modal -->
-    <div id="photo-modal" class="modal-overlay">
-        <div class="modal-content w-11/12 max-w-xl p-2">
-             <button id="photo-modal-close" class="modal-close">✕</button>
-            <img id="photo-modal-img" src="" alt="Core Team Member" class="rounded-lg w-full">
-        </div>
-    </div>
-
-
-    <!-- Lenis Smooth Scroll Library -->
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
-
-    <!-- Main JavaScript Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const lenis = new Lenis();
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
 
             // --- Modal Logic ---
             const flyerModal = document.getElementById('flyer-modal');
-            const notificationBanner = document.getElementById('notification-banner');
-            const closeNotificationBtn = document.getElementById('close-notification');
+            const notificationBell = document.getElementById('notification-bell');
             const flyerModalCloseBtn = document.getElementById('flyer-modal-close');
 
             const openFlyer = () => flyerModal.classList.add('active');
             const closeFlyer = () => flyerModal.classList.remove('active');
 
-            notificationBanner.addEventListener('click', openFlyer);
+            notificationBell.addEventListener('click', openFlyer);
             flyerModalCloseBtn.addEventListener('click', closeFlyer);
-            closeNotificationBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                notificationBanner.style.display = 'none';
-            });
+            flyerModal.addEventListener('click', (e) => { if(e.target === flyerModal) closeFlyer(); });
             
-            // --- Team Photo Modal Logic ---
             const photoModal = document.getElementById('photo-modal');
             const photoModalImg = document.getElementById('photo-modal-img');
             const photoModalCloseBtn = document.getElementById('photo-modal-close');
-            const teamPhotos = document.querySelectorAll('.team-card-photo');
-
-            teamPhotos.forEach(photo => {
+            document.querySelectorAll('.team-card-photo').forEach(photo => {
                 photo.addEventListener('dblclick', () => {
                     const imgSrc = photo.dataset.src;
                     if(imgSrc) {
@@ -433,26 +414,20 @@
                     }
                 });
             });
-
             const closePhotoModal = () => photoModal.classList.remove('active');
             photoModalCloseBtn.addEventListener('click', closePhotoModal);
-            photoModal.addEventListener('click', (e) => {
-                if(e.target === photoModal) closePhotoModal();
-            });
+            photoModal.addEventListener('click', (e) => { if(e.target === photoModal) closePhotoModal(); });
 
-
-            // --- Navigation Bar Logic ---
-            const header = document.getElementById('header');
+            // --- Navigation & Flip Card Logic ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            
             if (mobileMenuButton && mobileMenu) {
                 mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
                 mobileMenu.addEventListener('click', (e) => {
                     if (e.target.tagName === 'A') {
                         mobileMenu.classList.add('hidden');
                         const targetId = e.target.getAttribute('href');
-                        lenis.scrollTo(targetId);
+                        if (targetId.startsWith('#')) lenis.scrollTo(targetId);
                     }
                 });
             }
@@ -460,34 +435,37 @@
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    if(this.getAttribute('href') !== '#') lenis.scrollTo(this.getAttribute('href'));
+                    const targetId = this.getAttribute('href');
+                    if(targetId && targetId !== '#') {
+                        // Stop card flip on button click
+                        if(this.id === 'discover-story-btn') {
+                            e.stopPropagation();
+                        }
+                        lenis.scrollTo(targetId);
+                    }
                 });
             });
             
-            // --- Scroll Reveal Animation ---
-            const revealElements = document.querySelectorAll('.reveal');
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('active');
-                });
-            }, { threshold: 0.15 });
-            revealElements.forEach(el => revealObserver.observe(el));
-
-            // --- Flip Card Logic ---
             const heroCardInner = document.getElementById('hero-card-inner');
             const heroCardContainer = document.querySelector('.flip-card');
             if (heroCardInner && heroCardContainer) {
                 const flipCard = () => heroCardInner.classList.toggle('is-flipped');
                 heroCardContainer.addEventListener('click', flipCard);
-
                 let touchStartX = 0;
                 heroCardContainer.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
                 heroCardContainer.addEventListener('touchend', (e) => {
                     if (Math.abs(e.changedTouches[0].clientX - touchStartX) > 50) flipCard();
                 });
             }
+
+            // --- Scroll Reveal ---
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
         });
     </script>
-
 </body>
 </html>
