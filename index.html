@@ -7,10 +7,8 @@
     <title>The Literary Club | ICT Mumbai</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Preload the background image for faster initial load -->
     <link rel="preload" as="image" href="evie-s-kqJfP-lrl-8-unsplash.jpg">
     
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-E85HGSW0FK"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -19,23 +17,17 @@
       gtag('config', 'G-E85HGSW0FK');
     </script>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
     
-    <!-- Main Stylesheet -->
     <style>
         /* --- General Styles & Performance --- */
-        html.lenis {
-          height: auto;
-        }
-        .lenis.lenis-smooth {
-          scroll-behavior: auto !important;
-        }
-        .lenis.lenis-stopped {
-          overflow: hidden;
-        }
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-stopped { overflow: hidden; }
         body {
             font-family: 'Inter', sans-serif;
             background-image: url('evie-s-kqJfP-lrl-8-unsplash.jpg');
@@ -43,130 +35,165 @@
             background-position: center center;
             background-attachment: fixed;
             color: #1a1a1a;
-            overflow-x: hidden; /* Prevents horizontal scrollbars */
+            overflow-x: hidden;
         }
+        .font-serif { font-family: 'Playfair Display', serif; }
 
         /* --- Components & UI Elements --- */
         .glass-nav {
             background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(200, 200, 200, 0.2);
         }
-
         .section-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background-color: #3b82f6;
-            margin: 8px auto 0;
+            content: ''; display: block; width: 50px; height: 3px;
+            background-color: #3b82f6; margin: 8px auto 0;
             transition: width 0.3s ease-in-out;
         }
-
-        .section-title:hover::after {
-            width: 80px;
-        }
-
+        .section-title:hover::after { width: 80px; }
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
         }
-
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .card-hover:hover {
             transform: translateY(-8px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         
-        /* --- Hero Card Styles --- */
-        .hero-glass-box {
+        /* --- Hero Card & Flip Animation --- */
+        .hero-glass-box, .back-card-style {
             border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.1); /* Lighter glass for the new background */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
         }
-        
-        .back-card-style {
-            background-color: #ffffff;
-            border-radius: 1.5rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        .hero-glass-box {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
         }
-
-        /* --- Flip Card Animation --- */
-        .flip-card {
-            perspective: 1500px;
+        .back-card-style { background-color: #ffffff; }
+        .animated-gradient-text {
+            background: linear-gradient(-45deg, #833ab4, #c13584, #f77737, #fcaf45);
+            background-size: 400% 400%;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientTextAnimation 10s ease infinite;
         }
-
+        @keyframes gradientTextAnimation {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .flip-card { perspective: 1500px; }
         .flip-card-inner {
-            position: relative;
-            width: 100%;
+            position: relative; width: 100%; display: grid;
             transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
-            display: grid;
+            will-change: transform;
         }
-
-        .flip-card-inner.is-flipped {
-            transform: rotateY(180deg);
-        }
-
+        .flip-card-inner.is-flipped { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back {
-            grid-area: 1 / 1;
-            width: 100%;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            grid-area: 1 / 1; width: 100%;
+            backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .flip-card-back {
-            transform: rotateY(180deg);
-        }
+        .flip-card-back { transform: rotateY(180deg); }
         
         /* --- Page Structure & Layouts --- */
-        #home {
-            position: relative;
-        }
-
+        #home { position: relative; }
         #home::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.1); /* Reduced overlay darkness for new background */
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
             z-index: 0;
         }
-        
-        #home > div {
-            position: relative;
-            z-index: 1; 
-        }
-
+        #home > div { position: relative; z-index: 1; }
         .content-section {
             background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
         }
 
-        /* --- 120fps Scroll Reveal Animation --- */
+        /* --- Scroll Reveal Animation --- */
         .reveal {
-            opacity: 0;
-            transform: translateY(50px);
+            opacity: 0; transform: translateY(50px);
             will-change: transform, opacity;
             transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
                         transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* --- Core Team Section --- */
+        .team-slider-container {
+            padding: 0 1rem;
         }
+        @media (min-width: 768px) {
+            .team-slider-container {
+                padding: 0 4rem; 
+            }
+        }
+        .team-scroller {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+            padding-bottom: 1rem;
+            will-change: transform;
+        }
+        .team-scroller::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        .team-card-photo { cursor: pointer; }
+        .scroll-arrow {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-150%); /* Adjust to center on photo circle */
+            z-index: 10;
+        }
+        #scroll-left { left: 1rem; }
+        #scroll-right { right: 1rem; }
+        .team-slider-container:hover .scroll-arrow {
+            opacity: 1;
+        }
+        
+        /* --- Footer --- */
+        .footer-link, .social-icon { transition: all 0.3s ease; }
+        .social-icon:hover { transform: scale(1.1); }
 
+        /* --- Modals (Flyer & Photo Viewer) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 100; display: flex;
+            align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            position: relative; background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: scale(0.95); opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            will-change: transform, opacity;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); opacity: 1; }
+        .modal-close {
+            position: absolute; top: -1rem; right: -1rem;
+            width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+            background: white; color: #333;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .modal-close:hover { transform: scale(1.1); }
+
+        /* --- Notification Bell --- */
+        #notification-bell, #mobile-notification-bell { animation: bell-ring 2s ease-in-out infinite; }
+        @keyframes bell-ring {
+            0%, 50%, 100% { transform: rotate(0); }
+            5%, 15%, 25%, 35%, 45% { transform: rotate(13deg); }
+            10%, 20%, 30%, 40% { transform: rotate(-13deg); }
+        }
     </style>
 </head>
 <body>
@@ -178,53 +205,54 @@
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav">
         <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="https://assets.codepen.io/3/litclublogo.png" alt="LitClub Logo" class="h-8 mr-3">
+                <img src="litclublogo.png" alt="LitClub Logo" class="h-8 mr-3">
                 <div class="text-xl sm:text-2xl font-bold text-gray-800">LitClub <span class="text-blue-500">ICT</span></div>
             </div>
-            <div class="hidden md:flex space-x-8 items-center">
+            <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
                 <a href="#home" class="text-gray-600 hover:text-blue-500 transition-colors">Home</a>
                 <a href="#about" class="text-gray-600 hover:text-blue-500 transition-colors">About</a>
-                <a href="#events" class="text-gray-600 hover:text-blue-500 transition-colors">Upcoming Events</a>
-                <a href="#past-events" class="text-gray-600 hover:text-blue-500 transition-colors">Past Events</a>
-                <a href="#gallery" class="text-gray-600 hover:text-blue-500 transition-colors">Gallery</a>
-                <a href="#team" class="text-gray-600 hover:text-blue-500 transition-colors">Core Team</a>
-                <a href="#contact" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors shadow-md">Join Us</a>
+                <a href="#events" class="text-gray-600 hover:text-blue-500 transition-colors">Upcoming</a>
+                <a href="./merchandise.html" class="text-gray-600 hover:text-blue-500 transition-colors">Merchandise</a>
+                <a href="#team" class="text-gray-600 hover:text-blue-500 transition-colors">Team</a>
+                <a href="./subscribe.html" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors shadow-md">Join Us</a>
+                <button id="notification-bell" class="text-gray-600 hover:text-blue-500" aria-label="View event notification">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </button>
             </div>
-            <button id="mobile-menu-button" class="md:hidden text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
+            <div class="md:hidden flex items-center space-x-4">
+                <button id="mobile-notification-bell" class="text-gray-600 hover:text-blue-500" aria-label="View event notification">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </button>
+                <button id="mobile-menu-button" class="text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
         </nav>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white/80 backdrop-blur-sm">
             <a href="#home" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Home</a>
             <a href="#about" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">About</a>
-            <a href="#events" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Upcoming Events</a>
-            <a href="#past-events" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Past Events</a>
-            <a href="#gallery" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Gallery</a>
-            <a href="#team" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Core Team</a>
-            <a href="#contact" class="block py-3 px-4 text-sm text-white bg-blue-500 hover:bg-blue-600">Join Us</a>
+            <a href="#events" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Upcoming</a>
+            <a href="./merchandise.html" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Merchandise</a>
+            <a href="#team" class="block py-3 px-4 text-sm text-gray-700 hover:bg-blue-50">Team</a>
+            <a href="./subscribe.html" class="block py-3 px-4 text-sm text-white bg-blue-500 hover:bg-blue-600">Join Us</a>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main>
-
-        <!-- Flippable Hero Section -->
         <section id="home" class="h-screen flex items-center justify-center p-4">
             <div class="w-full max-w-5xl h-auto flip-card">
                 <div id="hero-card-inner" class="flip-card-inner">
-                    <!-- Front Of The Card -->
                     <div class="flip-card-front hero-glass-box p-8 sm:p-12">
                         <div class="text-center">
-                            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight">
+                            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight animated-gradient-text">
                                 Where Words Come to Life.
                             </h1>
                             <p class="mt-6 text-lg max-w-3xl mx-auto text-gray-200">
                                 Welcome to the Literary Club of ICT Mumbai, a vibrant community for thinkers, readers, and creators.
                             </p>
-                            <a href="#about" class="mt-10 inline-block bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold btn-primary shadow-2xl">
+                            <a href="#about" id="discover-story-btn" class="mt-10 inline-block bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold btn-primary shadow-2xl">
                                 Discover Our Story
                             </a>
                             <div class="mt-8 text-white/70 text-sm md:hidden">
@@ -232,27 +260,18 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Back Of The Card -->
                     <div class="flip-card-back back-card-style p-8 sm:p-12">
                         <div class="text-center text-gray-800">
                             <h2 class="text-3xl font-bold">Our Mission</h2>
                             <p class="mt-4 max-w-2xl mx-auto text-gray-600">
                                 To cultivate a dynamic literary environment that encourages creative expression, critical thinking, and a shared passion for the written word.
                             </p>
-                            <div class="mt-8">
-                                <p class="font-semibold">Get in Touch:</p>
-                                <a href="mailto:litsecretary.ta@ug.ictmumbai.edu.in" class="text-lg text-blue-600 hover:underline">litsecretary.ta@ug.ictmumbai.edu.in</a>
-                            </div>
-                             <div class="mt-8 text-gray-500 text-sm md:hidden">
-                                <p>&larr; Swipe to go back</p>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- About Us Section -->
         <section id="about" class="py-16 md:py-20 content-section">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <div class="reveal">
@@ -269,7 +288,6 @@
             </div>
         </section>
 
-        <!-- Upcoming Events Section - UPDATED -->
         <section id="events" class="py-16 md:py-20 content-section">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <div class="reveal">
@@ -277,41 +295,56 @@
                     <p class="mt-4 max-w-2xl mx-auto text-gray-500">A celebration of stories, accessibility, and the simple joy of holding a book.</p>
                 </div>
                 <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Event Cards - UPDATED -->
                     <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 100ms;"><img loading="lazy" src="https://placehold.co/600x400/3B82F6/FFFFFF?text=Books+by+Weight" alt="Books by Weight" class="w-full h-48 object-cover"><div class="p-6 text-left"><p class="text-blue-500 font-semibold text-sm">COMING SOON</p><h3 class="mt-2 text-xl font-bold text-gray-800">Books by Weight</h3><p class="mt-3 text-gray-600">A bibliophile's dream where books find new homes not by their cover, but by their weight. Discover hidden gems priced by the kilo.</p></div></div>
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="https://placehold.co/600x400/10B981/FFFFFF?text=Book+Club" alt="Book Club" class="w-full h-48 object-cover"><div class="p-6 text-left"><p class="text-emerald-500 font-semibold text-sm">COMING SOON</p><h3 class="mt-2 text-xl font-bold text-gray-800">Book Club</h3><p class="mt-3 text-gray-600">Dive deep into the world of words with us. Share reflections, debate perspectives, and celebrate diverse voices. Every page turns into a conversation.</p></div></div>
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="https://placehold.co/600x400/F59E0B/FFFFFF?text=Book+Drive" alt="Book Drive" class="w-full h-48 object-cover"><div class="p-6 text-left"><p class="text-amber-500 font-semibold text-sm">COMING SOON</p><h3 class="mt-2 text-xl font-bold text-gray-800">Book Drive</h3><p class="mt-3 text-gray-600">A drive fueled by generosity. We collect books from the ICT family and pass them on to those who need them most. Turn your read into another's reason to read.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="https://placehold.co/600x400/10B981/FFFFFF?text=Book+Club" alt="Book Club" class="w-full h-48 object-cover"><div class="p-6 text-left"><p class="text-emerald-500 font-semibold text-sm">COMING SOON</p><h3 class="mt-2 text-xl font-bold text-gray-800">Book Club</h3><p class="mt-3 text-gray-600">Dive deep into the world of words with us. Share reflections, debate perspectives, and celebrate diverse voices.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="https://placehold.co/600x400/F59E0B/FFFFFF?text=Book+Drive" alt="Book Drive" class="w-full h-48 object-cover"><div class="p-6 text-left"><p class="text-amber-500 font-semibold text-sm">COMING SOON</p><h3 class="mt-2 text-xl font-bold text-gray-800">Book Drive</h3><p class="mt-3 text-gray-600">A drive fueled by generosity. We collect books from the ICT family and pass them on to those who need them most.</p></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- Past Events Section - NEW -->
         <section id="past-events" class="py-16 md:py-20 content-section">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <div class="reveal">
                     <h2 class="section-title text-4xl font-bold text-gray-800">A Look Back at Our Events</h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">Celebrating the memorable moments and vibrant activities from our past events.</p>
+                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">Celebrating the memorable moments from our past events.</p>
                 </div>
                 <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 100ms;"><img loading="lazy" src="Graphics/ICTmun.jpeg" alt="ICT MUN" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">ICT Model United Nations</h3><p class="mt-3 text-gray-600">Our flagship event where students learn about diplomacy, international relations, and problem-solving by representing different countries.</p></div></div>
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="Graphics/spiritdays.jpeg" alt="Spirit Days" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Spirit Days</h3><p class="mt-3 text-gray-600">A fun, exciting week celebrating creativity and literature with activities like Retro Days and the launch of the Spirit Magazine.</p></div></div>
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="Graphics/panos-sakalakis-63sI4HO30tw-unsplash.jpg" alt="Open Mic" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Open Mic Night</h3><p class="mt-3 text-gray-600">A stage that resonated with creativity and expression, where students shared stories, poetry, and talents in an unforgettable evening.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 100ms;"><img loading="lazy" src="Graphics/ICTmun.jpeg" alt="ICT MUN" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">ICT Model United Nations</h3><p class="mt-3 text-gray-600">Our flagship event where students learn about diplomacy, international relations, and problem-solving.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="Graphics/spiritdays.jpeg" alt="Spirit Days" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Spirit Days</h3><p class="mt-3 text-gray-600">A fun, exciting week celebrating creativity with activities like Retro Days and the Spirit Magazine launch.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="Graphics/panos-sakalakis-63sI4HO30tw-unsplash.jpg" alt="Expression" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Expression</h3><p class="mt-3 text-gray-600">A stage for creativity and expression, where students share stories, poetry, and talents in an unforgettable evening.</p></div></div>
                 </div>
             </div>
         </section>
-
-        <section id="gallery" class="py-16 md:py-20 content-section">
-            <div class="container mx-auto px-4 sm:px-6 text-center">
-                 <div class="reveal">
-                    <h2 class="section-title text-4xl font-bold text-gray-800">Glimpses of Our Journey</h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">A collection of moments that define our club.</p>
+        
+        <section id="team" class="py-16 md:py-20 content-section">
+            <div class="container mx-auto">
+                <div class="reveal text-center px-4 sm:px-6">
+                    <h2 class="section-title text-4xl font-bold text-gray-800">Meet the Core Team</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-gray-500">The dedicated individuals leading our literary journey.</p>
                 </div>
-                <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Gallery Images -->
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/6366F1/FFFFFF?text=LitClub+1" alt="Gallery Image 1"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/F472B6/FFFFFF?text=LitClub+2" alt="Gallery Image 2"></div>
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/10B981/FFFFFF?text=LitClub+3" alt="Gallery Image 3"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/8B5CF6/FFFFFF?text=LitClub+4" alt="Gallery Image 4"></div>
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/F59E0B/FFFFFF?text=LitClub+5" alt="Gallery Image 5"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/EF4444/FFFFFF?text=LitClub+6" alt="Gallery Image 6"></div>
-                    <div class="reveal grid gap-4"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x400/3B82F6/FFFFFF?text=LitClub+7" alt="Gallery Image 7"><img loading="lazy" class="h-auto max-w-full rounded-lg card-hover" src="https://placehold.co/500x700/EC4899/FFFFFF?text=LitClub+8" alt="Gallery Image 8"></div>
+                <div class="mt-16 relative team-slider-container">
+                    <button id="scroll-left" class="scroll-arrow absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&lt;</button>
+                    <div id="team-scroller" class="flex overflow-x-auto snap-x snap-mandatory gap-8 team-scroller">
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Anirudh K.jpeg"><img src="core pics/Anirudh K.jpeg" alt="Anirudh Kolli" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Anirudh Kolli</h3><p class="text-gray-500">Secretary</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 50ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Arhat B.jpeg"><img src="core pics/Arhat B.jpeg" alt="Arhat Bhuta" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Arhat Bhuta</h3><p class="text-gray-500">Overall Event Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 100ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Ananya K.jpeg"><img src="core pics/Ananya K.jpeg" alt="Ananya Kasat" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Ananya Kasat</h3><p class="text-gray-500">Editor</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 150ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Tanishq P.jpeg"><img src="core pics/Tanishq P.jpeg" alt="Tanishq Pawar" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Tanishq Pawar</h3><p class="text-gray-500">Editor</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 200ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Pratheep S.jpeg"><img src="core pics/Pratheep S.jpeg" alt="Pratheep Saravanan" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Pratheep Saravanan</h3><p class="text-gray-500">Editor</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 250ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Aayush D.jpeg"><img src="core pics/Aayush D.jpeg" alt="Aayush" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Aayush</h3><p class="text-gray-500">Technical Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 300ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Rohit P.jpeg"><img src="core pics/Rohit P.jpeg" alt="Rohit Patil" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Rohit Patil</h3><p class="text-gray-500">Technical Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 350ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Shobhit T.jpeg"><img src="core pics/Shobhit T.jpeg" alt="Shobhit Tandon" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shobhit Tandon</h3><p class="text-gray-500">R&L</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 400ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Manas K.jpeg"><img src="core pics/Manas K.jpeg" alt="Manas Kirtane" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Manas Kirtane</h3><p class="text-gray-500">R&L</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 450ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Shreeya G.jpeg"><img src="core pics/Shreeya G.jpeg" alt="Shreeya Giripunje" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shreeya Giripunje</h3><p class="text-gray-500">Design Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 500ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Yug G.jpeg"><img src="core pics/Yug G.jpeg" alt="Yug Gaikwad" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Yug Gaikwad</h3><p class="text-gray-500">Creatives Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 550ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Kajal R.jpeg"><img src="core pics/Kajal R.jpeg" alt="Kajal Rathod" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Kajal Rathod</h3><p class="text-gray-500">Creatives Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 600ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Labhesh B.jpeg"><img src="core pics/Labhesh B.jpeg" alt="Labhesh Bora" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Labhesh Bora</h3><p class="text-gray-500">Hospitality Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 650ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Gatha B.jpeg"><img src="core pics/Gatha B.jpeg" alt="Gatha Bodhare" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Gatha Bodhare</h3><p class="text-gray-500">Photography Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 700ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Janmjay B.jpeg"><img src="core pics/Janmjay B.jpeg" alt="Janmjay Basutkar" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Janmjay Basutkar</h3><p class="text-gray-500">Videography Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 750ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Dhruv K.jpeg"><img src="core pics/Dhruv K.jpeg" alt="Dhruv Kamani" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Dhruv Kamani</h3><p class="text-gray-500">PR Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 800ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Akansha L.jpeg"><img src="core pics/Akansha L.jpeg" alt="Akansha Lavate" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Akansha Lavate</h3><p class="text-gray-500">PR Head</p></div>
+                        <div class="reveal text-center team-card snap-center flex-shrink-0 w-56" style="transition-delay: 850ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Amol J.jpeg"><img src="core pics/Amol J.jpeg" alt="Amol Jain" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Amol Jain</h3><p class="text-gray-500">Spons Head</p></div>
+                    </div>
+                    <button id="scroll-right" class="scroll-arrow absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&gt;</button>
                 </div>
             </div>
         </section>
@@ -319,129 +352,155 @@
         <section id="contact" class="py-16 md:py-20 content-section">
             <div class="container mx-auto px-4 sm:px-6 text-center">
                 <div class="reveal">
-                    <h2 class="section-title text-4xl font-bold text-gray-800">Become a Part of Our Story</h2>
+                    <h2 class="section-title text-4xl font-bold text-gray-800">Join Our Newsletter</h2>
                     <p class="mt-4 max-w-2xl mx-auto text-gray-500">
-                        Ready to join the conversation? Sign up for our newsletter to stay updated on all events and publications.
+                        Ready to join the conversation? Subscribe to get updates on all our events and publications.
                     </p>
                     <div class="mt-10 max-w-md mx-auto">
-                        <!-- Newsletter Form -->
-                        <form action="YOUR_MAILCHIMP_ACTION_URL" method="post" target="_blank">
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <input type="email" name="EMAIL" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Enter your email" required>
-                                <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-md font-semibold btn-primary whitespace-nowrap">Subscribe</button>
-                            </div>
-                        </form>
+                        <a href="./subscribe.html" class="inline-block bg-blue-500 text-white px-8 py-4 rounded-full font-semibold btn-primary whitespace-nowrap">Subscribe Now</a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white">
-        <div class="container mx-auto px-4 sm:px-6 py-12">
-            <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
-                <div class="mb-6 md:mb-0">
-                    <h3 class="text-2xl font-bold">LitClub ICT</h3>
-                    <p class="text-gray-400">Institute of Chemical Technology, Mumbai</p>
+    <footer id="footer" class="content-section">
+        <div class="container mx-auto px-4 sm:px-6 py-16">
+            <div class="grid md:grid-cols-3 gap-12 text-center md:text-left">
+                <div class="flex flex-col items-center md:items-start">
+                    <div class="flex items-center mb-4">
+                        <img src="litclublogo.png" alt="LitClub Logo" class="h-10 mr-3">
+                        <h3 class="text-2xl font-bold text-gray-800">LitClub ICT</h3>
+                    </div>
+                    <p class="text-gray-600 max-w-xs">A haven for bibliophiles and wordsmiths at the Institute of Chemical Technology, Mumbai.</p>
                 </div>
-                
-                <div class="text-gray-400">
-                    <h4 class="font-bold text-white mb-2">Contact Us</h4>
-                    <p>Secretary - Anirudh Kolli</p>
-                    <p class="mb-2">+91 93729 40431</p>
-                    <p>Overall Event Head - Arhat Bhuta</p>
-                    <p>+91 97695 62231</p>
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-4 text-lg">Navigate</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="#home" class="text-gray-600 hover:text-blue-500 footer-link">Home</a>
+                        <a href="#about" class="text-gray-600 hover:text-blue-500 footer-link">About</a>
+                        <a href="#events" class="text-gray-600 hover:text-blue-500 footer-link">Upcoming</a>
+                        <a href="./merchandise.html" class="text-gray-600 hover:text-blue-500 footer-link">Merchandise</a>
+                        <a href="#team" class="text-gray-600 hover:text-blue-500 footer-link">Team</a>
+                        <a href="#gallery" class="text-gray-600 hover:text-blue-500 footer-link">Gallery</a>
+                    </div>
                 </div>
-                
-                <div class="flex justify-center md:justify-end space-x-6 items-start">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="Facebook"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg></a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="Twitter"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg></a>
-                    <a href="https://www.instagram.com/litclub_ict/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Instagram"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218 1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2zm-1.002 3.705a.75.75 0 10-1.5 0 .75.75 0 001.5 0zm1.728 1.605a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zm-3.25 5.25a3.25 3.25 0 116.5 0 3.25 3.25 0 01-6.5 0z" clip-rule="evenodd" /></svg></a>
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-4 text-lg">Get in Touch</h4>
+                    <div class="text-gray-600 mb-6">
+                        <a href="mailto:litsecretary.ta@ug.ictmumbai.edu.in" class="text-blue-600 hover:underline footer-link">litsecretary.ta@ug.ictmumbai.edu.in</a>
+                    </div>
+                    <div class="flex justify-center md:justify-start space-x-6">
+                        <a href="#" class="text-gray-500 hover:text-blue-500 social-icon" aria-label="Facebook"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-500 social-icon" aria-label="Twitter"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg></a>
+                        <a href="https://www.instagram.com/litclub_ict/" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-pink-500 social-icon" aria-label="Instagram"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.585-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.585.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg></a>
+                    </div>
                 </div>
             </div>
-            <hr class="my-8 border-gray-700">
-            <p class="text-center text-gray-400 text-sm">&copy; 2025 The Literary Club, ICT Mumbai. All Rights Reserved.</p>
+            <hr class="my-10 border-gray-300/50">
+            <p class="text-center text-gray-500 text-sm">&copy; 2025 The Literary Club, ICT Mumbai. All Rights Reserved. | Developed by Divyansh & Core Team</p>
         </div>
     </footer>
 
-    <!-- Lenis Smooth Scroll Library -->
-    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <!-- Modals -->
+    <div id="flyer-modal" class="modal-overlay"><div class="modal-content w-11/12 max-w-lg"><button id="flyer-modal-close" class="modal-close">✕</button><img src="https://placehold.co/600x800/3b82f6/ffffff?text=Event+Poster" alt="Event Poster" class="rounded-lg w-full"></div></div>
+    <div id="photo-modal" class="modal-overlay"><div class="modal-content w-11/12 max-w-sm p-2 rounded-full"><button id="photo-modal-close" class="modal-close">✕</button><img id="photo-modal-img" src="" alt="Core Team Member" class="rounded-full w-full aspect-square object-cover"></div></div>
 
-    <!-- Main JavaScript Logic -->
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Lenis Smooth Scroll Initialization ---
             const lenis = new Lenis();
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
 
-            // --- Navigation Bar Logic ---
-            const header = document.getElementById('header');
+            // --- Modal Logic ---
+            const flyerModal = document.getElementById('flyer-modal');
+            const notificationBell = document.getElementById('notification-bell');
+            const mobileNotificationBell = document.getElementById('mobile-notification-bell');
+            const flyerModalCloseBtn = document.getElementById('flyer-modal-close');
+
+            const openFlyer = () => flyerModal.classList.add('active');
+            const closeFlyer = () => flyerModal.classList.remove('active');
+
+            notificationBell.addEventListener('click', openFlyer);
+            mobileNotificationBell.addEventListener('click', openFlyer);
+            flyerModalCloseBtn.addEventListener('click', closeFlyer);
+            flyerModal.addEventListener('click', (e) => { if(e.target === flyerModal) closeFlyer(); });
+            
+            const photoModal = document.getElementById('photo-modal');
+            const photoModalImg = document.getElementById('photo-modal-img');
+            const photoModalCloseBtn = document.getElementById('photo-modal-close');
+            document.querySelectorAll('.team-card-photo').forEach(photo => {
+                photo.addEventListener('dblclick', () => {
+                    const imgSrc = photo.dataset.src;
+                    if(imgSrc) {
+                        photoModalImg.src = imgSrc;
+                        photoModal.classList.add('active');
+                    }
+                });
+            });
+            const closePhotoModal = () => photoModal.classList.remove('active');
+            photoModalCloseBtn.addEventListener('click', closePhotoModal);
+            photoModal.addEventListener('click', (e) => { if(e.target === photoModal) closePhotoModal(); });
+
+            // --- Navigation & Flip Card Logic ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            
             if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                });
+                mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
                 mobileMenu.addEventListener('click', (e) => {
                     if (e.target.tagName === 'A') {
                         mobileMenu.classList.add('hidden');
-                        // Lenis scroll to target
                         const targetId = e.target.getAttribute('href');
-                        lenis.scrollTo(targetId);
+                        if (targetId.startsWith('#')) lenis.scrollTo(targetId);
                     }
                 });
             }
 
-            // Also handle smooth scroll for desktop nav links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    lenis.scrollTo(this.getAttribute('href'));
+                    const targetId = this.getAttribute('href');
+                    if(targetId && targetId !== '#') {
+                        if(this.id === 'discover-story-btn') {
+                            e.stopPropagation();
+                        }
+                        lenis.scrollTo(targetId);
+                    }
                 });
             });
             
-            // --- Scroll Reveal Animation ---
-            const revealElements = document.querySelectorAll('.reveal');
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, { threshold: 0.15 });
-            revealElements.forEach(el => {
-                revealObserver.observe(el);
-            });
-
-            // --- Flip Card Logic ---
             const heroCardInner = document.getElementById('hero-card-inner');
             const heroCardContainer = document.querySelector('.flip-card');
             if (heroCardInner && heroCardContainer) {
                 const flipCard = () => heroCardInner.classList.toggle('is-flipped');
                 heroCardContainer.addEventListener('click', flipCard);
-
-                // Swipe logic
                 let touchStartX = 0;
-                heroCardContainer.addEventListener('touchstart', (e) => {
-                    touchStartX = e.touches[0].clientX;
-                }, { passive: true });
-
+                heroCardContainer.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
                 heroCardContainer.addEventListener('touchend', (e) => {
-                    const touchEndX = e.changedTouches[0].clientX;
-                    if (Math.abs(touchEndX - touchStartX) > 50) {
-                        flipCard();
-                    }
+                    if (Math.abs(e.changedTouches[0].clientX - touchStartX) > 50) flipCard();
                 });
             }
+            
+            // --- Team Scroller ---
+            const scroller = document.getElementById('team-scroller');
+            const scrollLeftBtn = document.getElementById('scroll-left');
+            const scrollRightBtn = document.getElementById('scroll-right');
+            if (scroller && scrollLeftBtn && scrollRightBtn) {
+                const scrollAmount = 300;
+                scrollLeftBtn.addEventListener('click', () => scroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+                scrollRightBtn.addEventListener('click', () => scroller.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+            }
+
+            // --- Scroll Reveal ---
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
         });
     </script>
-
 </body>
 </html>
 
