@@ -123,12 +123,17 @@
         
         /* --- Core Team Section --- */
         .team-slider-container {
-            padding: 0 4rem; /* Add padding for arrows */
+            padding: 0 1rem;
+        }
+        @media (min-width: 768px) {
+            .team-slider-container {
+                padding: 0 4rem; 
+            }
         }
         .team-scroller {
             -ms-overflow-style: none; /* IE and Edge */
             scrollbar-width: none; /* Firefox */
-            padding-bottom: 1rem; /* Prevent cutting off text */
+            padding-bottom: 1rem;
             will-change: transform;
         }
         .team-scroller::-webkit-scrollbar {
@@ -293,9 +298,9 @@
                     <p class="mt-4 max-w-2xl mx-auto text-gray-500">Celebrating the memorable moments from our past events.</p>
                 </div>
                 <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 100ms;"><img loading="lazy" src="https://placehold.co/600x400/8B5CF6/FFFFFF?text=ICT+MUN" alt="ICT MUN" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">ICT Model United Nations</h3><p class="mt-3 text-gray-600">Our flagship event where students learn about diplomacy, international relations, and problem-solving.</p></div></div>
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="https://placehold.co/600x400/EC4899/FFFFFF?text=Spirit+Days" alt="Spirit Days" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Spirit Days</h3><p class="mt-3 text-gray-600">A fun, exciting week celebrating creativity with activities like Retro Days and the Spirit Magazine launch.</p></div></div>
-                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="https://placehold.co/600x400/F472B6/FFFFFF?text=Open+Mic" alt="Open Mic" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Open Mic Night</h3><p class="mt-3 text-gray-600">A stage for creativity and expression, where students share stories, poetry, and talents in an unforgettable evening.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 100ms;"><img loading="lazy" src="Graphics/ICTmun.jpeg&w=2070&auto=format&fit=crop" alt="ICT MUN" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">ICT Model United Nations</h3><p class="mt-3 text-gray-600">Our flagship event where students learn about diplomacy, international relations, and problem-solving.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 200ms;"><img loading="lazy" src="Graphics/spiritdays.jpeg&w=1887&auto=format&fit=crop" alt="Spirit Days" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Spirit Days</h3><p class="mt-3 text-gray-600">A fun, exciting week celebrating creativity with activities like Retro Days and the Spirit Magazine launch.</p></div></div>
+                    <div class="reveal bg-white rounded-xl overflow-hidden card-hover" style="transition-delay: 300ms;"><img loading="lazy" src="Graphics/expression.jpeg&w=1887&auto=format&fit=crop" alt="Expression" class="w-full h-48 object-cover"><div class="p-6 text-left"><h3 class="mt-2 text-xl font-bold text-gray-800">Expression</h3><p class="mt-3 text-gray-600">A stage for creativity and expression, where students share stories, poetry, and talents in an unforgettable evening.</p></div></div>
                 </div>
             </div>
         </section>
@@ -307,8 +312,8 @@
                     <p class="mt-4 max-w-2xl mx-auto text-gray-500">The dedicated individuals leading our literary journey.</p>
                 </div>
                 <div class="mt-16 relative team-slider-container">
-                    <button id="scroll-left" class="scroll-arrow absolute left-2 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&lt;</button>
-                    <div id="team-scroller" class="flex overflow-x-auto snap-x snap-mandatory gap-8 px-8 md:px-12 team-scroller">
+                    <button id="scroll-left" class="scroll-arrow absolute -left-4 md:left-2 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&lt;</button>
+                    <div id="team-scroller" class="flex overflow-x-auto snap-x snap-mandatory gap-8 px-4 team-scroller">
                         <div class="reveal text-center team-card snap-center flex-shrink-0 w-48"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Anirudh K.jpeg"><img src="core pics/Anirudh K.jpeg" alt="Anirudh Kolli" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Anirudh Kolli</h3><p class="text-gray-500">Secretary</p></div>
                         <div class="reveal text-center team-card snap-center flex-shrink-0 w-48" style="transition-delay: 50ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Arhat B.jpeg"><img src="core pics/Arhat B.jpeg" alt="Arhat Bhuta" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Arhat Bhuta</h3><p class="text-gray-500">Overall Event Head</p></div>
                         <div class="reveal text-center team-card snap-center flex-shrink-0 w-48" style="transition-delay: 100ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Ananya K.jpeg"><img src="core pics/Ananya K.jpeg" alt="Ananya Kasat" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Ananya Kasat</h3><p class="text-gray-500">Editor</p></div>
@@ -328,7 +333,7 @@
                         <div class="reveal text-center team-card snap-center flex-shrink-0 w-48" style="transition-delay: 800ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Akansha L.jpeg"><img src="core pics/Akansha L.jpeg" alt="Akansha Lavate" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Akansha Lavate</h3><p class="text-gray-500">PR Head</p></div>
                         <div class="reveal text-center team-card snap-center flex-shrink-0 w-48" style="transition-delay: 850ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Amol J.jpeg"><img src="core pics/Amol J.jpeg" alt="Amol Jain" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Amol Jain</h3><p class="text-gray-500">Spons Head</p></div>
                     </div>
-                    <button id="scroll-right" class="scroll-arrow absolute right-2 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&gt;</button>
+                    <button id="scroll-right" class="scroll-arrow absolute -right-4 md:right-2 top-1/2 -translate-y-1/2 bg-white/50 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-10">&gt;</button>
                 </div>
             </div>
         </section>
