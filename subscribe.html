@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- MSAL.js for Azure AD B2C -->
+    <script src="https://alcdn.msauth.net/browser/2.14.2/js/msal-browser.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -47,6 +49,7 @@
             <h1 class="text-3xl font-bold text-green-600 mb-2">Subscribed!</h1>
             <p class="text-gray-600 mb-6">Welcome, <span id="user-name" class="font-semibold"></span>!</p>
             <p class="text-gray-600">You're now on our mailing list. You'll receive all future updates at <span id="user-email" class="font-semibold"></span>.</p>
+            <p class="text-xs text-gray-500 mt-4">(Note: User data is authenticated but not yet stored in a database.)</p>
             <button id="sign-out-btn" class="mt-8 w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-md font-semibold hover:bg-gray-300 transition-all duration-300">Sign Out</button>
         </div>
          <p class="mt-8 text-sm text-gray-500">
@@ -54,49 +57,36 @@
         </p>
     </div>
 
-    <script type="module">
-        // --- Firebase Configuration ---
-        // IMPORTANT: Replace with your actual Firebase project configuration
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+    <script>
+        // --- Azure AD B2C Configuration ---
+        // IMPORTANT: Replace with your actual Azure AD B2C details
+        const b2cPolicies = {
+            names: {
+                signUpSignIn: "B2C_1_signup_signin", // The name of your user flow
+            },
+            authorities: {
+                signUpSignIn: {
+                    authority: "https://litclubict.b2clogin.com/litclubict.onmicrosoft.com/B2C_1_signup_signin", // Replace with your user flow's authority URL
+                },
+            },
+            authorityDomain: "litclubict.b2clogin.com", // Replace with your B2C tenant domain
         };
-        
-        // You can get these values from the Firebase console:
-        // Project settings > General tab
 
-        // --- Firebase Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // --- Initialize Firebase ---
-        let app, auth, db;
-        try {
-             // A check to see if the user has provided their own firebase config.
-            if(firebaseConfig.apiKey === "YOUR_API_KEY"){
-                const mainContainer = document.getElementById('main-container');
-                mainContainer.innerHTML = `
-                    <h1 class="text-2xl font-bold text-red-600 mb-4">Firebase Not Configured</h1>
-                    <p class="text-gray-700">Please replace the placeholder Firebase configuration in the &lt;script&gt; tag of this HTML file with your own project's configuration to enable Google Sign-In.</p>
-                     <a href="./index.html" class="mt-6 inline-block text-blue-600 hover:underline">&larr; Back to Home</a>
-                `;
-                throw new Error("Firebase not configured");
+        const msalConfig = {
+            auth: {
+                clientId: "YOUR_APPLICATION_CLIENT_ID", // Paste your Application (client) ID here
+                authority: b2cPolicies.authorities.signUpSignIn.authority,
+                knownAuthorities: [b2cPolicies.authorityDomain],
+                redirectUri: "https://litclubictmumbai.page/subscribe.html", // Your redirect URI
+            },
+            cache: {
+                cacheLocation: "sessionStorage", // This is more secure
+                storeAuthStateInCookie: false,
             }
+        };
 
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-        } catch (error) {
-            console.error("Firebase initialization failed:", error);
-            // Don't proceed if Firebase isn't initialized.
-            return;
-        }
-
+        // --- Initialize MSAL ---
+        const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
         // --- UI Elements ---
         const loggedInView = document.getElementById('logged-in-view');
@@ -107,12 +97,10 @@
         const userEmailEl = document.getElementById('user-email');
         const errorMessageEl = document.getElementById('error-message');
 
-        const provider = new GoogleAuthProvider();
-
         // --- Functions ---
-        const showLoggedInState = (user) => {
-            userNameEl.textContent = user.displayName;
-            userEmailEl.textContent = user.email;
+        const showLoggedInState = (account) => {
+            userNameEl.textContent = account.name;
+            userEmailEl.textContent = account.idTokenClaims.emails[0]; // Email is in the token claims
             loggedOutView.classList.add('hidden');
             loggedInView.classList.remove('hidden');
         };
@@ -121,56 +109,58 @@
             loggedOutView.classList.remove('hidden');
             loggedInView.classList.add('hidden');
         };
+        
+        const signIn = () => {
+            myMSALObj.loginPopup({ scopes: ["openid", "profile"] })
+                .then(handleResponse)
+                .catch(error => {
+                    console.error(error);
+                    errorMessageEl.textContent = "Authentication failed. Please try again.";
+                });
+        }
 
-        const saveUserToFirestore = async (user) => {
-            try {
-                // Use the user's UID as the document ID to prevent duplicates
-                const userRef = doc(db, "subscribers", user.uid);
-                await setDoc(userRef, {
-                    name: user.displayName,
-                    email: user.email,
-                    subscribedAt: new Date()
-                }, { merge: true }); // merge:true ensures we don't overwrite if doc exists
-                console.log("User data saved to Firestore.");
-            } catch (error) {
-                console.error("Error saving user to Firestore: ", error);
-                errorMessageEl.textContent = "Could not save subscription. Please try again.";
-            }
-        };
+        const signOut = () => {
+            const logoutRequest = {
+                account: myMSALObj.getAccountByUsername(sessionStorage.getItem("username"))
+            };
+            myMSALObj.logoutPopup(logoutRequest);
+        }
 
-        // --- Event Listeners ---
-        googleSignInBtn.addEventListener('click', async () => {
-            errorMessageEl.textContent = "";
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                await saveUserToFirestore(user);
-                showLoggedInState(user);
-            } catch (error) {
-                console.error("Google Sign-In Error:", error);
-                errorMessageEl.textContent = "Authentication failed. Please try again.";
-            }
-        });
-
-        signOutBtn.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                console.error("Sign Out Error:", error);
-            }
-        });
-
-        // --- Auth State Observer ---
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in.
-                showLoggedInState(user);
+        const handleResponse = (response) => {
+            if (response !== null) {
+                sessionStorage.setItem("username", response.account.username);
+                showLoggedInState(response.account);
+                // In a real app, you would now send the user's info (e.g., response.idToken)
+                // to your backend to save to a database like Azure Cosmos DB.
             } else {
-                // User is signed out.
-                showLoggedOutState();
+                // If no account is selected, show the logged out state.
+                const currentAccounts = myMSALObj.getAllAccounts();
+                if (currentAccounts.length === 0) {
+                    showLoggedOutState();
+                } else {
+                    showLoggedInState(currentAccounts[0]);
+                }
             }
+        }
+        
+        // --- Event Listeners ---
+        googleSignInBtn.addEventListener('click', signIn);
+        signOutBtn.addEventListener('click', signOut);
+
+        // --- Initial State Check ---
+        myMSALObj.handleRedirectPromise().then(handleResponse).catch(err => {
+            console.error(err);
         });
+
+        // Show initial state
+        const currentAccount = myMSALObj.getAllAccounts()[0];
+        if (currentAccount) {
+            showLoggedInState(currentAccount);
+        } else {
+            showLoggedOutState();
+        }
 
     </script>
 </body>
 </html>
+
