@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-image: url('evie-s-kqJfP-lrl-8-unsplash.jpg');
+            background-image: url('Graphics/evie-s-kqJfP-lrl-8-unsplash.jpg');
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
@@ -20,36 +20,157 @@
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease-in-out;
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="flex items-center justify-center min-h-screen p-4 bg-gray-100">
 
-    <div class="w-full max-w-md mx-auto text-center rounded-2xl shadow-2xl p-8 md:p-12 form-container">
+    <div id="main-container" class="w-full max-w-md mx-auto text-center rounded-2xl shadow-2xl p-8 md:p-12 form-container">
         <a href="./index.html" class="inline-block mb-8">
-            <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12">
+            <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto">
         </a>
         
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Join Our Newsletter</h1>
-        <p class="text-gray-600 mb-8">Get the latest event updates, publications, and literary news delivered right to your inbox.</p>
-
-        <!-- Placeholder for Mailchimp Form -->
-        <form action="YOUR_MAILCHIMP_ACTION_URL" method="post" target="_blank">
-            <div class="space-y-4">
-                <div>
-                    <input type="text" name="FNAME" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="First Name" required>
-                </div>
-                <div>
-                    <input type="email" name="EMAIL" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Enter your email" required>
-                </div>
-                <button type="submit" class="w-full bg-blue-500 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-600 transition-all duration-300">Subscribe</button>
-            </div>
-        </form>
-        
-        <div class="mt-8 text-sm text-gray-500">
-            <p>Already a member? <a href="#" class="text-blue-600 hover:underline">Log In</a></p>
+        <!-- Logged Out State -->
+        <div id="logged-out-view">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Join Our Newsletter</h1>
+            <p class="text-gray-600 mb-8">Get the latest event updates, publications, and literary news delivered right to your inbox.</p>
+            <button id="google-signin-btn" class="w-full bg-white text-gray-700 font-semibold py-3 px-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center justify-center">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" class="w-6 h-6 mr-3">
+                Sign in with Google
+            </button>
+            <p id="error-message" class="text-red-500 text-sm mt-4"></p>
         </div>
+
+        <!-- Logged In State -->
+        <div id="logged-in-view" class="hidden">
+            <h1 class="text-3xl font-bold text-green-600 mb-2">Subscribed!</h1>
+            <p class="text-gray-600 mb-6">Welcome, <span id="user-name" class="font-semibold"></span>!</p>
+            <p class="text-gray-600">You're now on our mailing list. You'll receive all future updates at <span id="user-email" class="font-semibold"></span>.</p>
+            <button id="sign-out-btn" class="mt-8 w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-md font-semibold hover:bg-gray-300 transition-all duration-300">Sign Out</button>
+        </div>
+         <p class="mt-8 text-sm text-gray-500">
+            <a href="./index.html" class="text-blue-600 hover:underline">&larr; Back to Home</a>
+        </p>
     </div>
 
+    <script type="module">
+        // --- Firebase Configuration ---
+        // IMPORTANT: Replace with your actual Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // You can get these values from the Firebase console:
+        // Project settings > General tab
+
+        // --- Firebase Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // --- Initialize Firebase ---
+        let app, auth, db;
+        try {
+             // A check to see if the user has provided their own firebase config.
+            if(firebaseConfig.apiKey === "YOUR_API_KEY"){
+                const mainContainer = document.getElementById('main-container');
+                mainContainer.innerHTML = `
+                    <h1 class="text-2xl font-bold text-red-600 mb-4">Firebase Not Configured</h1>
+                    <p class="text-gray-700">Please replace the placeholder Firebase configuration in the &lt;script&gt; tag of this HTML file with your own project's configuration to enable Google Sign-In.</p>
+                     <a href="./index.html" class="mt-6 inline-block text-blue-600 hover:underline">&larr; Back to Home</a>
+                `;
+                throw new Error("Firebase not configured");
+            }
+
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            // Don't proceed if Firebase isn't initialized.
+            return;
+        }
+
+
+        // --- UI Elements ---
+        const loggedInView = document.getElementById('logged-in-view');
+        const loggedOutView = document.getElementById('logged-out-view');
+        const googleSignInBtn = document.getElementById('google-signin-btn');
+        const signOutBtn = document.getElementById('sign-out-btn');
+        const userNameEl = document.getElementById('user-name');
+        const userEmailEl = document.getElementById('user-email');
+        const errorMessageEl = document.getElementById('error-message');
+
+        const provider = new GoogleAuthProvider();
+
+        // --- Functions ---
+        const showLoggedInState = (user) => {
+            userNameEl.textContent = user.displayName;
+            userEmailEl.textContent = user.email;
+            loggedOutView.classList.add('hidden');
+            loggedInView.classList.remove('hidden');
+        };
+
+        const showLoggedOutState = () => {
+            loggedOutView.classList.remove('hidden');
+            loggedInView.classList.add('hidden');
+        };
+
+        const saveUserToFirestore = async (user) => {
+            try {
+                // Use the user's UID as the document ID to prevent duplicates
+                const userRef = doc(db, "subscribers", user.uid);
+                await setDoc(userRef, {
+                    name: user.displayName,
+                    email: user.email,
+                    subscribedAt: new Date()
+                }, { merge: true }); // merge:true ensures we don't overwrite if doc exists
+                console.log("User data saved to Firestore.");
+            } catch (error) {
+                console.error("Error saving user to Firestore: ", error);
+                errorMessageEl.textContent = "Could not save subscription. Please try again.";
+            }
+        };
+
+        // --- Event Listeners ---
+        googleSignInBtn.addEventListener('click', async () => {
+            errorMessageEl.textContent = "";
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                await saveUserToFirestore(user);
+                showLoggedInState(user);
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+                errorMessageEl.textContent = "Authentication failed. Please try again.";
+            }
+        });
+
+        signOutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error("Sign Out Error:", error);
+            }
+        });
+
+        // --- Auth State Observer ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in.
+                showLoggedInState(user);
+            } else {
+                // User is signed out.
+                showLoggedOutState();
+            }
+        });
+
+    </script>
 </body>
 </html>
