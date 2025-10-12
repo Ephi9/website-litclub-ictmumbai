@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | The Literary Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .table-auto th, .table-auto td { @apply px-4 py-2; }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+
+    <!-- Main Container -->
+    <div id="app-container">
+
+        <!-- Login View -->
+        <div id="login-view" class="min-h-screen flex items-center justify-center">
+            <div class="bg-white p-8 rounded-lg shadow-md text-center">
+                <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto mb-4">
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">Admin Control Panel</h1>
+                <p id="login-message" class="text-gray-600 mb-6">Please sign in to continue.</p>
+                <button id="admin-signin-btn" class="w-full bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg shadow-sm hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" class="w-6 h-6 mr-3 bg-white p-1 rounded-full">
+                    Sign in with Google
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard View (hidden by default) -->
+        <div id="admin-view" class="hidden">
+            <header class="bg-white shadow-md">
+                <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                         <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-8 mr-3">
+                         <h1 class="text-xl font-bold text-gray-800">LitClub Admin</h1>
+                    </div>
+                    <div>
+                        <span id="admin-email" class="text-sm text-gray-600 mr-4"></span>
+                        <button id="admin-signout-btn" class="bg-red-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-600 transition-colors">Sign Out</button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="container mx-auto px-6 py-8">
+                <!-- Newsletter Composer -->
+                <section id="composer" class="bg-white p-6 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Create Weekly Newsletter</h2>
+                    <div id="composer-message" class="hidden p-4 mb-4 text-sm rounded-lg"></div>
+                    <form id="newsletter-form">
+                        <div class="mb-4">
+                            <label for="subject" class="block text-gray-700 font-bold mb-2">Subject</label>
+                            <input type="text" id="subject" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="body" class="block text-gray-700 font-bold mb-2">Body</label>
+                            <textarea id="body" rows="10" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                        </div>
+                        <button type="submit" id="send-btn" class="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600 transition-colors">Save Newsletter</button>
+                    </form>
+                </section>
+                
+                <!-- Subscribers List -->
+                <section id="subscribers" class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Subscriber List (<span id="subscriber-count">0</span>)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table-auto w-full text-left">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border">Email</th>
+                                    <th class="border">Subscribed On</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subscribers-table-body">
+                                <!-- Rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- START: Firebase Configuration ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyCOrX_vn5zupUn_OpXfvKeiDAUIY8Lz8LM",
+          authDomain: "web-litclub-ict.firebaseapp.com",
+          projectId: "web-litclub-ict",
+          storageBucket: "web-litclub-ict.firebasestorage.app",
+          messagingSenderId: "868285777261",
+          appId: "1:868285777261:web:27ddf25ce5c62bbdb68664"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        // --- END: Firebase Configuration ---
+
+        // --- UI Elements ---
+        const loginView = document.getElementById('login-view');
+        const adminView = document.getElementById('admin-view');
+        const adminSigninBtn = document.getElementById('admin-signin-btn');
+        const adminSignoutBtn = document.getElementById('admin-signout-btn');
+        const loginMessage = document.getElementById('login-message');
+        const adminEmailEl = document.getElementById('admin-email');
+        const subscriberCountEl = document.getElementById('subscriber-count');
+        const subscribersTableBody = document.getElementById('subscribers-table-body');
+        const newsletterForm = document.getElementById('newsletter-form');
+        const composerMessage = document.getElementById('composer-message');
+        const sendBtn = document.getElementById('send-btn');
+
+        // --- Auth Logic ---
+        const provider = new firebase.auth.GoogleAuthProvider();
+        adminSigninBtn.addEventListener('click', () => auth.signInWithPopup(provider));
+        adminSignoutBtn.addEventListener('click', () => auth.signOut());
+
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                // User is signed in, check if they are an admin
+                const adminRef = db.collection('admins').doc(user.uid);
+                const adminDoc = await adminRef.get();
+
+                if (adminDoc.exists && adminDoc.data().isAdmin) {
+                    // User is an admin
+                    loginView.classList.add('hidden');
+                    adminView.classList.remove('hidden');
+                    adminEmailEl.textContent = user.email;
+                    loadSubscribers();
+                } else {
+                    // User is not an admin
+                    loginMessage.textContent = "Access Denied. You are not an authorized administrator.";
+                    loginMessage.classList.add('text-red-500', 'font-bold');
+                    auth.signOut(); // Sign out non-admin users
+                }
+            } else {
+                // User is signed out
+                loginView.classList.remove('hidden');
+                adminView.classList.add('hidden');
+                loginMessage.textContent = "Please sign in to continue.";
+                loginMessage.classList.remove('text-red-500', 'font-bold');
+            }
+        });
+
+        // --- Data Loading ---
+        const loadSubscribers = () => {
+            db.collection('subscribers').orderBy('subscribedAt', 'desc').onSnapshot(snapshot => {
+                let html = '';
+                subscriberCountEl.textContent = snapshot.size;
+                snapshot.forEach(doc => {
+                    const subscriber = doc.data();
+                    const date = subscriber.subscribedAt.toDate().toLocaleDateString('en-US', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                    });
+                    html += `
+                        <tr class="border-b">
+                            <td class="border">${subscriber.email}</td>
+                            <td class="border">${date}</td>
+                        </tr>
+                    `;
+                });
+                subscribersTableBody.innerHTML = html;
+            });
+        };
+
+        // --- Newsletter Form Logic ---
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Saving...';
+            
+            const subject = document.getElementById('subject').value;
+            const body = document.getElementById('body').value;
+
+            try {
+                await db.collection('newsletters').add({
+                    subject: subject,
+                    body: body,
+                    sentAt: new Date(),
+                    sentBy: auth.currentUser.email
+                });
+                
+                showComposerMessage('Newsletter saved successfully! It is now stored in the database.', 'green');
+                newsletterForm.reset();
+
+            } catch (error) {
+                console.error("Error saving newsletter: ", error);
+                showComposerMessage('Error: Could not save the newsletter.', 'red');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Save Newsletter';
+            }
+        });
+
+        function showComposerMessage(message, color) {
+            composerMessage.textContent = message;
+            composerMessage.className = `p-4 mb-4 text-sm rounded-lg bg-${color}-100 text-${color}-700`;
+            composerMessage.classList.remove('hidden');
+            setTimeout(() => composerMessage.classList.add('hidden'), 5000);
+        }
+
+    </script>
+</body>
+</html>
