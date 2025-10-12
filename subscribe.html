@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- MSAL.js for Azure AD B2C -->
-    <script src="https://alcdn.msauth.net/browser/2.14.2/js/msal-browser.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -32,8 +30,7 @@
         <a href="./index.html" class="inline-block mb-8">
             <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto">
         </a>
-        
-        <!-- Logged Out State -->
+
         <div id="logged-out-view">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">Join Our Newsletter</h1>
             <p class="text-gray-600 mb-8">Get the latest event updates, publications, and literary news delivered right to your inbox.</p>
@@ -44,12 +41,10 @@
             <p id="error-message" class="text-red-500 text-sm mt-4"></p>
         </div>
 
-        <!-- Logged In State -->
         <div id="logged-in-view" class="hidden">
             <h1 class="text-3xl font-bold text-green-600 mb-2">Subscribed!</h1>
             <p class="text-gray-600 mb-6">Welcome, <span id="user-name" class="font-semibold"></span>!</p>
             <p class="text-gray-600">You're now on our mailing list. You'll receive all future updates at <span id="user-email" class="font-semibold"></span>.</p>
-            <p class="text-xs text-gray-500 mt-4">(Note: User data is authenticated but not yet stored in a database.)</p>
             <button id="sign-out-btn" class="mt-8 w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-md font-semibold hover:bg-gray-300 transition-all duration-300">Sign Out</button>
         </div>
          <p class="mt-8 text-sm text-gray-500">
@@ -57,38 +52,27 @@
         </p>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+
     <script>
-        // --- Azure AD B2C Configuration ---
-        // IMPORTANT: Replace with your actual Azure AD B2C details
-        const b2cPolicies = {
-            names: {
-                signUpSignIn: "B2C_1_signup_signin", // The name of your user flow
-            },
-            authorities: {
-                signUpSignIn: {
-                    authority: "https://litclubict.b2clogin.com/litclubict.onmicrosoft.com/B2C_1_signup_signin", // Replace with your user flow's authority URL
-                },
-            },
-            authorityDomain: "litclubict.b2clogin.com", // Replace with your B2C tenant domain
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCOrX_vn5zupUn_OpXfvKeiDAUIY8Lz8LM",
+          authDomain: "web-litclub-ict.firebaseapp.com",
+          projectId: "web-litclub-ict",
+          storageBucket: "web-litclub-ict.firebasestorage.app",
+          messagingSenderId: "868285777261",
+          appId: "1:868285777261:web:27ddf25ce5c62bbdb68664"
         };
 
-        const msalConfig = {
-            auth: {
-                clientId: "YOUR_APPLICATION_CLIENT_ID", // Paste your Application (client) ID here
-                authority: b2cPolicies.authorities.signUpSignIn.authority,
-                knownAuthorities: [b2cPolicies.authorityDomain],
-                redirectUri: "https://litclubictmumbai.page/subscribe.html", // Your redirect URI
-            },
-            cache: {
-                cacheLocation: "sessionStorage", // This is more secure
-                storeAuthStateInCookie: false,
-            }
-        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // --- Initialize MSAL ---
-        const myMSALObj = new msal.PublicClientApplication(msalConfig);
-
-        // --- UI Elements ---
+        // UI Elements
         const loggedInView = document.getElementById('logged-in-view');
         const loggedOutView = document.getElementById('logged-out-view');
         const googleSignInBtn = document.getElementById('google-signin-btn');
@@ -97,70 +81,45 @@
         const userEmailEl = document.getElementById('user-email');
         const errorMessageEl = document.getElementById('error-message');
 
-        // --- Functions ---
-        const showLoggedInState = (account) => {
-            userNameEl.textContent = account.name;
-            userEmailEl.textContent = account.idTokenClaims.emails[0]; // Email is in the token claims
-            loggedOutView.classList.add('hidden');
-            loggedInView.classList.remove('hidden');
-        };
-
-        const showLoggedOutState = () => {
-            loggedOutView.classList.remove('hidden');
-            loggedInView.classList.add('hidden');
-        };
-        
-        const signIn = () => {
-            myMSALObj.loginPopup({ scopes: ["openid", "profile"] })
-                .then(handleResponse)
+        // Sign in with Google
+        googleSignInBtn.addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
                 .catch(error => {
-                    console.error(error);
-                    errorMessageEl.textContent = "Authentication failed. Please try again.";
+                    console.error("Authentication Error:", error);
+                    errorMessageEl.textContent = "Failed to sign in. Please try again.";
                 });
-        }
-
-        const signOut = () => {
-            const logoutRequest = {
-                account: myMSALObj.getAccountByUsername(sessionStorage.getItem("username"))
-            };
-            myMSALObj.logoutPopup(logoutRequest);
-        }
-
-        const handleResponse = (response) => {
-            if (response !== null) {
-                sessionStorage.setItem("username", response.account.username);
-                showLoggedInState(response.account);
-                // In a real app, you would now send the user's info (e.g., response.idToken)
-                // to your backend to save to a database like Azure Cosmos DB.
-            } else {
-                // If no account is selected, show the logged out state.
-                const currentAccounts = myMSALObj.getAllAccounts();
-                if (currentAccounts.length === 0) {
-                    showLoggedOutState();
-                } else {
-                    showLoggedInState(currentAccounts[0]);
-                }
-            }
-        }
-        
-        // --- Event Listeners ---
-        googleSignInBtn.addEventListener('click', signIn);
-        signOutBtn.addEventListener('click', signOut);
-
-        // --- Initial State Check ---
-        myMSALObj.handleRedirectPromise().then(handleResponse).catch(err => {
-            console.error(err);
         });
 
-        // Show initial state
-        const currentAccount = myMSALObj.getAllAccounts()[0];
-        if (currentAccount) {
-            showLoggedInState(currentAccount);
-        } else {
-            showLoggedOutState();
-        }
+        // Sign out
+        signOutBtn.addEventListener('click', () => {
+            auth.signOut();
+        });
 
+        // Auth state listener
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is signed in
+                userNameEl.textContent = user.displayName;
+                userEmailEl.textContent = user.email;
+                loggedOutView.classList.add('hidden');
+                loggedInView.classList.remove('hidden');
+
+                // Save user to Firestore
+                db.collection('subscribers').doc(user.uid).set({
+                    name: user.displayName,
+                    email: user.email,
+                    subscribedAt: new Date()
+                })
+                .then(() => console.log("User saved to Firestore"))
+                .catch(error => console.error("Error saving user:", error));
+
+            } else {
+                // User is signed out
+                loggedOutView.classList.remove('hidden');
+                loggedInView.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
-
