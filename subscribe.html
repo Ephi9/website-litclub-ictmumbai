@@ -5,59 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscribe | The Literary Club</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-image: url('Graphics/evie-s-kqJfP-lrl-8-unsplash.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-        }
-        .form-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all 0.3s ease-in-out;
-        }
-    </style>
+    <style> body { font-family: 'Inter', sans-serif; background-image: url('Graphics/evie-s-kqJfP-lrl-8-unsplash.jpg'); background-size: cover; background-attachment: fixed; } .form-container { background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); } </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4 bg-gray-100">
-
-    <div id="main-container" class="w-full max-w-md mx-auto text-center rounded-2xl shadow-2xl p-8 md:p-12 form-container">
-        <a href="./index.html" class="inline-block mb-8">
-            <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto">
-        </a>
-
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div id="main-container" class="w-full max-w-md mx-auto text-center rounded-2xl shadow-2xl p-12 form-container">
+        <a href="./index.html"><img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto mb-8"></a>
         <div id="logged-out-view">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">Join Our Newsletter</h1>
-            <p class="text-gray-600 mb-8">Get the latest event updates, publications, and literary news delivered right to your inbox.</p>
-            <button id="google-signin-btn" class="w-full bg-white text-gray-700 font-semibold py-3 px-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center justify-center">
-                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" class="w-6 h-6 mr-3">
-                Sign in with Google
-            </button>
+            <p class="text-gray-600 mb-8">Get the latest updates delivered to your inbox.</p>
+            <button id="google-signin-btn" class="w-full bg-white text-gray-700 font-semibold py-3 px-4 border rounded-lg shadow-sm hover:shadow-md flex items-center justify-center"><img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" class="w-6 h-6 mr-3">Sign in with Google</button>
             <p id="error-message" class="text-red-500 text-sm mt-4"></p>
         </div>
-
         <div id="logged-in-view" class="hidden">
             <h1 class="text-3xl font-bold text-green-600 mb-2">Subscribed!</h1>
             <p class="text-gray-600 mb-6">Welcome, <span id="user-name" class="font-semibold"></span>!</p>
-            <p class="text-gray-600">You're now on our mailing list. You'll receive all future updates at <span id="user-email" class="font-semibold"></span>.</p>
-            <button id="sign-out-btn" class="mt-8 w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-md font-semibold hover:bg-gray-300 transition-all duration-300">Sign Out</button>
+            <button id="sign-out-btn" class="mt-8 w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-md font-semibold hover:bg-gray-300">Sign Out</button>
         </div>
-         <p class="mt-8 text-sm text-gray-500">
-            <a href="./index.html" class="text-blue-600 hover:underline">&larr; Back to Home</a>
-        </p>
+        <p class="mt-8 text-sm text-gray-500"><a href="./index.html" class="text-blue-600 hover:underline">&larr; Back to Home</a></p>
     </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
-
-    <script>
-        // Your web app's Firebase configuration
+    <script type="module">
         const firebaseConfig = {
           apiKey: "AIzaSyCOrX_vn5zupUn_OpXfvKeiDAUIY8Lz8LM",
           authDomain: "web-litclub-ict.firebaseapp.com",
@@ -65,61 +32,31 @@
           storageBucket: "web-litclub-ict.firebasestorage.app",
           messagingSenderId: "868285777261",
           appId: "1:868285777261:web:27ddf25ce5c62bbdb68664"
-        };
+        };        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // UI Elements
         const loggedInView = document.getElementById('logged-in-view');
         const loggedOutView = document.getElementById('logged-out-view');
-        const googleSignInBtn = document.getElementById('google-signin-btn');
-        const signOutBtn = document.getElementById('sign-out-btn');
-        const userNameEl = document.getElementById('user-name');
-        const userEmailEl = document.getElementById('user-email');
-        const errorMessageEl = document.getElementById('error-message');
-
-        // Sign in with Google
-        googleSignInBtn.addEventListener('click', () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .catch(error => {
-                    console.error("Authentication Error:", error);
-                    errorMessageEl.textContent = "Failed to sign in. Please try again.";
-                });
-        });
-
-        // Sign out
-        signOutBtn.addEventListener('click', () => {
-            auth.signOut();
-        });
-
-        // Auth state listener
-        auth.onAuthStateChanged(user => {
+        
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in
-                userNameEl.textContent = user.displayName;
-                userEmailEl.textContent = user.email;
+                document.getElementById('user-name').textContent = user.displayName;
                 loggedOutView.classList.add('hidden');
                 loggedInView.classList.remove('hidden');
-
-                // Save user to Firestore
-                db.collection('subscribers').doc(user.uid).set({
-                    name: user.displayName,
-                    email: user.email,
-                    subscribedAt: new Date()
-                })
-                .then(() => console.log("User saved to Firestore"))
-                .catch(error => console.error("Error saving user:", error));
-
+                await setDoc(doc(db, 'subscribers', user.uid), { name: user.displayName, email: user.email, subscribedAt: serverTimestamp() });
             } else {
-                // User is signed out
                 loggedOutView.classList.remove('hidden');
                 loggedInView.classList.add('hidden');
             }
         });
+        document.getElementById('google-signin-btn').addEventListener('click', () => signInWithPopup(auth, new GoogleAuthProvider()).catch(err => document.getElementById('error-message').textContent = err.message));
+        document.getElementById('sign-out-btn').addEventListener('click', () => signOut(auth));
     </script>
 </body>
 </html>
