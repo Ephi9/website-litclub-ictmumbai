@@ -127,7 +127,6 @@
             scrollbar-width: none; /* Firefox */
             padding-bottom: 1rem;
             will-change: transform;
-            /* FIX: Added padding to allow first and last cards to snap to the center */
             padding-left: calc(50% - 6rem);
             padding-right: calc(50% - 6rem);
         }
@@ -295,7 +294,6 @@
                     <p class="mt-4 max-w-2xl mx-auto text-gray-500">Celebrating the memorable moments from our past events.</p>
                 </div>
                 <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- FIX: Card size now adapts to image, and cards in a row have equal height -->
                     <div class="reveal bg-white rounded-xl overflow-hidden card-hover flex flex-col h-full" style="transition-delay: 100ms;">
                         <img loading="lazy" src="Graphics/past events/books-by-weight.jpg" alt="Books By Weight" class="w-full">
                         <div class="p-6 text-left flex-grow">
@@ -328,37 +326,18 @@
                     <p class="mt-4 max-w-2xl mx-auto text-gray-500">The dedicated individuals leading our literary journey.</p>
                 </div>
                 <div class="mt-16 relative team-slider-container">
-                    <!-- Left Arrow -->
                     <button id="scroll-left" class="hidden md:flex absolute top-1/2 -left-4 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full w-12 h-12 items-center justify-center shadow-lg hover:bg-white transition z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
 
+                    <!-- DYNAMIC TEAM SCROLLER: This will be populated by JavaScript -->
                     <div id="team-scroller" class="flex overflow-x-auto snap-x snap-mandatory gap-8 team-scroller">
-                        <!-- FIX: Removed fixed-width classes from HTML to rely on CSS -->
-                        <div class="reveal text-center team-card snap-center flex-shrink-0"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Galvina.jpeg"><img src="core pics/Galvina.jpeg" alt="Dr. Galvina Pereira" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Dr. Galvina Pereira</h3><p class="text-gray-500">Convenor</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 20ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Arhat B.jpeg"><img src="core pics/Anirudh K.jpeg" alt="Anirudh Kolli" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Anirudh Kolli</h3><p class="text-gray-500">Secretary</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 40ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Arhat B.jpeg"><img src="core pics/Arhat B.jpeg" alt="Arhat Bhuta" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Arhat Bhuta</h3><p class="text-gray-500">Overall Event Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 60ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Ananya K.jpeg"><img src="core pics/Ananya K.jpeg" alt="Ananya Kasat" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Ananya Kasat</h3><p class="text-gray-500">Editor</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 80ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Tanishq P.jpeg"><img src="core pics/Tanishq P.jpeg" alt="Tanishq Pawar" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Tanishq Pawar</h3><p class="text-gray-500">Editor</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 100ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Pratheep S.jpeg"><img src="core pics/Pratheep S.jpeg" alt="Pratheep Saravanan" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Pratheep Saravanan</h3><p class="text-gray-500">Editor</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 120ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Aayush D.jpeg"><img src="core pics/Aayush D.jpeg" alt="Aayush" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Aayush</h3><p class="text-gray-500">Technical Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 140ms;"><div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="core pics/Rohit P.jpeg"><img src="core pics/Rohit P.jpeg" alt="Rohit Patil" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Rohit Patil</h3><p class="text-gray-500">Technical Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 160ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Shobhit T.jpeg"><img src="core pics/Shobhit T.jpeg" alt="Shobhit Tandon" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shobhit Tandon</h3><p class="text-gray-500">R&L</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 180ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Manas K.jpeg"><img src="core pics/Manas K.jpeg" alt="Manas Kirtane" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Manas Kirtane</h3><p class="text-gray-500">R&L</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 200ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Shreeya G.jpeg"><img src="core pics/Shreeya G.jpeg" alt="Shreeya Giripunje" class="w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Shreeya Giripunje</h3><p class="text-gray-500">Design Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 220ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Yug G.jpeg"><img src="core pics/Yug G.jpeg" alt="Yug Gaikwad" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Yug Gaikwad</h3><p class="text-gray-500">Creatives Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 240ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Kajal R.jpeg"><img src="core pics/Kajal R.jpeg" alt="Kajal Rathod" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Kajal Rathod</h3><p class="text-gray-500">Creatives Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 260ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Labhesh B.jpeg"><img src="core pics/Labhesh B.jpeg" alt="Labhesh Bora" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Labhesh Bora</h3><p class="text-gray-500">Hospitality Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 280ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Gatha B.jpeg"><img src="core pics/Gatha B.jpeg" alt="Gatha Bodhare" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Gatha Bodhare</h3><p class="text-gray-500">Photography Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 300ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Janmjay B.jpeg"><img src="core pics/Janmjay B.jpeg" alt="Janmjay Basutkar" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Janmjay Basutkar</h3><p class="text-gray-500">Videography Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 320ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Dhruv K.jpeg"><img src="core pics/Dhruv K.jpeg" alt="Dhruv Kamani" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Dhruv Kamani</h3><p class="text-gray-500">PR Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 340ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Akansha L.jpeg"><img src="core pics/Akansha L.jpeg" alt="Akansha Lavate" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Akansha Lavate</h3><p class="text-gray-500">PR Head</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 360ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Amol J.jpeg"><img src="core pics/Srujanika R.jpeg" alt="Srujanika Rayaguru" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Srujanika Rayaguru</h3><p class="text-gray-500">PG Representative</p></div>
-                        <div class="reveal text-center team-card snap-center flex-shrink-0" style="transition-delay: 380ms;"><div class="relative w-48 h-48 mx-auto mb-4" data-src="core pics/Amol J.jpeg"><img src="core pics/Amol J.jpeg" alt="Amol Jain" class="team-card-photo w-full h-full rounded-full object-cover object-center shadow-md"></div><h3 class="text-xl font-bold text-gray-800">Amol Jain</h3><p class="text-gray-500">Finance Head</p></div>
+                        <!-- Loading placeholder (optional) -->
+                         <div class="text-center p-8">Loading team members...</div>
                     </div>
-                    <!-- Right Arrow -->
+                    
                     <button id="scroll-right" class="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full w-12 h-12 items-center justify-center shadow-lg hover:bg-white transition z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -424,9 +403,72 @@
     <div id="flyer-modal" class="modal-overlay"><div class="modal-content w-11/12 max-w-lg"><button id="flyer-modal-close" class="modal-close">✕</button><img src="flyer/eventposter.jpg" alt="Event Poster" class="rounded-lg w-full"></div></div>
     <div id="photo-modal" class="modal-overlay"><div class="modal-content w-11/12 max-w-sm p-2 rounded-full"><button id="photo-modal-close" class="modal-close">✕</button><img id="photo-modal-img" src="" alt="Core Team Member" class="rounded-full w-full aspect-square object-cover"></div></div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+
     <script>
+        // --- START: Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        // --- END: Firebase Configuration ---
+
+
+        // --- START: Dynamic Team Loading ---
+        const loadTeamMembers = () => {
+            const scroller = document.getElementById('team-scroller');
+            if (!scroller) return;
+
+            db.collection('teamMembers').orderBy('order').get().then(querySnapshot => {
+                let teamHTML = '';
+                if (querySnapshot.empty) {
+                    scroller.innerHTML = '<p class="text-center p-8 text-gray-500">Team members coming soon.</p>';
+                    return;
+                }
+                querySnapshot.forEach(doc => {
+                    const member = doc.data();
+                    teamHTML += `
+                        <div class="reveal text-center team-card snap-center flex-shrink-0">
+                            <div class="relative w-48 h-48 mx-auto mb-4 team-card-photo" data-src="${member.imageUrl}">
+                                <img src="${member.imageUrl}" alt="${member.name}" class="w-full h-full rounded-full object-cover object-center shadow-md">
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">${member.name}</h3>
+                            <p class="text-gray-500">${member.role}</p>
+                        </div>
+                    `;
+                });
+                scroller.innerHTML = teamHTML;
+                // Re-initialize reveal animations for new dynamic content
+                 const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) entry.target.classList.add('active');
+                    });
+                }, { threshold: 0.15 });
+                document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+            }).catch(error => {
+                console.error("Error loading team members: ", error);
+                scroller.innerHTML = '<p class="text-center p-8 text-red-500">Could not load team members.</p>';
+            });
+        };
+        // --- END: Dynamic Team Loading ---
+
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Load dynamic content first
+            loadTeamMembers();
+
             const lenis = new Lenis();
             function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
@@ -448,15 +490,19 @@
             const photoModal = document.getElementById('photo-modal');
             const photoModalImg = document.getElementById('photo-modal-img');
             const photoModalCloseBtn = document.getElementById('photo-modal-close');
-            document.querySelectorAll('.team-card-photo').forEach(photo => {
-                photo.addEventListener('dblclick', () => {
-                    const imgSrc = photo.dataset.src;
+            
+            // NOTE: Event delegation for dynamically added team photos
+            document.body.addEventListener('dblclick', function(e) {
+                const photoCard = e.target.closest('.team-card-photo');
+                if (photoCard) {
+                     const imgSrc = photoCard.dataset.src;
                     if(imgSrc) {
                         photoModalImg.src = imgSrc;
                         photoModal.classList.add('active');
                     }
-                });
+                }
             });
+
             const closePhotoModal = () => photoModal.classList.remove('active');
             photoModalCloseBtn.addEventListener('click', closePhotoModal);
             photoModal.addEventListener('click', (e) => { if(e.target === photoModal) closePhotoModal(); });
@@ -510,7 +556,7 @@
                 scrollRightBtn.addEventListener('click', () => scroller.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
             }
 
-            // --- Scroll Reveal ---
+            // --- Scroll Reveal for static content---
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) entry.target.classList.add('active');
@@ -521,4 +567,3 @@
     </script>
 </body>
 </html>
-
