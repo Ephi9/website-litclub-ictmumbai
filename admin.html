@@ -5,184 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | The Literary Club</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        .sidebar-link { @apply flex items-center p-3 my-1 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200; }
-        .sidebar-link.active { @apply bg-blue-500 text-white hover:bg-blue-600; }
-        .sidebar-link svg { @apply w-6 h-6 mr-3 flex-shrink-0; }
-        .stat-card { @apply bg-white p-6 rounded-xl shadow-sm border border-gray-200; }
+        :root {
+            --background: #f8f7f4; /* Parchment white */
+            --sidebar-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5c5c5c;
+            --accent: #005f73; /* Deep teal */
+            --accent-hover: #0a9396;
+            --border-color: #e5e5e5;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--background); color: var(--text-primary); }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* Login Page */
+        .login-bg {
+             background-image: url('https://placehold.co/1000x800/e2e8f0/334155?text=Literary+Inspiration');
+             background-size: cover;
+             background-position: center;
+        }
+
+        /* Sidebar */
+        .sidebar { background-color: var(--sidebar-bg); }
+        .sidebar-link { @apply flex items-center px-4 py-3 my-1 text-base text-gray-600 rounded-lg hover:bg-gray-100 transition-colors duration-200; }
+        .sidebar-link.active { @apply bg-teal-50 text-teal-800 font-semibold; }
+        .sidebar-link.active svg { @apply text-teal-700; }
+        .sidebar-link svg { @apply w-5 h-5 mr-3 flex-shrink-0 text-gray-400; }
+
+        /* Main Content */
+        .card { @apply bg-white p-6 rounded-xl border border-[var(--border-color)] shadow-sm; }
+        .btn-primary { @apply bg-[var(--accent)] text-white font-bold py-2 px-6 rounded-lg hover:bg-[var(--accent-hover)] transition-colors; }
+        .btn-secondary { @apply bg-gray-200 text-gray-800 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300; }
         
-        /* Hardware Acceleration & Smooth Transitions */
-        .modal-overlay, .modal-content, .sidebar {
-            will-change: transform, opacity;
-            transform: translateZ(0);
-        }
-
-        .modal-overlay { @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300; }
-        .modal-content { @apply bg-white p-8 rounded-lg shadow-xl transform transition-all duration-300; }
-
-        /* Mobile Sidebar Styling */
-        @media (max-width: 768px) {
-            .sidebar {
-                @apply absolute top-0 left-0 h-full z-40 transform -translate-x-full transition-transform duration-300 ease-in-out;
-            }
-            .sidebar.open {
-                @apply translate-x-0;
-            }
-            .sidebar-overlay {
-                @apply fixed inset-0 bg-black bg-opacity-50 z-30;
-            }
-        }
-
-        /* Loading Spinner */
+        /* Form & Table Styles */
+        input[type="text"], textarea { @apply shadow-sm border border-gray-300 rounded-lg w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]; }
+        .table-header { @apply p-4 border-b-2 border-gray-200 bg-gray-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider; }
+        .table-cell { @apply p-4 border-b border-gray-200; }
+        
         .loader {
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid #3498db; /* Blue */
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
+            border: 4px solid #f3f3f3; border-top: 4px solid var(--accent);
+            border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gray-100">
-
+<body>
     <div id="app-container">
-
         <!-- Login View -->
-        <div id="login-view" class="min-h-screen flex items-center justify-center px-4">
-            <div class="bg-white p-8 rounded-xl shadow-lg text-center w-full max-w-sm">
-                <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto mb-6">
-                <h1 class="text-2xl font-bold text-gray-800 mb-2">Admin Control Panel</h1>
-                <p id="login-message" class="text-gray-600 mb-6">Please sign in to continue.</p>
-                <button id="admin-signin-btn" class="w-full h-12 bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg shadow-sm hover:bg-blue-600 transition-all duration-300 flex items-center justify-center transform hover:scale-105">
-                    <span class="flex items-center justify-center">
-                        <svg class="w-6 h-6 mr-3" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"></path><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.222 0-9.519-3.512-11.011-8.46l-6.522 5.025C9.505 39.556 16.227 44 24 44z"></path><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.082 5.571l6.19 5.238C42.032 36.371 44 30.561 44 24c0-1.341-.138-2.65-.389-3.917z"></path></svg>
-                        <span>Sign in with Google</span>
-                    </span>
-                    <div id="signin-loader" class="loader hidden"></div>
-                </button>
+        <div id="login-view" class="min-h-screen flex">
+            <div class="flex-1 login-bg"></div>
+            <div class="w-full lg:w-1/3 flex items-center justify-center p-8">
+                <div class="w-full max-w-sm">
+                    <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto mb-6">
+                    <h1 class="text-3xl font-serif text-center text-gray-800 mb-2">Admin Portal</h1>
+                    <p id="login-message" class="text-gray-600 mb-8 text-center">Sign in to manage the club.</p>
+                    <button id="admin-signin-btn" class="w-full h-12 bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-lg shadow-sm hover:shadow-md transition-shadow flex items-center justify-center">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"></path><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.222 0-9.519-3.512-11.011-8.46l-6.522 5.025C9.505 39.556 16.227 44 24 44z"></path><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.082 5.571l6.19 5.238C42.032 36.371 44 30.561 44 24c0-1.341-.138-2.65-.389-3.917z"></path></svg>
+                            <span>Sign in with Google</span>
+                        </span>
+                        <div id="signin-loader" class="loader hidden"></div>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Admin Dashboard View -->
         <div id="admin-view" class="hidden">
-            <div id="sidebar-overlay" class="sidebar-overlay md:hidden hidden"></div>
-            <div class="flex h-screen bg-gray-100">
+            <div class="flex h-screen">
                 <!-- Sidebar -->
-                <aside id="sidebar" class="sidebar w-64 bg-white shadow-md flex-shrink-0">
-                    <div class="p-6 flex items-center justify-between">
-                        <div class="flex items-center">
-                            <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-10 mr-3">
-                            <span class="text-xl font-bold text-gray-800">LitClub Admin</span>
-                        </div>
-                         <button id="close-sidebar-btn" class="md:hidden text-gray-600 hover:text-gray-800">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
+                <aside class="sidebar w-64 flex-shrink-0 border-r border-[var(--border-color)]">
+                    <div class="p-6 flex items-center">
+                        <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-10 mr-3">
+                        <span class="text-2xl font-serif text-[var(--accent)]">Admin</span>
                     </div>
                     <nav class="mt-6 px-3">
-                         <a href="#dashboard" class="sidebar-link active" data-view="dashboard">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        <a href="#dashboard" class="sidebar-link active" data-view="dashboard">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                             <span>Dashboard</span>
                         </a>
                         <a href="#subscribers" class="sidebar-link" data-view="subscribers">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                             <span>Subscribers</span>
                         </a>
                         <a href="#newsletters" class="sidebar-link" data-view="newsletters">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
                             <span>Newsletters</span>
                         </a>
                     </nav>
-                    <div class="absolute bottom-0 left-0 w-full p-4 border-t">
-                         <span id="admin-email" class="text-sm text-gray-600 block truncate"></span>
-                         <button id="admin-signout-btn" class="w-full mt-2 text-left text-sm text-red-600 font-semibold hover:text-red-800 transition-colors">Sign Out</button>
+                    <div class="absolute bottom-0 left-0 w-full p-4 border-t border-[var(--border-color)]">
+                        <span id="admin-email" class="text-sm text-gray-600 block truncate"></span>
+                        <button id="admin-signout-btn" class="w-full mt-2 text-left text-sm text-red-600 font-semibold hover:text-red-800">Sign Out</button>
                     </div>
                 </aside>
 
                 <!-- Main Content -->
-                <div class="flex-1 flex flex-col overflow-hidden">
-                     <header class="bg-white shadow-sm md:hidden">
-                        <div class="p-4 flex items-center">
-                             <button id="open-sidebar-btn" class="text-gray-600 hover:text-gray-800">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                             </button>
-                             <h1 class="ml-4 font-semibold text-xl" id="main-header-title">Dashboard</h1>
+                <main class="flex-1 overflow-x-hidden overflow-y-auto p-8">
+                    <div id="dashboard-view" class="view">
+                        <h1 class="text-4xl font-serif text-gray-800 mb-8">Dashboard</h1>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="card"><h3 class="text-gray-500 font-medium">Total Subscribers</h3><p id="stats-subscribers" class="text-5xl font-serif text-[var(--accent)] mt-2">0</p></div>
+                            <div class="card"><h3 class="text-gray-500 font-medium">Newsletters Drafted</h3><p id="stats-newsletters" class="text-5xl font-serif text-[var(--accent)] mt-2">0</p></div>
+                            <div class="card"><h3 class="text-gray-500 font-medium">Team Members</h3><p id="stats-team" class="text-5xl font-serif text-[var(--accent)] mt-2">0</p></div>
                         </div>
-                     </header>
-                     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-8">
-                        
-                        <div id="dashboard-view" class="view">
-                           <h1 class="text-3xl font-bold text-gray-800 mb-6 hidden md:block">Dashboard</h1>
-                           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                               <div class="stat-card">
-                                   <h3 class="text-gray-500 font-medium">Total Subscribers</h3>
-                                   <p id="stats-subscribers" class="text-4xl font-bold text-blue-500 mt-2">0</p>
-                               </div>
-                               <div class="stat-card">
-                                   <h3 class="text-gray-500 font-medium">Newsletters Sent</h3>
-                                   <p id="stats-newsletters" class="text-4xl font-bold text-green-500 mt-2">0</p>
-                               </div>
-                               <div class="stat-card">
-                                   <h3 class="text-gray-500 font-medium">Team Members</h3>
-                                   <p id="stats-team" class="text-4xl font-bold text-purple-500 mt-2">0</p>
-                               </div>
-                           </div>
-                        </div>
-
-                        <div id="subscribers-view" class="view hidden">
-                           <h1 class="text-3xl font-bold text-gray-800 mb-6 hidden md:block">Subscriber Management</h1>
-                            <div class="bg-white p-6 rounded-lg shadow-md">
-                                <h2 class="text-xl font-bold text-gray-800 mb-4">All Subscribers (<span id="subscriber-count">0</span>)</h2>
-                                <div class="overflow-x-auto">
-                                    <table class="w-full text-left">
-                                        <thead>
-                                            <tr class="bg-gray-200 text-sm font-semibold">
-                                                <th class="p-3 border-b">Email</th>
-                                                <th class="p-3 border-b">Subscribed On</th>
-                                                <th class="p-3 border-b">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="subscribers-table-body"></tbody>
-                                    </table>
-                                </div>
+                    </div>
+                    <div id="subscribers-view" class="view hidden">
+                        <h1 class="text-4xl font-serif text-gray-800 mb-8">Subscriber Management</h1>
+                        <div class="card">
+                            <h2 class="text-xl font-bold text-gray-800 mb-4">All Subscribers (<span id="subscriber-count">0</span>)</h2>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead><tr><th class="table-header">Email</th><th class="table-header">Subscribed On</th><th class="table-header">Actions</th></tr></thead>
+                                    <tbody id="subscribers-table-body"></tbody>
+                                </table>
                             </div>
                         </div>
-
-                        <div id="newsletters-view" class="view hidden">
-                             <h1 class="text-3xl font-bold text-gray-800 mb-6 hidden md:block">Newsletter Management</h1>
-                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                <section id="composer" class="bg-white p-6 rounded-lg shadow-md">
-                                    <h2 class="text-xl font-bold text-gray-800 mb-4">Compose Newsletter</h2>
-                                    <div id="composer-message" class="hidden p-4 mb-4 text-sm rounded-lg"></div>
-                                    <form id="newsletter-form">
-                                        <div class="mb-4">
-                                            <label for="subject" class="block text-gray-700 font-semibold mb-2">Subject</label>
-                                            <input type="text" id="subject" class="shadow-sm border rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                                        </div>
-                                        <div class="mb-6">
-                                            <label for="body" class="block text-gray-700 font-semibold mb-2">Body (Markdown is supported)</label>
-                                            <textarea id="body" rows="10" class="shadow-sm border rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
-                                        </div>
-                                        <button type="submit" id="save-btn" class="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 transition-colors">Save Newsletter</button>
-                                    </form>
-                                </section>
-                                <section id="past-newsletters" class="bg-white p-6 rounded-lg shadow-md">
-                                    <h2 class="text-xl font-bold text-gray-800 mb-4">Past Newsletters</h2>
-                                    <div id="newsletters-list" class="space-y-3 max-h-[28rem] overflow-y-auto">
-                                        <p class="text-gray-500">No newsletters created yet.</p>
-                                    </div>
-                                </section>
-                             </div>
+                    </div>
+                    <div id="newsletters-view" class="view hidden">
+                        <h1 class="text-4xl font-serif text-gray-800 mb-8">Newsletter Management</h1>
+                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                            <section class="lg:col-span-3 card"><h2 class="text-xl font-bold text-gray-800 mb-4">Compose Newsletter</h2><form id="newsletter-form"><div class="mb-4"><label for="subject" class="block text-gray-700 font-semibold mb-2">Subject</label><input type="text" id="subject" required></div><div class="mb-6"><label for="body" class="block text-gray-700 font-semibold mb-2">Body</label><textarea id="body" rows="10" required></textarea></div><button type="submit" id="save-btn" class="btn-primary">Save Draft</button></form></section>
+                            <section class="lg:col-span-2 card"><h2 class="text-xl font-bold text-gray-800 mb-4">Past Newsletters</h2><div id="newsletters-list" class="space-y-4 max-h-[32rem] overflow-y-auto"></div></section>
                         </div>
-                     </main>
-                </div>
+                    </div>
+                </main>
             </div>
         </div>
     </div>
@@ -190,20 +139,16 @@
     <!-- Modal -->
     <div id="send-modal" class="modal-overlay opacity-0 pointer-events-none">
         <div class="modal-content w-full max-w-md scale-95">
-             <h2 class="text-xl font-bold mb-4">Confirm Sending</h2>
-            <p class="text-gray-600 mb-6">This will add the newsletter "<span id="modal-newsletter-subject" class="font-semibold"></span>" to the mail queue. This cannot be undone.</p>
+             <h2 class="text-2xl font-serif mb-4">Confirm Sending</h2>
+            <p class="text-gray-600 mb-6">This will add the newsletter "<span id="modal-newsletter-subject" class="font-semibold"></span>" to the mail queue.</p>
             <div class="flex justify-end space-x-4">
-                <button id="modal-cancel-btn" class="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300">Cancel</button>
-                <button id="modal-confirm-btn" class="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600">Yes, Send It</button>
+                <button id="modal-cancel-btn" class="btn-secondary">Cancel</button>
+                <button id="modal-confirm-btn" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700">Yes, Send It</button>
             </div>
         </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
-
         // --- START: Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyCOrX_vn5zupUn_OpXfvKeiDAUIY8Lz8LM",
@@ -213,16 +158,19 @@
           messagingSenderId: "868285777261",
           appId: "1:868285777261:web:27ddf25ce5c62bbdb68664"
         };
+        // --- END: Firebase Configuration ---
         
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        // --- END: Firebase Configuration ---
 
         // --- UI & State Management ---
         const loginView = document.getElementById('login-view');
         const adminView = document.getElementById('admin-view');
-        const mainHeaderTitle = document.getElementById('main-header-title');
         let currentNewsletterIdToSend = null;
 
         const switchView = (viewId) => {
@@ -230,11 +178,7 @@
             document.getElementById(`${viewId}-view`).classList.remove('hidden');
             
             document.querySelectorAll('.sidebar-link').forEach(link => {
-                const linkView = link.dataset.view;
-                link.classList.toggle('active', linkView === viewId);
-                if(linkView === viewId) {
-                    mainHeaderTitle.textContent = link.querySelector('span').textContent;
-                }
+                link.classList.toggle('active', link.dataset.view === viewId);
             });
         };
         
@@ -265,16 +209,16 @@
                 const adminRef = doc(db, 'admins', user.uid);
                 const adminDoc = await getDoc(adminRef);
                 if (adminDoc.exists() && adminDoc.data().isAdmin) {
-                    loginView.classList.add('hidden');
+                    loginView.style.display = 'none';
                     adminView.classList.remove('hidden');
                     document.getElementById('admin-email').textContent = user.email;
                     initializeDashboard();
                 } else {
-                    document.getElementById('login-message').textContent = "Access Denied. You are not an authorized administrator.";
+                    document.getElementById('login-message').textContent = "Access Denied. You are not an administrator.";
                     signOut(auth);
                 }
             } else {
-                loginView.classList.remove('hidden');
+                loginView.style.display = 'flex';
                 adminView.classList.add('hidden');
             }
         });
@@ -292,10 +236,9 @@
             updateStats();
             switchView('dashboard');
 
-            // Attach event listeners
-            document.getElementById('subscribers-view').addEventListener('click', handleSubscriberActions);
-            document.getElementById('newsletters-view').addEventListener('submit', handleNewsletterSubmit);
-            document.getElementById('newsletters-view').addEventListener('click', handleNewsletterActions);
+            document.getElementById('subscribers-table-body').addEventListener('click', handleSubscriberActions);
+            document.getElementById('newsletter-form').addEventListener('submit', handleNewsletterSubmit);
+            document.getElementById('newsletters-list').addEventListener('click', handleNewsletterActions);
         };
 
         const updateStats = async () => {
@@ -316,17 +259,12 @@
                 tableBody.innerHTML = '';
                 document.getElementById('subscriber-count').textContent = snapshot.size;
                 if(snapshot.empty) {
-                     tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4 text-gray-500">No subscribers yet.</td></tr>';
+                     tableBody.innerHTML = '<tr><td colspan="3" class="table-cell text-center text-gray-500">No subscribers yet.</td></tr>';
                 } else {
                     snapshot.forEach(doc => {
                         const subscriber = doc.data();
                         const date = subscriber.subscribedAt.toDate().toLocaleDateString();
-                        const row = `
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="p-3">${subscriber.email}</td>
-                                <td class="p-3">${date}</td>
-                                <td class="p-3"><button data-id="${doc.id}" class="remove-subscriber-btn text-red-500 hover:text-red-700 font-semibold">Remove</button></td>
-                            </tr>`;
+                        const row = `<tr class="hover:bg-gray-50"><td class="table-cell">${subscriber.email}</td><td class="table-cell">${date}</td><td class="table-cell"><button data-id="${doc.id}" class="remove-subscriber-btn text-red-500 hover:text-red-700 font-semibold">Remove</button></td></tr>`;
                         tableBody.innerHTML += row;
                     });
                 }
@@ -345,26 +283,22 @@
 
         // --- Newsletter Management ---
         async function handleNewsletterSubmit(e) {
-            if (e.target.id === 'newsletter-form') {
-                e.preventDefault();
-                const saveBtn = document.getElementById('save-btn');
-                saveBtn.disabled = true;
-                saveBtn.textContent = 'Saving...';
-                
-                const subject = document.getElementById('subject').value;
-                const body = document.getElementById('body').value;
+            e.preventDefault();
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+            
+            const subject = document.getElementById('subject').value;
+            const body = document.getElementById('body').value;
 
-                try {
-                    await addDoc(collection(db, 'newsletters'), {
-                        subject, body, createdAt: serverTimestamp(), status: 'draft'
-                    });
-                    e.target.reset();
-                } catch (error) {
-                    console.error("Error saving newsletter: ", error);
-                } finally {
-                    saveBtn.disabled = false;
-                    saveBtn.textContent = 'Save Newsletter';
-                }
+            try {
+                await addDoc(collection(db, 'newsletters'), { subject, body, createdAt: serverTimestamp(), status: 'draft' });
+                e.target.reset();
+            } catch (error) {
+                console.error("Error saving newsletter: ", error);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Draft';
             }
         }
         
@@ -374,24 +308,14 @@
                 const listEl = document.getElementById('newsletters-list');
                 listEl.innerHTML = '';
                  if (snapshot.empty) {
-                    listEl.innerHTML = '<p class="text-gray-500">No newsletters created yet.</p>';
+                    listEl.innerHTML = '<p class="text-gray-500">No newsletters drafted yet.</p>';
                     return;
                 }
                 snapshot.forEach(doc => {
                     const newsletter = doc.data();
-                    const date = newsletter.createdAt ? newsletter.createdAt.toDate().toLocaleString() : 'Just now';
+                    const date = newsletter.createdAt ? newsletter.createdAt.toDate().toLocaleDateString() : 'Just now';
                     const statusColor = newsletter.status === 'sent' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
-                    const item = `
-                    <div class="border rounded-lg p-4 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold">${newsletter.subject}</p>
-                            <p class="text-sm text-gray-500">Saved: ${date} <span class="ml-2 px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${newsletter.status}</span></p>
-                        </div>
-                        <div>
-                            ${newsletter.status !== 'sent' ? `<button data-id="${doc.id}" data-subject="${newsletter.subject}" class="send-newsletter-btn bg-green-500 text-white px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-600">Send</button>` : ''}
-                        </div>
-                    </div>
-                    `;
+                    const item = `<div class="border border-[var(--border-color)] rounded-lg p-4"><div class="flex justify-between items-center"><div><p class="font-bold">${newsletter.subject}</p><p class="text-sm text-gray-500">Drafted: ${date}</p></div><div><span class="px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${newsletter.status}</span></div></div>${newsletter.status !== 'sent' ? `<div class="mt-3 pt-3 border-t border-[var(--border-color)] text-right"><button data-id="${doc.id}" data-subject="${newsletter.subject}" class="send-newsletter-btn bg-green-500 text-white px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-600">Queue to Send</button></div>` : ''}</div>`;
                     listEl.innerHTML += item;
                 });
             });
@@ -407,55 +331,21 @@
         
         // --- Modal Logic ---
         const sendModal = document.getElementById('send-modal');
-        const openSendModal = () => {
-            sendModal.classList.remove('opacity-0', 'pointer-events-none');
-            sendModal.querySelector('.modal-content').classList.remove('scale-95');
-        };
-        const closeModal = () => {
-            sendModal.classList.add('opacity-0', 'pointer-events-none');
-            sendModal.querySelector('.modal-content').classList.add('scale-95');
-            currentNewsletterIdToSend = null;
-        };
+        const openSendModal = () => { sendModal.classList.remove('opacity-0', 'pointer-events-none'); sendModal.querySelector('.modal-content').classList.remove('scale-95'); };
+        const closeModal = () => { sendModal.classList.add('opacity-0', 'pointer-events-none'); sendModal.querySelector('.modal-content').classList.add('scale-95'); currentNewsletterIdToSend = null; };
 
         document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
         document.getElementById('modal-confirm-btn').addEventListener('click', async () => {
             if (!currentNewsletterIdToSend) return;
             try {
-                await addDoc(collection(db, 'mailQueue'), {
-                    newsletterId: currentNewsletterIdToSend,
-                    status: 'pending',
-                    createdAt: serverTimestamp()
-                });
+                await addDoc(collection(db, 'mailQueue'), { newsletterId: currentNewsletterIdToSend, status: 'pending', createdAt: serverTimestamp() });
                 alert('Newsletter has been added to the send queue! The backend will process and send it shortly.');
             } catch (error) {
                 console.error("Error queueing email:", error);
                 alert('Could not add newsletter to the send queue. Check console for errors.');
-            } finally {
-                closeModal();
-            }
+            } finally { closeModal(); }
         });
         sendModal.addEventListener('click', (e) => { if(e.target === sendModal) closeModal(); });
-
-        // --- Mobile Sidebar Logic ---
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        const openBtn = document.getElementById('open-sidebar-btn');
-        const closeBtn = document.getElementById('close-sidebar-btn');
-
-        const openSidebar = () => { sidebar.classList.add('open'); overlay.classList.remove('hidden'); };
-        const closeSidebar = () => { sidebar.classList.remove('open'); overlay.classList.add('hidden'); };
-
-        openBtn.addEventListener('click', openSidebar);
-        closeBtn.addEventListener('click', closeSidebar);
-        overlay.addEventListener('click', closeSidebar);
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    closeSidebar();
-                }
-            });
-        });
-
     </script>
 </body>
 </html>
