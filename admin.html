@@ -10,7 +10,7 @@
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .sidebar-link { @apply flex items-center p-3 my-1 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200; }
         .sidebar-link.active { @apply bg-blue-500 text-white hover:bg-blue-600; }
-        .sidebar-link svg { @apply w-6 h-6 mr-3; }
+        .sidebar-link svg { @apply w-6 h-6 mr-3 flex-shrink-0; }
         .stat-card { @apply bg-white p-6 rounded-xl shadow-sm border border-gray-200; }
         
         /* Hardware Acceleration & Smooth Transitions */
@@ -87,7 +87,6 @@
                         </button>
                     </div>
                     <nav class="mt-6 px-3">
-                        <!-- Sidebar Links -->
                          <a href="#dashboard" class="sidebar-link active" data-view="dashboard">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                             <span>Dashboard</span>
@@ -114,11 +113,74 @@
                              <button id="open-sidebar-btn" class="text-gray-600 hover:text-gray-800">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                              </button>
-                             <h1 class="ml-4 font-semibold text-xl">Admin Dashboard</h1>
+                             <h1 class="ml-4 font-semibold text-xl" id="main-header-title">Dashboard</h1>
                         </div>
                      </header>
                      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-8">
-                        <!-- Views will be injected here -->
+                        
+                        <div id="dashboard-view" class="view">
+                           <h1 class="text-3xl font-bold text-gray-800 mb-6 hidden md:block">Dashboard</h1>
+                           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                               <div class="stat-card">
+                                   <h3 class="text-gray-500 font-medium">Total Subscribers</h3>
+                                   <p id="stats-subscribers" class="text-4xl font-bold text-blue-500 mt-2">0</p>
+                               </div>
+                               <div class="stat-card">
+                                   <h3 class="text-gray-500 font-medium">Newsletters Sent</h3>
+                                   <p id="stats-newsletters" class="text-4xl font-bold text-green-500 mt-2">0</p>
+                               </div>
+                               <div class="stat-card">
+                                   <h3 class="text-gray-500 font-medium">Team Members</h3>
+                                   <p id="stats-team" class="text-4xl font-bold text-purple-500 mt-2">0</p>
+                               </div>
+                           </div>
+                        </div>
+
+                        <div id="subscribers-view" class="view hidden">
+                           <h1 class="text-3xl font-bold text-gray-800 mb-6 hidden md:block">Subscriber Management</h1>
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h2 class="text-xl font-bold text-gray-800 mb-4">All Subscribers (<span id="subscriber-count">0</span>)</h2>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-left">
+                                        <thead>
+                                            <tr class="bg-gray-200 text-sm font-semibold">
+                                                <th class="p-3 border-b">Email</th>
+                                                <th class="p-3 border-b">Subscribed On</th>
+                                                <th class="p-3 border-b">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="subscribers-table-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="newsletters-view" class="view hidden">
+                             <h1 class="text-3xl font-bold text-gray-800 mb-6 hidden md:block">Newsletter Management</h1>
+                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <section id="composer" class="bg-white p-6 rounded-lg shadow-md">
+                                    <h2 class="text-xl font-bold text-gray-800 mb-4">Compose Newsletter</h2>
+                                    <div id="composer-message" class="hidden p-4 mb-4 text-sm rounded-lg"></div>
+                                    <form id="newsletter-form">
+                                        <div class="mb-4">
+                                            <label for="subject" class="block text-gray-700 font-semibold mb-2">Subject</label>
+                                            <input type="text" id="subject" class="shadow-sm border rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                        </div>
+                                        <div class="mb-6">
+                                            <label for="body" class="block text-gray-700 font-semibold mb-2">Body (Markdown is supported)</label>
+                                            <textarea id="body" rows="10" class="shadow-sm border rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                                        </div>
+                                        <button type="submit" id="save-btn" class="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 transition-colors">Save Newsletter</button>
+                                    </form>
+                                </section>
+                                <section id="past-newsletters" class="bg-white p-6 rounded-lg shadow-md">
+                                    <h2 class="text-xl font-bold text-gray-800 mb-4">Past Newsletters</h2>
+                                    <div id="newsletters-list" class="space-y-3 max-h-[28rem] overflow-y-auto">
+                                        <p class="text-gray-500">No newsletters created yet.</p>
+                                    </div>
+                                </section>
+                             </div>
+                        </div>
                      </main>
                 </div>
             </div>
@@ -157,9 +219,26 @@
         const db = getFirestore(app);
         // --- END: Firebase Configuration ---
 
-        // All other script logic remains the same as the previous version...
-        // ... except for the sign-in part
+        // --- UI & State Management ---
+        const loginView = document.getElementById('login-view');
+        const adminView = document.getElementById('admin-view');
+        const mainHeaderTitle = document.getElementById('main-header-title');
+        let currentNewsletterIdToSend = null;
+
+        const switchView = (viewId) => {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(`${viewId}-view`).classList.remove('hidden');
+            
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                const linkView = link.dataset.view;
+                link.classList.toggle('active', linkView === viewId);
+                if(linkView === viewId) {
+                    mainHeaderTitle.textContent = link.querySelector('span').textContent;
+                }
+            });
+        };
         
+        // --- Auth Logic ---
         const provider = new GoogleAuthProvider();
         const adminSigninBtn = document.getElementById('admin-signin-btn');
         const signinLoader = document.getElementById('signin-loader');
@@ -168,7 +247,6 @@
         adminSigninBtn.addEventListener('click', () => {
             signinBtnContent.classList.add('hidden');
             signinLoader.classList.remove('hidden');
-            
             signInWithPopup(auth, provider)
                 .catch((error) => {
                     console.error("Popup sign-in error", error);
@@ -179,50 +257,6 @@
                     signinLoader.classList.add('hidden');
                 });
         });
-        
-        // --- Mobile Sidebar Logic ---
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        const openBtn = document.getElementById('open-sidebar-btn');
-        const closeBtn = document.getElementById('close-sidebar-btn');
-
-        const openSidebar = () => {
-            sidebar.classList.add('open');
-            overlay.classList.remove('hidden');
-        };
-
-        const closeSidebar = () => {
-            sidebar.classList.remove('open');
-            overlay.classList.add('hidden');
-        };
-
-        openBtn.addEventListener('click', openSidebar);
-        closeBtn.addEventListener('click', closeSidebar);
-        overlay.addEventListener('click', closeSidebar);
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    closeSidebar();
-                }
-            });
-        });
-        
-        // --- The rest of the script logic (onAuthStateChanged, data loading, etc.)
-        // should be copied from the previous version as it was correct. ---
-        
-        // --- UI & State Management ---
-        const views = document.querySelectorAll('.view');
-        const sidebarLinks = document.querySelectorAll('.sidebar-link');
-        const loginView = document.getElementById('login-view');
-        const adminView = document.getElementById('admin-view');
-        let currentNewsletterIdToSend = null;
-
-        const switchView = (viewId) => {
-            document.querySelector('main').innerHTML = document.getElementById(`${viewId}-view-template`).innerHTML;
-            sidebarLinks.forEach(link => {
-                link.classList.toggle('active', link.dataset.view === viewId);
-            });
-        };
         
         document.getElementById('admin-signout-btn').addEventListener('click', () => signOut(auth));
 
@@ -246,55 +280,183 @@
         });
         
         const initializeDashboard = () => {
-            // Initializing listeners and loading initial view
-            document.querySelector('main').addEventListener('click', handleMainClickEvents);
-            document.querySelector('main').addEventListener('submit', handleMainSubmitEvents);
-            
-            sidebarLinks.forEach(link => {
+            document.querySelectorAll('.sidebar-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     switchView(e.currentTarget.dataset.view);
                 });
             });
-            switchView('dashboard');
+            
+            loadSubscribers();
+            loadNewsletters();
             updateStats();
+            switchView('dashboard');
+
+            // Attach event listeners
+            document.getElementById('subscribers-view').addEventListener('click', handleSubscriberActions);
+            document.getElementById('newsletters-view').addEventListener('submit', handleNewsletterSubmit);
+            document.getElementById('newsletters-view').addEventListener('click', handleNewsletterActions);
         };
 
-        const updateStats = async () => { /* ... same as before ... */ };
+        const updateStats = async () => {
+            const subscribersSnap = await getDocs(collection(db, 'subscribers'));
+            const newslettersSnap = await getDocs(collection(db, 'newsletters'));
+            const teamSnap = await getDocs(collection(db, 'teamMembers'));
+            
+            document.getElementById('stats-subscribers').textContent = subscribersSnap.size;
+            document.getElementById('stats-newsletters').textContent = newslettersSnap.size;
+            document.getElementById('stats-team').textContent = teamSnap.size;
+        };
         
-        // --- Event Delegation for dynamically loaded content ---
-        function handleMainClickEvents(e) {
+        // --- Subscriber Management ---
+        const loadSubscribers = () => {
+            const q = query(collection(db, 'subscribers'), orderBy('subscribedAt', 'desc'));
+            onSnapshot(q, (snapshot) => {
+                const tableBody = document.getElementById('subscribers-table-body');
+                tableBody.innerHTML = '';
+                document.getElementById('subscriber-count').textContent = snapshot.size;
+                if(snapshot.empty) {
+                     tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4 text-gray-500">No subscribers yet.</td></tr>';
+                } else {
+                    snapshot.forEach(doc => {
+                        const subscriber = doc.data();
+                        const date = subscriber.subscribedAt.toDate().toLocaleDateString();
+                        const row = `
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">${subscriber.email}</td>
+                                <td class="p-3">${date}</td>
+                                <td class="p-3"><button data-id="${doc.id}" class="remove-subscriber-btn text-red-500 hover:text-red-700 font-semibold">Remove</button></td>
+                            </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                }
+            });
+        };
+        
+        async function handleSubscriberActions(e) {
             if (e.target.classList.contains('remove-subscriber-btn')) {
-                // ... logic to remove subscriber
-            }
-            if (e.target.classList.contains('send-newsletter-btn')) {
-                // ... logic to open send modal
+                const docId = e.target.dataset.id;
+                if(confirm('Are you sure you want to remove this subscriber?')) {
+                    await deleteDoc(doc(db, 'subscribers', docId));
+                    updateStats();
+                }
             }
         }
-        
-        function handleMainSubmitEvents(e) {
+
+        // --- Newsletter Management ---
+        async function handleNewsletterSubmit(e) {
             if (e.target.id === 'newsletter-form') {
                 e.preventDefault();
-                // ... logic to save newsletter
+                const saveBtn = document.getElementById('save-btn');
+                saveBtn.disabled = true;
+                saveBtn.textContent = 'Saving...';
+                
+                const subject = document.getElementById('subject').value;
+                const body = document.getElementById('body').value;
+
+                try {
+                    await addDoc(collection(db, 'newsletters'), {
+                        subject, body, createdAt: serverTimestamp(), status: 'draft'
+                    });
+                    e.target.reset();
+                } catch (error) {
+                    console.error("Error saving newsletter: ", error);
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Save Newsletter';
+                }
             }
         }
+        
+        const loadNewsletters = () => {
+            const q = query(collection(db, 'newsletters'), orderBy('createdAt', 'desc'));
+            onSnapshot(q, (snapshot) => {
+                const listEl = document.getElementById('newsletters-list');
+                listEl.innerHTML = '';
+                 if (snapshot.empty) {
+                    listEl.innerHTML = '<p class="text-gray-500">No newsletters created yet.</p>';
+                    return;
+                }
+                snapshot.forEach(doc => {
+                    const newsletter = doc.data();
+                    const date = newsletter.createdAt ? newsletter.createdAt.toDate().toLocaleString() : 'Just now';
+                    const statusColor = newsletter.status === 'sent' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+                    const item = `
+                    <div class="border rounded-lg p-4 flex justify-between items-center">
+                        <div>
+                            <p class="font-bold">${newsletter.subject}</p>
+                            <p class="text-sm text-gray-500">Saved: ${date} <span class="ml-2 px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${newsletter.status}</span></p>
+                        </div>
+                        <div>
+                            ${newsletter.status !== 'sent' ? `<button data-id="${doc.id}" data-subject="${newsletter.subject}" class="send-newsletter-btn bg-green-500 text-white px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-600">Send</button>` : ''}
+                        </div>
+                    </div>
+                    `;
+                    listEl.innerHTML += item;
+                });
+            });
+        };
+
+        function handleNewsletterActions(e) {
+             if (e.target.classList.contains('send-newsletter-btn')) {
+                currentNewsletterIdToSend = e.target.dataset.id;
+                document.getElementById('modal-newsletter-subject').textContent = e.target.dataset.subject;
+                openSendModal();
+            }
+        }
+        
+        // --- Modal Logic ---
+        const sendModal = document.getElementById('send-modal');
+        const openSendModal = () => {
+            sendModal.classList.remove('opacity-0', 'pointer-events-none');
+            sendModal.querySelector('.modal-content').classList.remove('scale-95');
+        };
+        const closeModal = () => {
+            sendModal.classList.add('opacity-0', 'pointer-events-none');
+            sendModal.querySelector('.modal-content').classList.add('scale-95');
+            currentNewsletterIdToSend = null;
+        };
+
+        document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+        document.getElementById('modal-confirm-btn').addEventListener('click', async () => {
+            if (!currentNewsletterIdToSend) return;
+            try {
+                await addDoc(collection(db, 'mailQueue'), {
+                    newsletterId: currentNewsletterIdToSend,
+                    status: 'pending',
+                    createdAt: serverTimestamp()
+                });
+                alert('Newsletter has been added to the send queue! The backend will process and send it shortly.');
+            } catch (error) {
+                console.error("Error queueing email:", error);
+                alert('Could not add newsletter to the send queue. Check console for errors.');
+            } finally {
+                closeModal();
+            }
+        });
+        sendModal.addEventListener('click', (e) => { if(e.target === sendModal) closeModal(); });
+
+        // --- Mobile Sidebar Logic ---
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const openBtn = document.getElementById('open-sidebar-btn');
+        const closeBtn = document.getElementById('close-sidebar-btn');
+
+        const openSidebar = () => { sidebar.classList.add('open'); overlay.classList.remove('hidden'); };
+        const closeSidebar = () => { sidebar.classList.remove('open'); overlay.classList.add('hidden'); };
+
+        openBtn.addEventListener('click', openSidebar);
+        closeBtn.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 768) {
+                    closeSidebar();
+                }
+            });
+        });
+
     </script>
-
-    <!-- HTML Templates for Views -->
-    <template id="dashboard-view-template">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
-        <!-- ... dashboard stat cards ... -->
-    </template>
-
-    <template id="subscribers-view-template">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Subscriber Management</h1>
-        <!-- ... subscriber table ... -->
-    </template>
-    
-    <template id="newsletters-view-template">
-         <h1 class="text-3xl font-bold text-gray-800 mb-6">Newsletter Management</h1>
-         <!-- ... newsletter composer and list ... -->
-    </template>
 </body>
 </html>
 
