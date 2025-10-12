@@ -51,31 +51,10 @@
                     </div>
                     <div class="card"><h3 class="font-bold mb-4">Subscriber Growth</h3><canvas id="subscribersChart"></canvas></div>
                 </div>
-                <div id="events-view" class="view hidden">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Events Management</h1>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="card"><h2 class="text-xl font-bold mb-4">Add New Event</h2><form id="event-form"><div class="mb-4"><label for="event-title" class="block text-sm font-medium text-gray-700">Title</label><input type="text" id="event-title" class="mt-1 block w-full" required></div><div class="mb-4"><label for="event-date" class="block text-sm font-medium text-gray-700">Date</label><input type="date" id="event-date" class="mt-1 block w-full" required></div><div class="mb-4"><label for="event-description" class="block text-sm font-medium text-gray-700">Description</label><textarea id="event-description" rows="3" class="mt-1 block w-full" required></textarea></div><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Save Event</button></form></div>
-                        <div class="card"><h2 class="text-xl font-bold mb-4">Event List</h2><div id="events-list" class="space-y-3"></div></div>
-                    </div>
-                </div>
-                <div id="team-view" class="view hidden">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Team Management</h1>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="card"><h2 class="text-xl font-bold mb-4">Add Team Member</h2><form id="team-form"><div class="mb-4"><label for="team-name" class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="team-name" class="mt-1 block w-full" required></div><div class="mb-4"><label for="team-role" class="block text-sm font-medium text-gray-700">Role</label><input type="text" id="team-role" class="mt-1 block w-full" required></div><div class="mb-4"><label for="team-image" class="block text-sm font-medium text-gray-700">Image URL</label><input type="text" id="team-image" class="mt-1 block w-full" required></div><div class="mb-4"><label for="team-order" class="block text-sm font-medium text-gray-700">Display Order</label><input type="number" id="team-order" class="mt-1 block w-full" required></div><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Save Member</button></form></div>
-                        <div class="card"><h2 class="text-xl font-bold mb-4">Current Team</h2><div id="team-list" class="space-y-3"></div></div>
-                    </div>
-                </div>
-                <div id="subscribers-view" class="view hidden">
-                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Subscribers</h1>
-                     <div class="card overflow-x-auto"><table class="w-full"><thead><tr><th class="table-header">Email</th><th class="table-header">Subscribed On</th><th class="table-header">Actions</th></tr></thead><tbody id="subscribers-table-body"></tbody></table></div>
-                </div>
-                <div id="newsletters-view" class="view hidden">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Newsletters</h1>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="card"><h2 class="text-xl font-bold mb-4">Compose</h2><form id="newsletter-form"><div class="mb-4"><label for="newsletter-subject" class="block text-sm font-medium text-gray-700">Subject</label><input type="text" id="newsletter-subject" class="mt-1 block w-full" required></div><div class="mb-4"><label for="newsletter-body" class="block text-sm font-medium text-gray-700">Body</label><textarea id="newsletter-body" rows="8" class="mt-1 block w-full" required></textarea></div><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Save Draft</button></form></div>
-                        <div class="card"><h2 class="text-xl font-bold mb-4">Drafts & Sent</h2><div id="newsletters-list" class="space-y-3"></div></div>
-                    </div>
-                </div>
+                <div id="events-view" class="view hidden"><h1 class="text-3xl font-bold text-gray-800 mb-6">Events Management</h1><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card"><h2 class="text-xl font-bold mb-4">Add New Event</h2><form id="event-form"><div class="mb-4"><label for="event-title" class="block text-sm font-medium text-gray-700">Title</label><input type="text" id="event-title" class="mt-1 block w-full" required></div><div class="mb-4"><label for="event-date" class="block text-sm font-medium text-gray-700">Date</label><input type="date" id="event-date" class="mt-1 block w-full" required></div><div class="mb-4"><label for="event-description" class="block text-sm font-medium text-gray-700">Description</label><textarea id="event-description" rows="3" class="mt-1 block w-full" required></textarea></div><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Save Event</button></form></div><div class="card"><h2 class="text-xl font-bold mb-4">Event List</h2><div id="events-list" class="space-y-3"></div></div></div></div>
+                <div id="team-view" class="view hidden"><h1 class="text-3xl font-bold text-gray-800 mb-6">Team Management</h1><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card"><h2 class="text-xl font-bold mb-4">Add Team Member</h2><form id="team-form"><div class="mb-4"><label for="team-name" class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="team-name" class="mt-1 block w-full" required></div><div class="mb-4"><label for="team-role" class="block text-sm font-medium text-gray-700">Role</label><input type="text" id="team-role" class="mt-1 block w-full" required></div><div class="mb-4"><label for="team-image" class="block text-sm font-medium text-gray-700">Image URL</label><input type="text" id="team-image" class="mt-1 block w-full" required></div><div class="mb-4"><label for="team-order" class="block text-sm font-medium text-gray-700">Display Order</label><input type="number" id="team-order" class="mt-1 block w-full" required></div><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Save Member</button></form></div><div class="card"><h2 class="text-xl font-bold mb-4">Current Team</h2><div id="team-list" class="space-y-3"></div></div></div></div>
+                <div id="subscribers-view" class="view hidden"><h1 class="text-3xl font-bold text-gray-800 mb-6">Subscribers</h1><div class="card overflow-x-auto"><table class="w-full"><thead><tr><th class="table-header">Email</th><th class="table-header">Subscribed On</th><th class="table-header">Actions</th></tr></thead><tbody id="subscribers-table-body"></tbody></table></div></div>
+                <div id="newsletters-view" class="view hidden"><h1 class="text-3xl font-bold text-gray-800 mb-6">Newsletters</h1><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card"><h2 class="text-xl font-bold mb-4">Compose</h2><form id="newsletter-form"><div class="mb-4"><label for="newsletter-subject" class="block text-sm font-medium text-gray-700">Subject</label><input type="text" id="newsletter-subject" class="mt-1 block w-full" required></div><div class="mb-4"><label for="newsletter-body" class="block text-sm font-medium text-gray-700">Body</label><textarea id="newsletter-body" rows="8" class="mt-1 block w-full" required></textarea></div><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Save Draft</button></form></div><div class="card"><h2 class="text-xl font-bold mb-4">Drafts & Sent</h2><div id="newsletters-list" class="space-y-3"></div></div></div></div>
             </main>
         </div></div>
     </div>
@@ -123,13 +102,9 @@
         const setupEventListeners = () => {
             document.getElementById('admin-signin-btn').addEventListener('click', () => signInWithPopup(auth, new GoogleAuthProvider()).catch(err => console.error(err)));
             document.getElementById('admin-signout-btn').addEventListener('click', () => signOut(auth));
-            
-            // Forms
             document.getElementById('event-form').addEventListener('submit', handleEventSubmit);
             document.getElementById('team-form').addEventListener('submit', handleTeamSubmit);
             document.getElementById('newsletter-form').addEventListener('submit', handleNewsletterSubmit);
-
-            // Action buttons (delegated)
             document.getElementById('events-list').addEventListener('click', e => handleListDelete(e, 'events'));
             document.getElementById('team-list').addEventListener('click', e => handleListDelete(e, 'teamMembers'));
             document.getElementById('subscribers-table-body').addEventListener('click', e => handleListDelete(e, 'subscribers'));
@@ -154,7 +129,6 @@
             });
         };
 
-        // --- RENDER FUNCTIONS ---
         const renderEventList = (snapshot) => {
             const listEl = document.getElementById('events-list');
             listEl.innerHTML = '';
@@ -193,18 +167,48 @@
             });
         };
 
-        const renderChart = (snapshot) => { /* ... (chart logic remains the same) ... */ };
+        const renderChart = (snapshot) => {
+            const ctx = document.getElementById('subscribersChart').getContext('2d');
+            const data = {};
+            snapshot.forEach(doc => {
+                if (doc.data().subscribedAt) {
+                    const date = doc.data().subscribedAt.toDate().toLocaleDateString();
+                    data[date] = (data[date] || 0) + 1;
+                }
+            });
+            const labels = Object.keys(data).sort((a,b) => new Date(a) - new Date(b));
+            const values = labels.map(label => data[label]);
 
-        // --- FORM SUBMISSION HANDLERS ---
+            if (subscribersChart) {
+                subscribersChart.data.labels = labels;
+                subscribersChart.data.datasets[0].data = values;
+                subscribersChart.update();
+            } else {
+                subscribersChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'New Subscribers',
+                            data: values,
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
+            }
+        };
+
         const handleEventSubmit = async (e) => {
             e.preventDefault();
             const form = e.target;
             try {
                 await addDoc(collection(db, 'events'), {
-                    title: form.elements['event-title'].value,
-                    date: form.elements['event-date'].value,
-                    description: form.elements['event-description'].value,
-                    createdAt: serverTimestamp()
+                    title: form.elements['event-title'].value, date: form.elements['event-date'].value, description: form.elements['event-description'].value, createdAt: serverTimestamp()
                 });
                 form.reset();
             } catch (error) { console.error("Error adding event:", error); }
@@ -214,10 +218,7 @@
             const form = e.target;
             try {
                 await addDoc(collection(db, 'teamMembers'), {
-                    name: form.elements['team-name'].value,
-                    role: form.elements['team-role'].value,
-                    imageUrl: form.elements['team-image'].value,
-                    order: parseInt(form.elements['team-order'].value)
+                    name: form.elements['team-name'].value, role: form.elements['team-role'].value, imageUrl: form.elements['team-image'].value, order: parseInt(form.elements['team-order'].value)
                 });
                 form.reset();
             } catch (error) { console.error("Error adding team member:", error); }
@@ -227,16 +228,12 @@
             const form = e.target;
             try {
                 await addDoc(collection(db, 'newsletters'), {
-                    subject: form.elements['newsletter-subject'].value,
-                    body: form.elements['newsletter-body'].value,
-                    status: 'draft',
-                    createdAt: serverTimestamp()
+                    subject: form.elements['newsletter-subject'].value, body: form.elements['newsletter-body'].value, status: 'draft', createdAt: serverTimestamp()
                 });
                 form.reset();
             } catch (error) { console.error("Error saving newsletter:", error); }
         };
         
-        // --- GENERIC DELETE HANDLER ---
         const handleListDelete = async (e, collectionName) => {
             if (e.target.classList.contains('delete-btn')) {
                 const id = e.target.dataset.id;
@@ -246,7 +243,6 @@
             }
         };
 
-        // --- AUTHENTICATION ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const adminDoc = await getDoc(doc(db, 'admins', user.uid));
