@@ -5,58 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | The Literary Club</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --background: #fdfdfc; /* Off-white */
-            --sidebar-bg: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #5c5c5c;
-            --accent: #8c7a6b; /* Muted brown, like a book cover */
-            --accent-hover: #736357;
-            --border-color: #f0ebe5; /* Light beige */
+            --sidebar-bg: #1f2937; /* Dark Gray */
+            --content-bg: #f9fafb; /* Very Light Gray */
+            --card-bg: #ffffff;
+            --primary-accent: #3b82f6; /* Blue */
+            --text-main: #111827;
+            --text-light: #6b7280;
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--background); color: var(--text-primary); }
-        .font-serif { font-family: 'Playfair Display', serif; }
-
-        .login-bg { background-image: url('https://placehold.co/1000x800/f0ebe5/8c7a6b?text=The+Literary+Club'); background-size: cover; background-position: center; }
-        .sidebar { background-color: var(--sidebar-bg); }
-        .sidebar-link { @apply flex items-center px-4 py-3 my-1 text-base text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200; }
-        .sidebar-link.active { @apply bg-[var(--background)] font-semibold text-[var(--accent)]; }
-        .sidebar-link.active svg { @apply text-[var(--accent)]; }
-        .sidebar-link svg { @apply w-5 h-5 mr-3 flex-shrink-0 text-gray-400 transition-colors; }
-        .sidebar-link:hover svg { @apply text-gray-600; }
-        
-        .card { @apply bg-white p-6 rounded-lg border border-[var(--border-color)] shadow-sm; }
-        .btn-primary { @apply bg-[var(--accent)] text-white font-bold py-2 px-6 rounded-lg hover:bg-[var(--accent-hover)] transition-colors; }
-        .btn-secondary { @apply bg-gray-200 text-gray-800 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300; }
-        
-        input[type="text"], input[type="date"], textarea { @apply shadow-sm border border-gray-300 rounded-lg w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]; }
-        .table-header { @apply p-4 border-b-2 border-gray-100 bg-gray-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider; }
-        .table-cell { @apply p-4 border-b border-gray-100; }
-        
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--content-bg); }
+        .sidebar-link { @apply flex items-center px-4 py-2.5 my-1 text-sm text-gray-300 rounded-lg hover:bg-gray-700 transition-colors duration-200; }
+        .sidebar-link.active { @apply bg-[var(--primary-accent)] text-white shadow-md; }
+        .sidebar-link svg { @apply w-5 h-5 mr-3 flex-shrink-0; }
+        .card { @apply bg-[var(--card-bg)] p-6 rounded-xl shadow-lg border border-gray-200; }
+        .stat-card { @apply flex items-start justify-between; }
+        .stat-card-icon { @apply bg-gray-800 text-white rounded-lg shadow-lg -mt-10 p-3; }
+        .table-header { @apply p-4 bg-gray-50 text-left text-xs font-bold text-gray-500 uppercase tracking-wider; }
+        .table-cell { @apply p-4 border-b border-gray-200; }
     </style>
 </head>
 <body>
     <div id="app-container">
         <!-- Login View -->
-        <div id="login-view" class="min-h-screen flex">
-            <div class="flex-1 login-bg"></div>
-            <div class="w-full lg:w-1/3 flex items-center justify-center p-8 bg-white">
-                <div class="w-full max-w-sm">
+        <div id="login-view" class="min-h-screen flex items-center justify-center bg-gray-100">
+            <div class="w-full max-w-sm">
+                <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
                     <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-12 mx-auto mb-6">
-                    <h1 class="text-3xl font-serif text-center text-gray-800 mb-2">Admin Portal</h1>
-                    <p id="login-message" class="text-gray-600 mb-8 text-center">Sign in to manage the club.</p>
-                    <button id="admin-signin-btn" class="w-full h-12 bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-lg shadow-sm hover:shadow-md transition-shadow flex items-center justify-center">
-                        <span class="flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"></path><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.222 0-9.519-3.512-11.011-8.46l-6.522 5.025C9.505 39.556 16.227 44 24 44z"></path><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.082 5.571l6.19 5.238C42.032 36.371 44 30.561 44 24c0-1.341-.138-2.65-.389-3.917z"></path></svg>
-                            <span>Sign in with Google</span>
-                        </span>
-                        <div id="signin-loader" class="loader hidden"></div>
+                    <h1 class="text-2xl font-bold text-gray-800 mb-2">Admin Portal</h1>
+                    <p id="login-message" class="text-gray-600 mb-6">Please sign in to continue.</p>
+                    <button id="admin-signin-btn" class="w-full h-12 bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300 flex items-center justify-center">
+                        Sign in with Google
                     </button>
                 </div>
             </div>
@@ -65,57 +48,61 @@
         <!-- Admin Dashboard View -->
         <div id="admin-view" class="hidden">
             <div class="flex h-screen">
-                <aside class="sidebar w-64 flex-shrink-0 border-r border-[var(--border-color)]">
-                    <div class="p-6 flex items-center"><img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-10 mr-3"><span class="text-2xl font-serif text-[var(--accent)]">Admin</span></div>
+                <aside class="sidebar w-64 flex-shrink-0 bg-[var(--sidebar-bg)] overflow-y-auto">
+                    <div class="p-4 border-b border-gray-700">
+                        <a href="#" class="flex items-center">
+                           <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-10 mr-3">
+                           <span class="text-white text-lg font-bold">LitClub ICT</span>
+                        </a>
+                    </div>
                     <nav class="mt-6 px-3">
-                        <a href="#dashboard" class="sidebar-link active" data-view="dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
-                        <a href="#events" class="sidebar-link" data-view="events"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Events</span></a>
-                        <a href="#subscribers" class="sidebar-link" data-view="subscribers"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Subscribers</span></a>
-                        <a href="#newsletters" class="sidebar-link" data-view="newsletters"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><span>Newsletters</span></a>
+                        <p class="px-4 text-xs font-semibold text-gray-400 uppercase">Analytics</p>
+                        <a href="#dashboard" class="sidebar-link active" data-view="dashboard"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg><span>Dashboard</span></a>
+                        <p class="mt-4 px-4 text-xs font-semibold text-gray-400 uppercase">Management</p>
+                        <a href="#events" class="sidebar-link" data-view="events"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span>Events</span></a>
+                        <a href="#team" class="sidebar-link" data-view="team"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.122-1.28-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.122-1.28.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg><span>Team</span></a>
+                        <a href="#subscribers" class="sidebar-link" data-view="subscribers"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><span>Subscribers</span></a>
+                        <a href="#newsletters" class="sidebar-link" data-view="newsletters"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg><span>Newsletters</span></a>
                     </nav>
-                    <div class="absolute bottom-0 left-0 w-full p-4 border-t border-[var(--border-color)]"><span id="admin-email" class="text-sm text-gray-600 block truncate"></span><button id="admin-signout-btn" class="w-full mt-2 text-left text-sm text-red-600 font-semibold hover:text-red-800">Sign Out</button></div>
+                    <div class="absolute bottom-0 left-0 w-full p-4 bg-[var(--sidebar-bg)] border-t border-gray-700">
+                        <div id="admin-email" class="text-sm text-gray-300 block truncate"></div>
+                        <button id="admin-signout-btn" class="w-full mt-2 text-left text-sm text-red-400 font-semibold hover:text-red-300">Sign Out</button>
+                    </div>
                 </aside>
+
                 <main class="flex-1 overflow-x-hidden overflow-y-auto p-8">
                     <div id="dashboard-view" class="view">
-                        <h1 class="text-4xl font-serif text-gray-800 mb-2">Welcome Back!</h1>
-                        <p class="text-gray-500 mb-8">Here's a snapshot of your literary club's activity.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div class="card"><h3 class="text-gray-500 font-medium">Upcoming Events</h3><p id="stats-events" class="text-5xl font-serif text-[var(--accent)] mt-2">0</p></div>
-                            <div class="card"><h3 class="text-gray-500 font-medium">Total Subscribers</h3><p id="stats-subscribers" class="text-5xl font-serif text-[var(--accent)] mt-2">0</p></div>
-                            <div class="card"><h3 class="text-gray-500 font-medium">Newsletters Drafted</h3><p id="stats-newsletters" class="text-5xl font-serif text-[var(--accent)] mt-2">0</p></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <div class="card stat-card"><div class="stat-card-icon"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div><div class="text-right"><p class="text-sm font-bold text-gray-500">Upcoming Events</p><h3 id="stats-events" class="text-2xl font-bold text-gray-800">0</h3></div></div>
+                            <div class="card stat-card"><div class="stat-card-icon"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.122-1.28-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.122-1.28.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div><div class="text-right"><p class="text-sm font-bold text-gray-500">Team Members</p><h3 id="stats-team" class="text-2xl font-bold text-gray-800">0</h3></div></div>
+                            <div class="card stat-card"><div class="stat-card-icon"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div><div class="text-right"><p class="text-sm font-bold text-gray-500">Subscribers</p><h3 id="stats-subscribers" class="text-2xl font-bold text-gray-800">0</h3></div></div>
+                            <div class="card stat-card"><div class="stat-card-icon"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg></div><div class="text-right"><p class="text-sm font-bold text-gray-500">Draft Newsletters</p><h3 id="stats-newsletters" class="text-2xl font-bold text-gray-800">0</h3></div></div>
                         </div>
+                        <div class="card"><h3 class="font-bold mb-4">Subscriber Growth</h3><canvas id="subscribersChart"></canvas></div>
                     </div>
                     <div id="events-view" class="view hidden">
-                        <h1 class="text-4xl font-serif text-gray-800 mb-8">Event Management</h1>
-                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                            <section class="lg:col-span-3 card"><h2 class="text-xl font-bold text-gray-800 mb-4">Create New Event</h2><form id="event-form"><div class="mb-4"><label for="event-title" class="block text-gray-700 font-semibold mb-2">Event Title</label><input type="text" id="event-title" required></div><div class="mb-4"><label for="event-date" class="block text-gray-700 font-semibold mb-2">Date</label><input type="date" id="event-date" required></div><div class="mb-6"><label for="event-desc" class="block text-gray-700 font-semibold mb-2">Description</label><textarea id="event-desc" rows="4" required></textarea></div><button type="submit" id="save-event-btn" class="btn-primary">Add Event</button></form></section>
-                            <section class="lg:col-span-2 card"><h2 class="text-xl font-bold text-gray-800 mb-4">Upcoming Events</h2><div id="events-list" class="space-y-4 max-h-[32rem] overflow-y-auto"></div></section>
-                        </div>
+                        <!-- Events Management View -->
+                    </div>
+                    <div id="team-view" class="view hidden">
+                        <!-- Team Management View -->
                     </div>
                     <div id="subscribers-view" class="view hidden">
-                         <h1 class="text-4xl font-serif text-gray-800 mb-8">Subscriber Management</h1>
-                        <div class="card">
-                            <h2 class="text-xl font-bold text-gray-800 mb-4">All Subscribers (<span id="subscriber-count">0</span>)</h2>
-                            <div class="overflow-x-auto"><table class="w-full"><thead><tr><th class="table-header">Email</th><th class="table-header">Subscribed On</th><th class="table-header">Actions</th></tr></thead><tbody id="subscribers-table-body"></tbody></table></div>
-                        </div>
+                        <!-- Subscribers Management View -->
                     </div>
                     <div id="newsletters-view" class="view hidden">
-                        <h1 class="text-4xl font-serif text-gray-800 mb-8">Newsletter Management</h1>
-                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                            <section class="lg:col-span-3 card"><h2 class="text-xl font-bold text-gray-800 mb-4">Compose Newsletter</h2><form id="newsletter-form"><div class="mb-4"><label for="subject" class="block text-gray-700 font-semibold mb-2">Subject</label><input type="text" id="subject" required></div><div class="mb-6"><label for="body" class="block text-gray-700 font-semibold mb-2">Body</label><textarea id="body" rows="10" required></textarea></div><button type="submit" id="save-btn" class="btn-primary">Save Draft</button></form></section>
-                            <section class="lg:col-span-2 card"><h2 class="text-xl font-bold text-gray-800 mb-4">Past Newsletters</h2><div id="newsletters-list" class="space-y-4 max-h-[32rem] overflow-y-auto"></div></section>
-                        </div>
+                        <!-- Newsletters Management View -->
                     </div>
                 </main>
             </div>
         </div>
     </div>
     
-    <div id="send-modal" class="modal-overlay opacity-0 pointer-events-none fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
-        <div class="modal-content w-full max-w-md scale-95 bg-white p-8 rounded-lg shadow-xl transform transition-all duration-300"><h2 class="text-2xl font-serif mb-4">Confirm Sending</h2><p class="text-gray-600 mb-6">This will add the newsletter "<span id="modal-newsletter-subject" class="font-semibold"></span>" to the mail queue.</p><div class="flex justify-end space-x-4"><button id="modal-cancel-btn" class="btn-secondary">Cancel</button><button id="modal-confirm-btn" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700">Yes, Send It</button></div></div>
-    </div>
-
     <script type="module">
+        /*****************************************************************************
+         * !!! IMPORTANT !!!
+         * REPLACE THE PLACEHOLDER CONFIGURATION BELOW WITH YOUR OWN FIREBASE CONFIG
+         * You can find this in your Firebase project settings.
+         *****************************************************************************/
         const firebaseConfig = {
           apiKey: "AIzaSyCOrX_vn5zupUn_OpXfvKeiDAUIY8Lz8LM",
           authDomain: "web-litclub-ict.firebaseapp.com",
@@ -125,53 +112,142 @@
           appId: "1:868285777261:web:27ddf25ce5c62bbdb68664"
         };
         
+        // --- Firebase SDK Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, getDocs, deleteDoc, where } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, getDocs, deleteDoc, where, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
 
+        // --- Firebase Initialization ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- Global State & UI Elements ---
         const loginView = document.getElementById('login-view');
         const adminView = document.getElementById('admin-view');
-        let currentNewsletterIdToSend = null;
+        let subscribersChart = null;
 
+        // --- Core Application Logic ---
+
+        /**
+         * Switches the main content view in the dashboard.
+         * @param {string} viewId - The ID of the view to show (e.g., 'dashboard').
+         */
         const switchView = (viewId) => {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(`${viewId}-view`).classList.remove('hidden');
+            document.querySelectorAll('.view').forEach(v => v && v.classList.add('hidden'));
+            const viewEl = document.getElementById(`${viewId}-view`);
+            if (viewEl) viewEl.classList.remove('hidden');
             document.querySelectorAll('.sidebar-link').forEach(link => link.classList.toggle('active', link.dataset.view === viewId));
         };
         
-        const provider = new GoogleAuthProvider();
-        const adminSigninBtn = document.getElementById('admin-signin-btn');
-        adminSigninBtn.addEventListener('click', () => {
-            const loader = document.getElementById('signin-loader');
-            const content = adminSigninBtn.querySelector('span');
-            content.classList.add('hidden');
-            loader.classList.remove('hidden');
-            signInWithPopup(auth, provider).catch((error) => {
-                console.error("Popup sign-in error", error);
-                document.getElementById('login-message').textContent = `Sign-in failed: ${error.code}`;
-            }).finally(() => {
-                content.classList.remove('hidden');
-                loader.classList.add('hidden');
-            });
-        });
-        
-        document.getElementById('admin-signout-btn').addEventListener('click', () => signOut(auth));
+        /**
+         * Initializes the entire dashboard, sets up event listeners, and loads initial data.
+         */
+        const initializeDashboard = () => {
+            document.querySelectorAll('.sidebar-link').forEach(link => link.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                switchView(e.currentTarget.dataset.view); 
+            }));
+            
+            // Set up listeners for each management section
+            setupEventListeners();
 
+            // Load initial data for all sections
+            loadAllData();
+
+            // Start on the dashboard view
+            switchView('dashboard');
+        };
+
+        /**
+         * Central function to set up all event listeners for the application.
+         */
+        const setupEventListeners = () => {
+            document.getElementById('admin-signin-btn').addEventListener('click', () => signInWithPopup(auth, new GoogleAuthProvider()).catch(err => console.error(err)));
+            document.getElementById('admin-signout-btn').addEventListener('click', () => signOut(auth));
+            
+            // Add other event listeners for forms and buttons here
+        };
+
+        /**
+         * Loads all real-time data from Firestore.
+         */
+        const loadAllData = () => {
+            // Dashboard Stats & Chart
+            onSnapshot(collection(db, 'subscribers'), snap => {
+                document.getElementById('stats-subscribers').textContent = snap.size;
+                renderChart(snap);
+            });
+            onSnapshot(query(collection(db, 'events'), where('date', '>=', new Date().toISOString().split('T')[0])), snap => {
+                document.getElementById('stats-events').textContent = snap.size;
+            });
+            onSnapshot(collection(db, 'teamMembers'), snap => {
+                document.getElementById('stats-team').textContent = snap.size;
+            });
+            onSnapshot(collection(db, 'newsletters'), snap => {
+                document.getElementById('stats-newsletters').textContent = snap.size;
+            });
+        };
+
+        /**
+         * Renders or updates the subscriber growth chart on the dashboard.
+         * @param {QuerySnapshot} snapshot - The Firestore snapshot of the subscribers collection.
+         */
+        const renderChart = (snapshot) => {
+            const ctx = document.getElementById('subscribersChart').getContext('2d');
+            const data = {};
+            snapshot.forEach(doc => {
+                if (doc.data().subscribedAt) {
+                    const date = doc.data().subscribedAt.toDate().toLocaleDateString();
+                    data[date] = (data[date] || 0) + 1;
+                }
+            });
+            const labels = Object.keys(data).sort((a,b) => new Date(a) - new Date(b));
+            const values = labels.map(label => data[label]);
+
+            if (subscribersChart) {
+                subscribersChart.data.labels = labels;
+                subscribersChart.data.datasets[0].data = values;
+                subscribersChart.update();
+            } else {
+                subscribersChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'New Subscribers',
+                            data: values,
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: { 
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } 
+                    }
+                });
+            }
+        };
+
+        // --- Authentication State Change Handler ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const adminRef = doc(db, 'admins', user.uid);
-                const adminDoc = await getDoc(adminRef);
-                if (adminDoc.exists() && adminDoc.data().isAdmin) {
-                    loginView.style.display = 'none';
-                    adminView.classList.remove('hidden');
-                    document.getElementById('admin-email').textContent = user.email;
-                    initializeDashboard();
-                } else {
-                    document.getElementById('login-message').textContent = "Access Denied. You are not an administrator.";
+                try {
+                    const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+                    if (adminDoc.exists() && adminDoc.data().isAdmin) {
+                        loginView.style.display = 'none';
+                        adminView.classList.remove('hidden');
+                        document.getElementById('admin-email').textContent = user.email;
+                        initializeDashboard();
+                    } else {
+                        // User is not an admin, sign them out.
+                        document.getElementById('login-message').textContent = 'Access Denied. Not an admin.';
+                        signOut(auth);
+                    }
+                } catch (error) {
+                    console.error("Error checking admin status:", error);
                     signOut(auth);
                 }
             } else {
@@ -179,95 +255,8 @@
                 adminView.classList.add('hidden');
             }
         });
-        
-        const initializeDashboard = () => {
-            document.querySelectorAll('.sidebar-link').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); switchView(e.currentTarget.dataset.view); }));
-            loadSubscribers();
-            loadNewsletters();
-            loadEvents();
-            updateStats();
-            switchView('dashboard');
-            document.getElementById('subscribers-table-body').addEventListener('click', handleSubscriberActions);
-            document.getElementById('newsletter-form').addEventListener('submit', handleNewsletterSubmit);
-            document.getElementById('newsletters-list').addEventListener('click', handleNewsletterActions);
-            document.getElementById('event-form').addEventListener('submit', handleEventSubmit);
-            document.getElementById('events-list').addEventListener('click', handleEventActions);
-        };
 
-        const updateStats = async () => {
-            const subscribersSnap = await getDocs(collection(db, 'subscribers'));
-            const newslettersSnap = await getDocs(collection(db, 'newsletters'));
-            const eventsQuery = query(collection(db, 'events'), where('date', '>=', new Date().toISOString().split('T')[0]));
-            const eventsSnap = await getDocs(eventsQuery);
-            document.getElementById('stats-subscribers').textContent = subscribersSnap.size;
-            document.getElementById('stats-newsletters').textContent = newslettersSnap.size;
-            document.getElementById('stats-events').textContent = eventsSnap.size;
-        };
-        
-        const loadSubscribers = () => onSnapshot(query(collection(db, 'subscribers'), orderBy('subscribedAt', 'desc')), (snapshot) => {
-            const tableBody = document.getElementById('subscribers-table-body');
-            tableBody.innerHTML = '';
-            document.getElementById('subscriber-count').textContent = snapshot.size;
-            if (snapshot.empty) tableBody.innerHTML = '<tr><td colspan="3" class="table-cell text-center text-gray-500">No subscribers yet.</td></tr>';
-            else snapshot.forEach(doc => {
-                const s = doc.data();
-                tableBody.innerHTML += `<tr class="hover:bg-gray-50"><td class="table-cell">${s.email}</td><td class="table-cell">${s.subscribedAt.toDate().toLocaleDateString()}</td><td class="table-cell"><button data-id="${doc.id}" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button></td></tr>`;
-            });
-        });
-        async function handleSubscriberActions(e) { if (e.target.classList.contains('remove-btn') && confirm('Remove this subscriber?')) { await deleteDoc(doc(db, 'subscribers', e.target.dataset.id)); updateStats(); } }
-
-        const loadEvents = () => onSnapshot(query(collection(db, 'events'), orderBy('date', 'asc')), (snapshot) => {
-            const listEl = document.getElementById('events-list');
-            listEl.innerHTML = '';
-            if (snapshot.empty) { listEl.innerHTML = '<p class="text-gray-500">No events scheduled.</p>'; return; }
-            snapshot.forEach(doc => {
-                const event = doc.data();
-                const eventDate = new Date(event.date + 'T00:00:00');
-                const isPast = eventDate < new Date();
-                listEl.innerHTML += `<div class="border border-[var(--border-color)] rounded-lg p-4 ${isPast ? 'opacity-50' : ''}"><div class="flex justify-between items-start"><div><p class="font-bold">${event.title}</p><p class="text-sm text-gray-500">${eventDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p><p class="text-sm text-gray-600 mt-2">${event.description}</p></div><button data-id="${doc.id}" class="remove-btn text-red-500 hover:text-red-700">&times;</button></div></div>`;
-            });
-        });
-        async function handleEventSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('save-event-btn');
-            btn.disabled = true;
-            try { await addDoc(collection(db, 'events'), { title: e.target.elements['event-title'].value, date: e.target.elements['event-date'].value, description: e.target.elements['event-desc'].value, createdAt: serverTimestamp() }); e.target.reset(); } 
-            catch (error) { console.error("Error adding event:", error); } 
-            finally { btn.disabled = false; }
-        }
-        async function handleEventActions(e) { if (e.target.classList.contains('remove-btn') && confirm('Delete this event?')) { await deleteDoc(doc(db, 'events', e.target.dataset.id)); updateStats(); } }
-
-        const loadNewsletters = () => onSnapshot(query(collection(db, 'newsletters'), orderBy('createdAt', 'desc')), (snapshot) => {
-            const listEl = document.getElementById('newsletters-list');
-            listEl.innerHTML = '';
-            if (snapshot.empty) { listEl.innerHTML = '<p class="text-gray-500">No newsletters drafted yet.</p>'; return; }
-            snapshot.forEach(doc => {
-                const n = doc.data();
-                const statusColor = n.status === 'sent' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
-                listEl.innerHTML += `<div class="border border-[var(--border-color)] rounded-lg p-4"><div class="flex justify-between items-center"><div><p class="font-bold">${n.subject}</p><p class="text-sm text-gray-500">Drafted: ${n.createdAt ? n.createdAt.toDate().toLocaleDateString() : 'N/A'}</p></div><div><span class="px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${n.status}</span></div></div>${n.status !== 'sent' ? `<div class="mt-3 pt-3 border-t border-[var(--border-color)] text-right"><button data-id="${doc.id}" data-subject="${n.subject}" class="send-newsletter-btn bg-green-500 text-white px-4 py-1 rounded-md text-sm font-semibold hover:bg-green-600">Queue to Send</button></div>` : ''}</div>`;
-            });
-        });
-        async function handleNewsletterSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('save-btn');
-            btn.disabled = true;
-            try { await addDoc(collection(db, 'newsletters'), { subject: e.target.elements.subject.value, body: e.target.elements.body.value, createdAt: serverTimestamp(), status: 'draft' }); e.target.reset(); }
-            catch (error) { console.error("Error saving newsletter: ", error); }
-            finally { btn.disabled = false; }
-        }
-        function handleNewsletterActions(e) { if (e.target.classList.contains('send-newsletter-btn')) { currentNewsletterIdToSend = e.target.dataset.id; document.getElementById('modal-newsletter-subject').textContent = e.target.dataset.subject; openSendModal(); } }
-        
-        const sendModal = document.getElementById('send-modal');
-        const openSendModal = () => { sendModal.classList.remove('opacity-0', 'pointer-events-none'); sendModal.querySelector('.modal-content').classList.remove('scale-95'); };
-        const closeModal = () => { sendModal.classList.add('opacity-0', 'pointer-events-none'); sendModal.querySelector('.modal-content').classList.add('scale-95'); currentNewsletterIdToSend = null; };
-        document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
-        document.getElementById('modal-confirm-btn').addEventListener('click', async () => {
-            if (!currentNewsletterIdToSend) return;
-            try { await addDoc(collection(db, 'mailQueue'), { newsletterId: currentNewsletterIdToSend, status: 'pending', createdAt: serverTimestamp() }); alert('Newsletter is in the send queue!'); }
-            catch (error) { console.error("Error queueing email:", error); alert('Could not queue newsletter.'); }
-            finally { closeModal(); }
-        });
-        sendModal.addEventListener('click', (e) => { if(e.target === sendModal) closeModal(); });
     </script>
 </body>
 </html>
+
