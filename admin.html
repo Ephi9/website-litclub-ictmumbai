@@ -119,8 +119,25 @@
 
         // --- Auth Logic ---
         const provider = new firebase.auth.GoogleAuthProvider();
-        adminSigninBtn.addEventListener('click', () => auth.signInWithPopup(provider));
+        
+        // **FIX:** Changed from signInWithPopup to signInWithRedirect
+        adminSigninBtn.addEventListener('click', () => auth.signInWithRedirect(provider));
         adminSignoutBtn.addEventListener('click', () => auth.signOut());
+
+        // Handle the redirect result when the page loads
+        auth.getRedirectResult()
+            .then((result) => {
+                if (result.user) {
+                    // User has just signed in via redirect.
+                    // The onAuthStateChanged listener will handle the admin check.
+                }
+            })
+            .catch((error) => {
+                console.error("Redirect sign-in error", error);
+                loginMessage.textContent = `Sign-in failed: ${error.message}`;
+                loginMessage.classList.add('text-red-500', 'font-bold');
+            });
+
 
         auth.onAuthStateChanged(async user => {
             if (user) {
@@ -209,3 +226,4 @@
     </script>
 </body>
 </html>
+
