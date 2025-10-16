@@ -157,7 +157,7 @@
             });
         };
         
-        const renderHtml = (el, html) => { el.innerHTML = html; };
+        const renderHtml = (el, html) => { if(el) el.innerHTML = html; };
 
         // --- PAGE RENDER FUNCTIONS ---
         const renderEventList = (snapshot) => {
@@ -202,8 +202,29 @@
 
 
         // --- CHART RENDERING ---
-        const renderSubscriberChart = (snapshot) => { /* ... (same logic) ... */ };
-        const renderEventTypeChart = (snapshot) => { /* ... (same logic) ... */ };
+        const renderSubscriberChart = (snapshot) => { 
+             const ctx = document.getElementById('subscribersChart').getContext('2d');
+            const data = {};
+            snapshot.forEach(doc => { if (doc.data().subscribedAt) { const date = doc.data().subscribedAt.toDate().toLocaleDateString(); data[date] = (data[date] || 0) + 1; } });
+            const labels = Object.keys(data).sort((a,b) => new Date(a) - new Date(b));
+            const values = labels.map(label => data[label]);
+            if (subscribersChart) { subscribersChart.data.labels = labels; subscribersChart.data.datasets[0].data = values; subscribersChart.update(); } 
+            else { subscribersChart = new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: 'New Subscribers', data: values, backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 2, tension: 0.3, fill: true }] }, options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } }); }
+        };
+
+        const renderEventTypeChart = (snapshot) => { 
+            const ctx = document.getElementById('eventsTypeChart').getContext('2d');
+            const eventTypes = { 'Book Club': 0, 'MUN': 0, 'Open Mic': 0, 'Other': 0 };
+            snapshot.forEach(doc => {
+                const title = doc.data().title.toLowerCase();
+                if (title.includes('book club') || title.includes('veritas')) eventTypes['Book Club']++;
+                else if (title.includes('mun')) eventTypes['MUN']++;
+                else if (title.includes('open mic') || title.includes('expression')) eventTypes['Open Mic']++;
+                else eventTypes['Other']++;
+            });
+            if (eventsTypeChart) { eventsTypeChart.data.datasets[0].data = Object.values(eventTypes); eventsTypeChart.update(); }
+            else { eventsTypeChart = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(eventTypes), datasets: [{ data: Object.values(eventTypes), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#6366f1'] }] }, options: { responsive: true, plugins: { legend: { position: 'top' }}}}); }
+        };
 
 
         // --- FORM SUBMISSIONS ---
@@ -214,6 +235,7 @@
                 if (id) await updateDoc(doc(db, 'events', id), data);
                 else await addDoc(collection(db, 'events'), { ...data, createdAt: serverTimestamp() });
                 closeModal();
+                form.reset();
             } catch (e) { console.error(e); }
         };
         const handleTeamSubmit = async (form) => {
@@ -223,9 +245,12 @@
                 if (id) await updateDoc(doc(db, 'teamMembers', id), data);
                 else await addDoc(collection(db, 'teamMembers'), data);
                 closeModal();
+                form.reset();
             } catch(e){ console.error(e); }
         };
-        const handleNewsletterSubmit = async (form) => { /* ... (same add logic) ... */ };
+        const handleNewsletterSubmit = async (form) => { 
+            try { await addDoc(collection(db, 'newsletters'), { subject: form.elements['newsletter-subject'].value, body: form.elements['newsletter-body'].value, status: 'draft', createdAt: serverTimestamp() }); form.reset(); } catch (e) { console.error(e); }
+        };
         
         const handleListDelete = async (id, collectionName) => {
             if (confirm(`Delete this item from ${collectionName}?`)) await deleteDoc(doc(db, collectionName, id));
@@ -248,7 +273,7 @@
             modal.classList.add('active');
         };
         const closeModal = () => modal.classList.remove('active');
-        window.closeModal = closeModal; // Make it globally accessible for inline onclick
+        window.closeModal = closeModal;
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
 
