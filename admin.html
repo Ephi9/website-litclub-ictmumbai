@@ -44,9 +44,12 @@
     .login-box { background: var(--card-bg); padding: 40px; border-radius: 14px; text-align: center; box-shadow: 0 6px 28px rgba(0,0,0, 0.2); }
     .hidden { display: none; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 20px; align-items: center; }
-    input[type="text"], input[type="date"], input[type="number"] { background: var(--bg-dark); color: var(--text-light); border: 1px solid var(--border-color); padding: 10px; border-radius: 6px; width: 100%; }
-    .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    input[type="text"], input[type="date"], input[type="number"], textarea { background: var(--bg-dark); color: var(--text-light); border: 1px solid var(--border-color); padding: 10px; border-radius: 6px; width: 100%; }
+    .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-danger { background: var(--danger); }
+    .btn-secondary { background: #334155; }
+    .loader { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -67,6 +70,7 @@
         <a href="#members" data-view="members"><i class="fa-solid fa-users"></i> <span>Members</span></a>
         <a href="#events" data-view="events"><i class="fa-solid fa-calendar-days"></i> <span>Events</span></a>
         <a href="#books" data-view="books"><i class="fa-solid fa-book"></i> <span>Books</span></a>
+        <a href="#newsletters" data-view="newsletters"><i class="fa-solid fa-envelope"></i> <span>Newsletters</span></a>
       </div>
     </div>
 
@@ -84,13 +88,14 @@
           <div class="card"><span class="label">Total Members</span><span class="value" id="stats-members">0</span></div>
           <div class="card"><span class="label">Upcoming Events</span><span class="value" id="stats-events">0</span></div>
           <div class="card"><span class="label">Books in Library</span><span class="value" id="stats-books">0</span></div>
-          <div class="card"><span class="label">Newsletters</span><span class="value" id="stats-newsletters">0</span></div>
+          <div class="card"><span class="label">Newsletters Sent</span><span class="value" id="stats-newsletters">0</span></div>
         </div>
         <div class="widget"><h3 class="font-bold mb-4">Member Growth</h3><canvas id="memberGrowthChart"></canvas></div>
       </div>
       <div id="members-view" class="view hidden"></div>
       <div id="events-view" class="view hidden"></div>
       <div id="books-view" class="view hidden"></div>
+      <div id="newsletters-view" class="view hidden"></div>
     </div>
   </div>
 
@@ -150,6 +155,7 @@
         });
         onSnapshot(collection(db, 'newsletters'), snap => {
             document.getElementById('stats-newsletters').textContent = snap.size;
+            renderNewslettersList(snap);
         });
     };
     
@@ -169,13 +175,13 @@
     
     const renderEventsList = (snapshot) => {
         let tableHtml = '<tbody>';
-        if(snapshot.empty) tableHtml += '<tr><td colspan="3" style="text-align:center; padding: 20px;">No events found.</td></tr>';
+        if(snapshot.empty) tableHtml += '<tr><td colspan="4" style="text-align:center; padding: 20px;">No events found.</td></tr>';
         else snapshot.forEach(doc => {
             const event = doc.data();
-            tableHtml += `<tr><td>${event.title}</td><td>${event.date}</td><td><button data-id="${doc.id}" data-collection="events" class="delete-btn btn btn-danger">Delete</button></td></tr>`;
+            tableHtml += `<tr><td>${event.title}</td><td>${event.date}</td><td>${event.description || ''}</td><td><button data-id="${doc.id}" data-collection="events" class="delete-btn btn btn-danger">Delete</button></td></tr>`;
         });
         tableHtml += '</tbody>';
-        renderHtml(document.getElementById('events-view'), `<div class="widget"><h3>Event Management</h3><form id="event-form" class="form-grid"><input type="text" name="title" placeholder="Event Title" required><input type="date" name="date" required><button type="submit" class="btn">Add Event</button></form><div class="table-container"><table><thead><tr><th>Title</th><th>Date</th><th>Action</th></tr></thead>${tableHtml}</table></div></div>`);
+        renderHtml(document.getElementById('events-view'), `<div class="widget"><h3>Event Management</h3><form id="event-form" style="margin-bottom:20px; display: flex; flex-direction: column; gap: 15px;"><div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;"><input type="text" name="title" placeholder="Event Title" required><input type="date" name="date" required></div><textarea name="description" placeholder="Description..." rows="3"></textarea><div style="display:flex; gap: 10px;"><button type="submit" class="btn">Add Event</button><button type="button" id="generate-event-desc-btn" class="btn btn-secondary">Generate with AI</button></div></form><div class="table-container"><table><thead><tr><th>Title</th><th>Date</th><th>Description</th><th>Action</th></tr></thead>${tableHtml}</table></div></div>`);
     };
     
     const renderBooksList = (snapshot) => {
@@ -189,12 +195,22 @@
         renderHtml(document.getElementById('books-view'), `<div class="widget"><h3>Book Library</h3><form id="book-form" class="form-grid"><input type="text" name="title" placeholder="Book Title" required><input type="text" name="author" placeholder="Author" required><button type="submit" class="btn">Add Book</button></form><div class="table-container"><table><thead><tr><th>Title</th><th>Author</th><th>Action</th></tr></thead>${tableHtml}</table></div></div>`);
     };
 
+    const renderNewslettersList = (snapshot) => {
+        let itemsHtml = '';
+        if (snapshot.empty) itemsHtml = '<p class="text-gray-500">No newsletters found.</p>';
+        else snapshot.forEach(doc => {
+            const newsletter = doc.data();
+            itemsHtml += `<div style="padding:12px; border: 1px solid var(--border-color); border-radius: 8px; display:flex; justify-content:space-between; align-items:center;"><div><p style="font-weight:600;">${newsletter.subject}</p><p style="font-size:14px; color: var(--text-muted);">Draft</p></div><button data-id="${doc.id}" data-collection="newsletters" class="delete-btn btn btn-danger">Delete</button></div>`;
+        });
+        renderHtml(document.getElementById('newsletters-view'), `<div class="widget"><h3>Newsletter Composer</h3><form id="newsletter-form" style="display: flex; flex-direction: column; gap: 15px;"><input type="text" name="subject" placeholder="Newsletter Subject" required><textarea name="body" placeholder="Newsletter body..." rows="6"></textarea><div style="display:flex; gap: 10px;"><button type="submit" class="btn">Save Draft</button><button type="button" id="generate-newsletter-body-btn" class="btn btn-secondary">Generate with AI</button></div></form><h3 style="margin-top: 30px;">Saved Drafts</h3><div style="display:flex; flex-direction:column; gap:10px;">${itemsHtml}</div></div>`);
+    };
+
     const renderMemberGrowthChart = (snapshot) => {
         const ctx = document.getElementById('memberGrowthChart').getContext('2d');
         const data = {};
         snapshot.forEach(doc => {
             if(doc.data().subscribedAt){
-                const date = doc.data().subscribedAt.toDate().toISOString().slice(0, 7); // YYYY-MM
+                const date = doc.data().subscribedAt.toDate().toISOString().slice(0, 7);
                 data[date] = (data[date] || 0) + 1;
             }
         });
@@ -240,8 +256,51 @@
     document.getElementById('admin-signin-btn').addEventListener('click', () => signInWithPopup(auth, new GoogleAuthProvider()));
     document.getElementById('admin-signout-btn').addEventListener('click', () => signOut(auth));
 
+    // --- AI Content Generation ---
+    async function generateAiContent(prompt, button) {
+        const originalText = button.innerHTML;
+        button.innerHTML = '<div class="loader"></div>';
+        button.disabled = true;
+
+        const apiKey = ""; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const payload = { contents: [{ parts: [{ text: prompt }] }] };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+            const result = await response.json();
+            return result.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        } catch (error) {
+            console.error("AI Generation Error:", error);
+            return "Error generating content. Please try again.";
+        } finally {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
+    }
+
     // CRUD Event Listeners (Delegated)
     dashboardWrapper.addEventListener('click', async (e) => {
+        if (e.target.id === 'generate-event-desc-btn') {
+            const title = document.querySelector('#event-form [name="title"]').value;
+            const date = document.querySelector('#event-form [name="date"]').value;
+            if (!title) { alert("Please enter an event title first."); return; }
+            const prompt = `Write a short, engaging description for a literary club event titled '${title}'${date ? ` scheduled for ${date}` : ''}. Keep it under 50 words.`;
+            const description = await generateAiContent(prompt, e.target);
+            document.querySelector('#event-form [name="description"]').value = description;
+        }
+        if (e.target.id === 'generate-newsletter-body-btn') {
+            const subject = document.querySelector('#newsletter-form [name="subject"]').value;
+            if (!subject) { alert("Please enter a subject first."); return; }
+            const prompt = `Write a friendly and engaging newsletter body for a literary club. The subject is '${subject}'. Mention upcoming events and encourage members to participate.`;
+            const body = await generateAiContent(prompt, e.target);
+            document.querySelector('#newsletter-form [name="body"]').value = body;
+        }
         if(e.target.classList.contains('delete-btn')){
             const id = e.target.dataset.id;
             const collectionName = e.target.dataset.collection;
@@ -257,11 +316,15 @@
         try {
             if(form.id === 'event-form') {
                 await addDoc(collection(db, 'events'), {
-                    title: form.elements.title.value, date: form.elements.date.value, createdAt: serverTimestamp()
+                    title: form.elements.title.value, date: form.elements.date.value, description: form.elements.description.value, createdAt: serverTimestamp()
                 });
             } else if(form.id === 'book-form') {
                 await addDoc(collection(db, 'books'), {
                     title: form.elements.title.value, author: form.elements.author.value, createdAt: serverTimestamp()
+                });
+            } else if(form.id === 'newsletter-form') {
+                await addDoc(collection(db, 'newsletters'), {
+                    subject: form.elements.subject.value, body: form.elements.body.value, createdAt: serverTimestamp(), status: 'draft'
                 });
             }
             form.reset();
