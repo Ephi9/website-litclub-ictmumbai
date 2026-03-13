@@ -48,35 +48,38 @@
             font-family: 'Lora', serif;
             color: #1a1a1a;
             overflow-x: hidden;
-            /* Background moved to dedicated fixed layer for extreme stability */
+            -webkit-font-smoothing: antialiased;
         }
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-retro { font-family: 'Courier Prime', monospace; }
 
-        /* --- Components & UI Elements (Glassmorphism & Literary Paper Mix) --- */
+        /* --- Components & UI Elements --- */
         .glass-nav {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-            transition: background 0.5s ease, border-color 0.5s ease;
+            transition: background 0.3s ease, border-color 0.3s ease;
+            transform: translateZ(0); /* Hardware acceleration */
         }
+        /* High Contrast Black Navigation */
         .dark .glass-nav {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(0, 0, 0, 0.85);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .paper-card {
-            background-color: #fdfbf7;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        /* Fast, Clean Styled Card */
+        .styled-card {
+            background-color: rgba(255, 255, 255, 0.95);
             border: 1px solid #e8e3dc;
             box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
         }
-        .dark .paper-card {
-            background-color: #1a202c;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            border-color: #2d3748;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        /* High Contrast Black Cards */
+        .dark .styled-card {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-color: #262626; /* neutral-800 */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
 
         .section-title::after {
@@ -84,49 +87,62 @@
             background-color: #3b82f6; margin: 8px auto 0;
             transition: width 0.3s ease-in-out;
         }
+        .dark .section-title::after {
+            background-color: #ffffff; /* Replaced blue accent with stark white */
+        }
         .section-title:hover::after { width: 80px; }
+        
+        /* Snappier button hovers */
+        .btn-primary {
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s;
+            will-change: transform;
+        }
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
         }
-        .card-hover { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .dark .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+        }
+        
         .card-hover:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
         .dark .card-hover:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
         }
         
         /* --- Hero Card & Flip Animation --- */
         .hero-glass-box, .back-card-style {
             border-radius: 1.5rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0); 
         }
         .hero-glass-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(28px) saturate(120%); -webkit-backdrop-filter: blur(28px) saturate(120%);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-            transition: background 0.5s ease;
+            transition: background 0.3s ease;
         }
+        /* High Contrast Black Hero Box */
         .dark .hero-glass-box {
-            background: rgba(15, 23, 42, 0.15);
+            background: rgba(0, 0, 0, 0.6);
             border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
         
         .back-card-style { 
-            background-color: #fdfbf7;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-            transition: background 0.5s ease;
+            background-color: rgba(253, 251, 247, 0.98);
+            transition: background 0.3s ease;
         }
         .dark .back-card-style { 
-            background-color: #1a202c; 
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            background-color: rgba(10, 10, 10, 0.98);
             border-color: rgba(255, 255, 255, 0.1);
         }
-        
+
         .animated-gradient-text {
             background: linear-gradient(-45deg, #833ab4, #c13584, #f77737, #fcaf45);
             background-size: 400% 400%;
@@ -135,27 +151,30 @@
             animation: gradientTextAnimation 10s ease infinite;
         }
         .dark .animated-gradient-text {
+            /* Retaining the exact beautiful animating gradient for Dark Mode! */
             background: linear-gradient(-45deg, #a78bfa, #f472b6, #fb923c, #fcd34d);
             background-size: 400% 400%;
             -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradientTextAnimation 10s ease infinite;
         }
         
         @keyframes gradientTextAnimation {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
+
         .flip-card { perspective: 1500px; }
         .flip-card-inner {
             position: relative; width: 100%; display: grid;
-            transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
             will-change: transform;
         }
         .flip-card-inner.is-flipped { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back {
             grid-area: 1 / 1; width: 100%;
-            backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
             display: flex; align-items: center; justify-content: center;
         }
         .flip-card-back { transform: rotateY(180deg); }
@@ -164,29 +183,27 @@
         #home { position: relative; z-index: 10; }
         
         .content-section {
-            background-color: rgba(253, 251, 247, 0.88);
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background-color: rgba(253, 251, 247, 0.98);
             border-top: 1px solid rgba(255, 255, 255, 0.6);
-            transition: background-color 0.5s ease;
+            transition: background-color 0.3s ease;
         }
+        /* High Contrast Black Sections */
         .dark .content-section {
-            background-color: rgba(15, 23, 42, 0.88);
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            background-color: rgba(0, 0, 0, 0.98);
             border-top-color: rgba(255, 255, 255, 0.05);
         }
 
         /* --- Scroll Reveal & Float Animations --- */
         .reveal {
-            opacity: 0; transform: translateY(40px) scale(0.96);
+            opacity: 0; transform: translateY(30px);
             will-change: transform, opacity;
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
         
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
         }
         .animate-float { animation: float 6s ease-in-out infinite; }
         
@@ -195,6 +212,7 @@
             -ms-overflow-style: none; scrollbar-width: none;
             padding-bottom: 1rem; will-change: transform;
             padding-left: calc(50% - 6rem); padding-right: calc(50% - 6rem);
+            touch-action: pan-x pan-y;
         }
         .team-scroller::-webkit-scrollbar { display: none; }
         .team-card { width: 12rem; }
@@ -208,7 +226,7 @@
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             z-index: 100; display: flex; align-items: center; justify-content: center;
             opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
         }
@@ -216,23 +234,25 @@
         .modal-content {
             position: relative; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             transform: scale(0.95); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;
+            will-change: transform, opacity;
         }
-        .dark .modal-content { background: #1e293b; color: white; }
+        .dark .modal-content { background: #0a0a0a; color: white; border: 1px solid #262626; }
         .modal-overlay.active .modal-content { transform: scale(1); opacity: 1; }
         .modal-close {
             position: absolute; top: -1rem; right: -1rem;
-            width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+            width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; 
             background: white; color: #333; display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: transform 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .dark .modal-close { background: #334155; color: #f1f5f9; }
-        .modal-close:hover { transform: scale(1.1); }
+        .dark .modal-close { background: #262626; color: #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.8); }
+        .modal-close:hover { transform: scale(1.05); }
 
         /* --- Renewed Notifications --- */
         #notification-panel {
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             transform: translateY(-20px) scale(0.95);
             opacity: 0; pointer-events: none;
+            will-change: transform, opacity;
         }
         #notification-panel.active {
             transform: translateY(0) scale(1); opacity: 1; pointer-events: auto;
@@ -250,28 +270,29 @@
             text-decoration: underline; text-underline-offset: 4px;
             color: #2563eb; transition: color 0.2s; font-weight: 600;
         }
-        .dark .rulebook-link { color: #60a5fa; }
+        .dark .rulebook-link { color: #f3f4f6; }
         .rulebook-link:hover { color: #1e3a8a; }
-        .dark .rulebook-link:hover { color: #93c5fd; }
+        .dark .rulebook-link:hover { color: #ffffff; }
 
         /* --- Classic Literary Button Refinements --- */
         .classic-btn {
             background-color: transparent; border: 1px solid #1a1a1a;
             color: #1a1a1a;
             text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease-out;
             cursor: pointer; font-family: 'Courier Prime', monospace;
             position: relative; overflow: hidden; z-index: 1;
+            will-change: transform;
         }
         .classic-btn::before {
             content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
             background-color: #1a1a1a; transition: width 0.3s ease; z-index: -1;
         }
         .dark .classic-btn {
-            border-color: #cbd5e1; color: #cbd5e1;
+            border-color: #ffffff; color: #ffffff;
         }
         .dark .classic-btn::before {
-            background-color: #cbd5e1;
+            background-color: #ffffff;
         }
         .classic-btn:hover::before { width: 100%; }
         .classic-btn:hover { 
@@ -279,133 +300,139 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
-        .dark .classic-btn:hover { color: #0f172a; border-color: #cbd5e1; }
-        
-        .classic-btn:active {
-            transform: translateY(1px);
+        .dark .classic-btn:hover { color: #000000; border-color: #ffffff; box-shadow: 0 8px 20px rgba(255,255,255,0.15); }
+        .classic-btn:active { transform: translateY(1px) scale(0.98); }
+
+        /* Generic global snappy button press effect */
+        button:active, a.btn-primary:active {
+            transform: scale(0.96) !important;
+            transition: transform 0.1s ease-out !important;
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
+<body class="bg-gray-50 dark:bg-black transition-colors duration-300">
     <!-- Nostalgic Forest Background Layer (Highly Stable) -->
-    <div id="forest-bg" class="fixed inset-0 z-[0] transition-colors duration-700 bg-[url('Graphics/evie-s-kqJfP-lrl-8-unsplash.jpg')] bg-cover bg-center">
-        <!-- Overlays blending into Dark Mode -->
-        <div class="absolute inset-0 bg-gradient-to-b from-green-900/20 to-slate-900/30 dark:from-slate-900/90 dark:to-slate-950/95 transition-colors duration-700"></div>
+    <div id="forest-bg" class="fixed inset-0 z-[0] transition-colors duration-500 bg-[url('Graphics/evie-s-kqJfP-lrl-8-unsplash.jpg')] bg-cover bg-center">
+        <!-- Overlays blending into True Black Mode -->
+        <div class="absolute inset-0 bg-gradient-to-b from-green-900/10 to-slate-900/20 dark:from-black/90 dark:to-black/95 transition-colors duration-500"></div>
     </div>
     
-    <!-- Canvas for Animated Fireflies -->
+    <!-- Canvas for Animated Particles -->
     <canvas id="fireflies-canvas" class="fixed inset-0 pointer-events-none z-[1]"></canvas>
 
-    <!-- Main Application Wrapper to place above fixed backgrounds -->
+    <!-- Main Application Wrapper -->
     <div class="relative z-[10]">
-
-        <script>
-            console.log("👋 Hello there! This website was designed and developed with care.");
-        </script>
 
         <!-- Header & Navigation -->
         <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav">
-            <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center relative z-20">
                 <div class="flex items-center">
                     <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-8 mr-3 dark:brightness-0 dark:invert transition-all">
-                    <div class="text-xl sm:text-2xl font-bold font-serif text-gray-900 dark:text-white transition-colors">LitClub <span class="text-blue-600 dark:text-blue-400">ICT</span></div>
+                    <div class="text-xl sm:text-2xl font-bold font-serif text-gray-900 dark:text-white transition-colors">LitClub <span class="text-blue-600 dark:text-white">ICT</span></div>
                 </div>
+                
                 <div class="hidden md:flex space-x-6 lg:space-x-8 items-center font-medium">
-                    <a href="#home" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
-                    <a href="#about" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
-                    <a href="#events" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Upcoming</a>
-                    <a href="./gallery.html" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Gallery</a>
-                    <a href="#team" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Team</a>
+                    <a href="#home" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors">Home</a>
+                    <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors">About</a>
+                    <a href="#events" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors">Upcoming</a>
+                    <a href="./gallery.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors">Gallery</a>
+                    <a href="#team" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors">Team</a>
                     
                     <!-- Dark Mode Toggle -->
-                    <button id="theme-toggle" type="button" class="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                    <button id="theme-toggle" type="button" class="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none rounded-xl text-sm p-2 transition-colors">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                     </button>
 
-                    <a href="./subscribe.html" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition-colors shadow-md">Join Us</a>
+                    <a href="./subscribe.html" class="bg-blue-600 dark:bg-white text-white dark:text-black px-5 py-2 rounded-xl hover:bg-blue-700 dark:hover:bg-gray-200 transition-colors shadow-md btn-primary inline-block">Join Us</a>
                     
-                    <!-- Renewed Notification Trigger -->
+                    <!-- Desktop Notification Trigger -->
                     <div class="relative">
-                        <button id="notification-bell" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 relative p-1" aria-label="View notifications">
+                        <button id="notification-bell" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-white relative p-1 rounded-xl transition-transform" aria-label="View notifications">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                            <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border border-white dark:border-gray-900"></span>
+                            <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border border-white dark:border-black"></span>
                         </button>
-                        <!-- Renewed Notification Panel -->
-                        <div id="notification-panel" class="absolute top-12 right-0 w-80 paper-card p-4 rounded-xl shadow-2xl z-50 text-left">
-                            <div class="flex justify-between items-center mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
-                                <h3 class="font-bold text-gray-800 dark:text-gray-100">Alerts</h3>
-                            </div>
-                            <ul class="space-y-3 text-sm">
-                                <li class="p-3 bg-white/70 dark:bg-slate-800/80 rounded-lg border border-white/60 dark:border-gray-600 shadow-sm relative overflow-hidden">
-                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
-                                    <p class="font-bold text-gray-900 dark:text-white mb-1">Expression Registrations Open!</p>
-                                    <p class="text-xs text-gray-700 dark:text-gray-300">Fill the GForm to secure your spot in Spoken Word, Debate, or Improv.</p>
-                                </li>
-                                <li class="p-3 bg-white/70 dark:bg-slate-800/80 rounded-lg border border-white/60 dark:border-gray-600 shadow-sm relative overflow-hidden">
-                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
-                                    <p class="font-bold text-gray-900 dark:text-white mb-1">ICT MUN Updates</p>
-                                    <p class="text-xs text-gray-700 dark:text-gray-300">Official rulebooks for UNGA procedures are now live in the events section.</p>
-                                </li>
-                            </ul>
-                            <button id="view-flyer-btn" class="w-full mt-3 py-2 text-xs font-bold text-center border-t border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition">
-                                View Latest Event Flyer
-                            </button>
-                        </div>
                     </div>
                 </div>
+
                 <div class="md:hidden flex items-center space-x-4">
                     <!-- Mobile theme toggle -->
-                    <button id="theme-toggle-mobile" type="button" class="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                    <button id="theme-toggle-mobile" type="button" class="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none rounded-xl text-sm p-2 transition-colors">
                         <svg class="w-5 h-5 theme-dark-icon hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                         <svg class="w-5 h-5 theme-light-icon hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                     </button>
-                    <button id="mobile-notification-bell" class="text-gray-700 dark:text-gray-200 hover:text-blue-500 relative" aria-label="View notifications">
+                    <!-- Mobile Notification Trigger -->
+                    <button id="mobile-notification-bell" class="text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-white relative rounded-xl transition-transform" aria-label="View notifications">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                        <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border border-white dark:border-gray-900"></span>
+                        <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border border-white dark:border-black"></span>
                     </button>
-                    <button id="mobile-menu-button" class="text-gray-700 dark:text-gray-200">
+                    <!-- Mobile Menu Trigger -->
+                    <button id="mobile-menu-button" class="text-gray-700 dark:text-gray-200 rounded-xl transition-transform">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                         </svg>
                     </button>
                 </div>
             </nav>
-            <div id="mobile-menu" class="hidden md:hidden bg-white/90 dark:bg-slate-900/95 backdrop-blur-md shadow-lg border-t border-gray-200 dark:border-gray-800">
-                <a href="#home" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800">Home</a>
-                <a href="#about" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800">About</a>
-                <a href="#events" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800">Upcoming</a>
-                <a href="./gallery.html" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800">Gallery</a>
-                <a href="#team" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800">Team</a>
-                <a href="./subscribe.html" class="block py-3 px-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700">Join Us</a>
+
+            <!-- Global Notification Panel -->
+            <div id="notification-panel" class="absolute top-16 right-4 sm:right-6 md:right-8 lg:right-16 w-80 styled-card p-4 rounded-xl shadow-2xl z-50 text-left">
+                <div class="flex justify-between items-center mb-3 border-b border-gray-300 dark:border-neutral-800 pb-2">
+                    <h3 class="font-bold text-gray-800 dark:text-white">Alerts</h3>
+                </div>
+                <ul class="space-y-3 text-sm">
+                    <li class="p-3 bg-white/70 dark:bg-neutral-900/80 rounded-lg border border-white/60 dark:border-neutral-800 shadow-sm relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
+                        <p class="font-bold text-gray-900 dark:text-white mb-1">Expression Registrations Open!</p>
+                        <p class="text-xs text-gray-700 dark:text-gray-400">Fill the GForm to secure your spot in Spoken Word, Debate, or Improv.</p>
+                    </li>
+                    <li class="p-3 bg-white/70 dark:bg-neutral-900/80 rounded-lg border border-white/60 dark:border-neutral-800 shadow-sm relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-white"></div>
+                        <p class="font-bold text-gray-900 dark:text-white mb-1">ICT MUN Updates</p>
+                        <p class="text-xs text-gray-700 dark:text-gray-400">Official rulebooks for UNGA procedures are now live in the events section.</p>
+                    </li>
+                </ul>
+                <button id="view-flyer-btn" class="w-full mt-3 py-2 text-xs font-bold text-center border-t border-gray-300 dark:border-neutral-800 text-blue-600 dark:text-white hover:text-blue-800 dark:hover:text-gray-300 transition">
+                    View Latest Event Flyer
+                </button>
+            </div>
+
+            <!-- Fixed Mobile Dropdown Positioning -->
+            <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-black/95 backdrop-blur-md shadow-lg border-t border-gray-200 dark:border-neutral-800 flex flex-col z-10 transition-opacity duration-300">
+                <a href="#home" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-neutral-900">Home</a>
+                <a href="#about" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-neutral-900">About</a>
+                <a href="#events" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-neutral-900">Upcoming</a>
+                <a href="./gallery.html" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-neutral-900">Gallery</a>
+                <a href="#team" class="block py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-neutral-900">Team</a>
+                <a href="./subscribe.html" class="block py-3 px-4 text-sm font-bold text-white dark:text-black bg-blue-600 dark:bg-white hover:bg-blue-700 dark:hover:bg-gray-200">Join Us</a>
             </div>
         </header>
 
         <main>
-            <!-- Original Hero Section with Flip Card -->
+            <!-- Hero Section with Flip Card -->
             <section id="home" class="min-h-[100svh] flex items-center justify-center p-4 pt-24 md:pt-4">
                 <div class="w-full max-w-5xl h-auto flip-card animate-float">
                     <div id="hero-card-inner" class="flip-card-inner">
                         <div class="flip-card-front hero-glass-box p-6 sm:p-8 md:p-12 min-h-[400px] flex flex-col justify-center">
                             <div class="text-center">
-                                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-extrabold tracking-tight animated-gradient-text drop-shadow-lg leading-tight">
+                                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-extrabold tracking-tight drop-shadow-lg leading-tight animated-gradient-text">
                                     Where Words Come to Life.
                                 </h1>
-                                <p class="mt-4 md:mt-6 text-base md:text-lg max-w-3xl mx-auto text-gray-800 dark:text-gray-100 font-medium bg-white/30 dark:bg-slate-800/50 px-4 md:px-6 py-2 rounded-full inline-block backdrop-blur-md border border-white/40 dark:border-gray-600">
+                                <p class="mt-4 md:mt-6 text-base md:text-lg max-w-3xl mx-auto text-gray-800 dark:text-gray-200 font-medium bg-white/50 dark:bg-black/50 px-4 md:px-6 py-2 rounded-xl inline-block border border-white/40 dark:border-neutral-800">
                                     Welcome to the Literary Club of ICT Mumbai, a vibrant community for thinkers, readers, and creators.
                                 </p>
                                 <br>
-                                <a href="#about" id="discover-story-btn" class="mt-8 md:mt-10 inline-block bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 px-6 py-3 md:px-8 md:py-4 rounded-full text-base md:text-lg font-bold btn-primary shadow-2xl transition border border-gray-200 dark:border-gray-700">
+                                <a href="#about" id="discover-story-btn" class="relative z-20 mt-8 md:mt-10 inline-block bg-white dark:bg-white text-blue-600 dark:text-black px-6 py-3 md:px-8 md:py-4 rounded-xl text-base md:text-lg font-bold btn-primary shadow-xl transition border border-gray-200 dark:border-white">
                                     Discover Our Story
                                 </a>
-                                <div class="mt-6 md:mt-8 text-gray-800 dark:text-gray-200 font-medium text-sm md:hidden bg-white/40 dark:bg-slate-800/60 px-4 py-1 rounded-full inline-block backdrop-blur-sm">
-                                    <p>Tap to learn more &rarr;</p>
+                                <div class="mt-6 md:mt-8 text-gray-800 dark:text-gray-300 font-medium text-sm md:hidden bg-white/50 dark:bg-black/70 px-4 py-1 rounded-lg inline-block shadow-sm dark:border dark:border-neutral-800">
+                                    <p>Swipe to learn more &rarr;</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="flip-card-back back-card-style p-6 sm:p-8 md:p-12 border border-gray-200 dark:border-gray-700 min-h-[400px] flex flex-col justify-center">
-                            <div class="text-center text-gray-800 dark:text-gray-100">
-                                <h2 class="text-3xl md:text-4xl font-serif font-bold text-blue-600 dark:text-blue-400">Our Mission</h2>
+                        <div class="flip-card-back back-card-style p-6 sm:p-8 md:p-12 border border-gray-200 dark:border-neutral-800 min-h-[400px] flex flex-col justify-center">
+                            <div class="text-center text-gray-800 dark:text-white">
+                                <h2 class="text-3xl md:text-4xl font-serif font-bold text-blue-600 dark:text-white">Our Mission</h2>
                                 <p class="mt-4 md:mt-6 text-base md:text-lg max-w-2xl mx-auto text-gray-700 dark:text-gray-300 leading-relaxed">
                                     To cultivate a dynamic literary environment that encourages creative expression, critical thinking, and a shared passion for the written word.
                                 </p>
@@ -415,7 +442,7 @@
                 </div>
             </section>
 
-            <!-- Original About Section -->
+            <!-- About Section -->
             <section id="about" class="py-12 md:py-24 content-section">
                 <div class="container mx-auto px-4 sm:px-6 text-center">
                     <div class="reveal">
@@ -425,18 +452,18 @@
                         </p>
                     </div>
                     <div class="mt-10 md:mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 text-left">
-                        <div class="reveal p-6 md:p-8 paper-card rounded-2xl h-full" style="transition-delay: 100ms;">
-                            <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center mb-4 md:mb-6 text-xl md:text-2xl">🤝</div>
+                        <div class="reveal p-6 md:p-8 styled-card rounded-2xl h-full" style="transition-delay: 100ms;">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 dark:bg-neutral-800 text-blue-600 dark:text-white rounded-xl flex items-center justify-center mb-4 md:mb-6 text-xl md:text-2xl">🤝</div>
                             <h3 class="text-xl md:text-2xl font-serif font-bold text-gray-900 dark:text-white">Engage</h3>
                             <p class="mt-2 md:mt-3 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">Participate in stimulating discussions, workshops, and competitions that challenge your perspective.</p>
                         </div>
-                        <div class="reveal p-6 md:p-8 paper-card rounded-2xl h-full" style="transition-delay: 200ms;">
-                            <div class="w-10 h-10 md:w-12 md:h-12 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 rounded-full flex items-center justify-center mb-4 md:mb-6 text-xl md:text-2xl">✍️</div>
+                        <div class="reveal p-6 md:p-8 styled-card rounded-2xl h-full" style="transition-delay: 200ms;">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-purple-100 dark:bg-neutral-800 text-purple-600 dark:text-white rounded-xl flex items-center justify-center mb-4 md:mb-6 text-xl md:text-2xl">✍️</div>
                             <h3 class="text-xl md:text-2xl font-serif font-bold text-gray-900 dark:text-white">Create</h3>
                             <p class="mt-2 md:mt-3 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">Unleash your creativity through writing sessions, open mic nights, and our annual magazine.</p>
                         </div>
-                        <div class="reveal p-6 md:p-8 paper-card rounded-2xl h-full sm:col-span-2 md:col-span-1" style="transition-delay: 300ms;">
-                            <div class="w-10 h-10 md:w-12 md:h-12 bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300 rounded-full flex items-center justify-center mb-4 md:mb-6 text-xl md:text-2xl">🌐</div>
+                        <div class="reveal p-6 md:p-8 styled-card rounded-2xl h-full sm:col-span-2 md:col-span-1" style="transition-delay: 300ms;">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-orange-100 dark:bg-neutral-800 text-orange-600 dark:text-white rounded-xl flex items-center justify-center mb-4 md:mb-6 text-xl md:text-2xl">🌐</div>
                             <h3 class="text-xl md:text-2xl font-serif font-bold text-gray-900 dark:text-white">Connect</h3>
                             <p class="mt-2 md:mt-3 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">Meet like-minded individuals, network with authors, and build lasting friendships.</p>
                         </div>
@@ -444,8 +471,8 @@
                 </div>
             </section>
 
-            <!-- Expanded Upcoming Events Section -->
-            <section id="events" class="py-12 md:py-24 content-section bg-gray-50/50 dark:bg-slate-900/50">
+            <!-- Upcoming Events Section -->
+            <section id="events" class="py-12 md:py-24 content-section bg-gray-50/50 dark:bg-black/50">
                 <div class="container mx-auto px-4 sm:px-6 text-center mb-10 md:mb-16">
                     <div class="reveal">
                         <h2 class="section-title font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">Featured Events</h2>
@@ -456,13 +483,13 @@
                 <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
                     <!-- Standard Events Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-10 md:mb-12">
-                        <div class="reveal paper-card rounded-2xl overflow-hidden card-hover" style="transition-delay: 100ms;">
+                        <div class="reveal styled-card rounded-2xl overflow-hidden card-hover" style="transition-delay: 100ms;">
                             <div class="p-6 md:p-8">
                                 <h3 class="font-serif text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2 md:mb-3">Book Club & Veritas</h3>
                                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">Dive deep into literary worlds, analyze timeless classics, and engage in thoughtful discussions with fellow bibliophiles.</p>
                             </div>
                         </div>
-                        <div class="reveal paper-card rounded-2xl overflow-hidden card-hover" style="transition-delay: 200ms;">
+                        <div class="reveal styled-card rounded-2xl overflow-hidden card-hover" style="transition-delay: 200ms;">
                             <div class="p-6 md:p-8">
                                 <h3 class="font-serif text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2 md:mb-3">Spirit Days</h3>
                                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">A week of creative celebration, fun activities, and literary-themed days, culminating in our annual magazine launch.</p>
@@ -472,38 +499,37 @@
 
                     <!-- Expanded Major Events -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-stretch">
-                        <!-- ICT MUN Block (Smaller width on large screens) -->
-                        <div class="reveal lg:col-span-4 paper-card rounded-2xl p-5 md:p-6 flex flex-col card-hover border-2 border-gray-800 dark:border-gray-600 bg-white/70 dark:bg-slate-800/80 h-full" style="transition-delay: 300ms;">
+                        <!-- ICT MUN Block -->
+                        <div class="reveal lg:col-span-4 styled-card rounded-2xl p-5 md:p-6 flex flex-col card-hover dark:bg-neutral-900/80 h-full" style="transition-delay: 300ms;">
                             <div class="flex-grow flex flex-col">
                                 <div class="flex justify-between items-start mb-3 md:mb-4">
                                     <h3 class="font-serif text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">ICT MUN</h3>
                                     <span class="text-xl md:text-2xl">🌐</span>
                                 </div>
                                 
-                                <!-- Poster Image -->
-                                <div class="mb-4 md:mb-5 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm relative group shrink-0">
-                                    <img src="Graphics/munposter.svg" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x800/e2e8f0/334155?text=MUN+Poster'">
+                                <div class="mb-4 md:mb-5 rounded-xl overflow-hidden border border-gray-200 dark:border-neutral-800 shadow-sm relative group shrink-0">
+                                    <img src="Graphics/upcoming-events/mun-poster.png" alt="ICT MUN Poster" loading="lazy" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x800/e2e8f0/111827?text=MUN+Poster'">
                                 </div>
 
                                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-5 md:mb-6 leading-relaxed flex-grow">
                                     Our signature Model United Nations. Step into the shoes of global leaders, engage in complex diplomacy, and debate pressing global issues.
                                 </p>
                                 
-                                <div class="mb-5 md:mb-6 bg-blue-50/80 dark:bg-slate-700/80 p-3 md:p-4 rounded-lg border border-blue-100 dark:border-gray-600 shrink-0">
-                                    <p class="text-xs font-bold uppercase tracking-wider text-blue-800 dark:text-blue-300 mb-1 md:mb-2">Resources</p>
-                                    <a href="downloads/mun_rulebook.pdf" target="_blank" onclick="alert('In a live environment, this downloads the rulebook.')" class="rulebook-link text-xs md:text-sm flex items-center">
+                                <div class="mb-5 md:mb-6 bg-blue-50/80 dark:bg-neutral-800/80 p-3 md:p-4 rounded-xl border border-blue-100 dark:border-neutral-700 shrink-0">
+                                    <p class="text-xs font-bold uppercase tracking-wider text-blue-800 dark:text-white mb-1 md:mb-2">Resources</p>
+                                    <a href="assets/rulebooks/mun_rulebook.pdf" target="_blank" onclick="alert('In a live environment, this downloads the rulebook.')" class="rulebook-link text-xs md:text-sm flex items-center relative z-20">
                                         <svg class="w-3 h-3 md:w-4 md:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                                         Official Rulebook
                                     </a>
                                 </div>
                             </div>
-                            <a href="https://forms.google.com/" target="_blank" class="classic-btn w-full py-3 rounded-lg text-center block text-sm shadow-md shrink-0">
+                            <a href="https://forms.google.com/" target="_blank" class="relative z-20 classic-btn w-full py-3 rounded-xl text-center block text-sm shadow-md shrink-0">
                                 Register Now
                             </a>
                         </div>
 
-                        <!-- Expression Block (Larger width) -->
-                        <div class="reveal lg:col-span-8 paper-card rounded-2xl p-5 md:p-6 flex flex-col card-hover border-2 border-gray-800 dark:border-gray-600 bg-white/70 dark:bg-slate-800/80 h-full" style="transition-delay: 400ms;">
+                        <!-- Expression Block -->
+                        <div class="reveal lg:col-span-8 styled-card rounded-2xl p-5 md:p-6 flex flex-col card-hover dark:bg-neutral-900/80 h-full" style="transition-delay: 400ms;">
                             <div class="flex flex-col flex-grow">
                                 <div class="flex justify-between items-start mb-3 md:mb-4">
                                     <h3 class="font-serif text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Expression</h3>
@@ -513,61 +539,61 @@
                                     The ultimate literary showcase. This year, "Expression" evolves into four distinct sub-events designed to test your wit, articulation, and creativity.
                                 </p>
                                 
-                                <!-- Sub Events Grid inside Expression -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 mb-6 md:mb-8 flex-grow">
-                                <!-- Sub Event 1: Debate -->
-                                <div class="bg-white/50 dark:bg-slate-800/50 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
-                                    <div class="overflow-hidden relative shrink-0">
-                                        <img src="Graphics/eve1.svg" alt="Debate Poster" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/334155?text=Debate'">
-                                        <div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow">Team: 1-3</div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 mb-6 md:mb-8 flex-grow">
+                                    <!-- Sub Event 1: Debate -->
+                                    <div class="bg-white/50 dark:bg-neutral-800/50 rounded-xl border border-gray-300 dark:border-neutral-700 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
+                                        <div class="overflow-hidden relative shrink-0">
+                                            <img src="Graphics/eve1.svg" alt="Debate Poster" loading="lazy" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/111827?text=Debate'">
+                                            <div class="absolute top-2 right-2 bg-blue-600 dark:bg-white text-white dark:text-black text-[10px] font-bold px-2 py-1 rounded-lg shadow">Team: 1-3</div>
+                                        </div>
+                                        <div class="p-4 md:p-5 flex flex-col flex-grow">
+                                            <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">1. Debate Showdown</h4>
+                                            <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">A fiery battle of wits and words. Challenge your rhetorical skills, logical reasoning, and literary knowledge on pressing themes. Team competition.</p>
+                                            <a href="https://forms.gle/nogzLGAF3G3FZXhV7" target="_blank" class="relative z-20 rulebook-link text-xs font-sans mt-auto">Register Now &rarr;</a>
+                                        </div>
                                     </div>
-                                    <div class="p-4 md:p-5 flex flex-col flex-grow">
-                                        <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">1. Debate Showdown</h4>
-                                        <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">A fiery battle of wits and words. Challenge your rhetorical skills, logical reasoning, and literary knowledge on pressing themes. Team competition.</p>
-                                        <a href="https://forms.gle/nogzLGAF3G3FZXhV7" target="_blank" class="rulebook-link text-xs font-sans mt-auto text-blue-600 dark:text-blue-400">Register Now &rarr;</a>
+                                    
+                                    <!-- Sub Event 2: Spell Bee -->
+                                    <div class="bg-white/50 dark:bg-neutral-800/50 rounded-xl border border-gray-300 dark:border-neutral-700 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
+                                        <div class="overflow-hidden relative shrink-0">
+                                            <img src="Graphics/eve2.svg" alt="Spell Bee Poster" loading="lazy" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/111827?text=Spell+Bee'">
+                                            <div class="absolute top-2 right-2 bg-purple-600 dark:bg-white text-white dark:text-black text-[10px] font-bold px-2 py-1 rounded-lg shadow">Team: 1-3</div>
+                                        </div>
+                                        <div class="p-4 md:p-5 flex flex-col flex-grow">
+                                            <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">2. Spell Bee</h4>
+                                            <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">Test your vocabulary and quick thinking in this classic team challenge. Navigate through complex words and literary terms.</p>
+                                            <a href="https://forms.gle/XExp5wDceNVCYkys9" target="_blank" class="relative z-20 rulebook-link text-xs font-sans mt-auto">Register Now &rarr;</a>
+                                        </div>
                                     </div>
-                                </div>
-                                
-                                <!-- Sub Event 2: Spell Bee -->
-                                <div class="bg-white/50 dark:bg-slate-800/50 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
-                                    <div class="overflow-hidden relative shrink-0">
-                                        <img src="Graphics/eve2.svg" alt="Spell Bee Poster" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/334155?text=Spell+Bee'">
-                                        <div class="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow">Team: 1-3</div>
-                                    </div>
-                                    <div class="p-4 md:p-5 flex flex-col flex-grow">
-                                        <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">2. Spell Bee</h4>
-                                        <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">Test your vocabulary and quick thinking in this classic team challenge. Navigate through complex words and literary terms.</p>
-                                        <a href="https://forms.gle/XExp5wDceNVCYkys9" target="_blank" class="rulebook-link text-xs font-sans mt-auto text-purple-600 dark:text-purple-400">Register Now &rarr;</a>
-                                    </div>
-                                </div>
 
-                                <!-- Sub Event 3: Author Meet & Greet -->
-                                <div class="bg-white/50 dark:bg-slate-800/50 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
-                                    <div class="overflow-hidden shrink-0">
-                                        <img src="Graphics/eve3.png" alt="Author Meet and Greet Poster" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/334155?text=Meet+%26+Greet'">
+                                    <!-- Sub Event 3: Author Meet & Greet -->
+                                    <div class="bg-white/50 dark:bg-neutral-800/50 rounded-xl border border-gray-300 dark:border-neutral-700 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
+                                        <div class="overflow-hidden shrink-0">
+                                            <img src="Graphics/eve3.svg" alt="Author Meet and Greet Poster" loading="lazy" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/111827?text=Meet+%26+Greet'">
+                                        </div>
+                                        <div class="p-4 md:p-5 flex flex-col flex-grow">
+                                            <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">3. Author Meet & Greet</h4>
+                                            <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">An exclusive opportunity to interact with celebrated authors. Discuss their works, inspirations, and the art of storytelling.</p>
+                                            <a href="https://forms.gle/ijxeYnu1Nb6YruRx9" target="_blank" class="relative z-20 rulebook-link text-xs font-sans mt-auto">Reserve Your Spot &rarr;</a>
+                                        </div>
                                     </div>
-                                    <div class="p-4 md:p-5 flex flex-col flex-grow">
-                                        <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">3. Author Meet & Greet</h4>
-                                        <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">An exclusive opportunity to interact with celebrated authors. Discuss their works, inspirations, and the art of storytelling.</p>
-                                        <a href="https://forms.gle/ijxeYnu1Nb6YruRx9" target="_blank" class="rulebook-link text-xs font-sans mt-auto text-green-600 dark:text-green-400">Reserve Your Spot &rarr;</a>
-                                    </div>
-                                </div>
 
-                                <!-- Sub Event 4: Book Drive -->
-                                <div class="bg-white/50 dark:bg-slate-800/50 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
-                                    <div class="overflow-hidden shrink-0">
-                                        <img src="Graphics/eve4.svg" alt="Book Drive Poster" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/334155?text=Book+Drive'">
-                                    </div>
-                                    <div class="p-4 md:p-5 flex flex-col flex-grow">
-                                        <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">4. Book Drive</h4>
-                                        <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">Share the joy of reading. Donate your gently used books to help build a richer literary community for everyone.</p>
-                                        <a href="https://forms.google.com/" target="_blank" class="rulebook-link text-xs font-sans mt-auto text-orange-600 dark:text-orange-400">Participate &rarr;</a>
+                                    <!-- Sub Event 4: Book Drive -->
+                                    <div class="bg-white/50 dark:bg-neutral-800/50 rounded-xl border border-gray-300 dark:border-neutral-700 shadow-sm flex flex-col overflow-hidden hover:shadow-md transition-all group h-full">
+                                        <div class="overflow-hidden shrink-0">
+                                            <img src="Graphics/eve4.svg" alt="Book Drive Poster" loading="lazy" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e2e8f0/111827?text=Book+Drive'">
+                                        </div>
+                                        <div class="p-4 md:p-5 flex flex-col flex-grow">
+                                            <h4 class="font-serif font-bold text-gray-900 dark:text-white mb-2 text-base md:text-lg">4. Book Drive</h4>
+                                            <p class="text-xs text-gray-700 dark:text-gray-300 mb-3 md:mb-4 leading-relaxed font-sans flex-grow">Share the joy of reading. Donate your gently used books to help build a richer literary community for everyone.</p>
+                                            <a href="https://forms.google.com/" target="_blank" class="relative z-20 rulebook-link text-xs font-sans mt-auto">Participate &rarr;</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="flex justify-center md:justify-end shrink-0 pt-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
-                                <a href="#events" onclick="alert('Please use the individual registration links above for each specific Expression event.')" class="classic-btn w-full md:w-auto rounded-lg px-6 py-3 text-sm text-center inline-block shadow-md">
+                            <div class="flex justify-center md:justify-end shrink-0 pt-4 border-t border-gray-200 dark:border-neutral-800 mt-auto">
+                                <a href="#events" onclick="alert('Please use the individual registration links above for each specific Expression event.')" class="relative z-20 classic-btn w-full md:w-auto rounded-xl px-6 py-3 text-sm text-center inline-block shadow-md">
                                     View All Expression Events
                                 </a>
                             </div>
@@ -576,7 +602,7 @@
                 </div>
             </section>
 
-            <!-- Original Past Events Section -->
+            <!-- Past Events Section -->
             <section id="past-events" class="py-12 md:py-24 content-section">
                 <div class="container mx-auto px-4 sm:px-6 text-center">
                     <div class="reveal">
@@ -584,21 +610,21 @@
                         <p class="mt-3 md:mt-4 max-w-2xl mx-auto text-gray-600 dark:text-gray-300 text-base md:text-lg">Celebrating the memorable moments from our past events.</p>
                     </div>
                     <div class="mt-10 md:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-                        <div class="reveal paper-card rounded-2xl overflow-hidden card-hover flex flex-col h-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-800/80" style="transition-delay: 100ms;">
+                        <div class="reveal styled-card rounded-2xl overflow-hidden card-hover flex flex-col h-full dark:bg-neutral-900/80" style="transition-delay: 100ms;">
                             <img loading="lazy" src="Graphics/past events/books-by-weight.jpg" alt="Books By Weight" class="w-full h-48 md:h-56 object-cover">
                             <div class="p-6 md:p-8 text-left flex-grow">
                                 <h3 class="mt-2 font-serif text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Books By Weight</h3>
                                 <p class="mt-2 md:mt-3 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">A unique book sale where literary treasures were valued by the kilo.</p>
                             </div>
                         </div>
-                        <div class="reveal paper-card rounded-2xl overflow-hidden card-hover flex flex-col h-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-800/80" style="transition-delay: 200ms;">
+                        <div class="reveal styled-card rounded-2xl overflow-hidden card-hover flex flex-col h-full dark:bg-neutral-900/80" style="transition-delay: 200ms;">
                             <img loading="lazy" src="Graphics/past events/mun-py.jpeg" alt="MUN" class="w-full h-48 md:h-56 object-cover">
                             <div class="p-6 md:p-8 text-left flex-grow">
                                 <h3 class="mt-2 font-serif text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Model United Nation</h3>
                                 <p class="mt-2 md:mt-3 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">A dynamic simulation of parliamentary debate, fostering public speaking and critical thinking.</p>
                             </div>
                         </div>
-                        <div class="reveal paper-card rounded-2xl overflow-hidden card-hover flex flex-col h-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-800/80 sm:col-span-2 lg:col-span-1" style="transition-delay: 300ms;">
+                        <div class="reveal styled-card rounded-2xl overflow-hidden card-hover flex flex-col h-full dark:bg-neutral-900/80 sm:col-span-2 lg:col-span-1" style="transition-delay: 300ms;">
                             <img loading="lazy" src="Graphics/past events/ict-got-latent.jpeg" alt="ICT's Got Latent" class="w-full h-48 md:h-56 object-cover object-top">
                             <div class="p-6 md:p-8 text-left flex-grow">
                                 <h3 class="mt-2 font-serif text-xl md:text-2xl font-bold text-gray-900 dark:text-white">ICT's Got Latent</h3>
@@ -607,13 +633,13 @@
                         </div>
                     </div>
                     <div class="mt-8 md:mt-12">
-                        <a href="./gallery.html" class="inline-block border-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 px-6 py-2 md:px-8 md:py-3 rounded-full font-bold hover:bg-blue-600 hover:text-white dark:hover:bg-blue-400 dark:hover:text-slate-900 transition text-sm md:text-base">View Full Gallery &rarr;</a>
+                        <a href="./gallery.html" class="inline-block border-2 border-blue-600 dark:border-white text-blue-600 dark:text-white px-6 py-2 md:px-8 md:py-3 rounded-xl font-bold hover:bg-blue-600 hover:text-white dark:hover:bg-white dark:hover:text-black transition text-sm md:text-base btn-primary relative z-20">View Full Gallery &rarr;</a>
                     </div>
                 </div>
             </section>
 
-            <!-- Original Publications Section -->
-            <section id="publications" class="py-12 md:py-24 content-section bg-gradient-to-b from-blue-50/80 to-white/90 dark:from-slate-900/80 dark:to-slate-950/90">
+            <!-- Publications Section -->
+            <section id="publications" class="py-12 md:py-24 content-section bg-gradient-to-b from-blue-50/80 to-white/90 dark:from-black/80 dark:to-black/90">
                 <div class="container mx-auto px-4 sm:px-6 text-center">
                     <div class="reveal">
                         <h2 class="section-title font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">Latest Release</h2>
@@ -621,16 +647,16 @@
                     </div>
                     
                     <div class="mt-10 md:mt-16 flex flex-col lg:flex-row items-center justify-center gap-8 md:gap-12">
-                        <div class="reveal w-full max-w-xs md:max-w-sm rounded-xl overflow-hidden shadow-2xl transform hover:scale-105 transition duration-500 border border-gray-200 dark:border-gray-700">
-                            <img src="Graphics/spirit-cover.jpg" alt="Spirit Magazine Cover" class="w-full h-auto">
+                        <div class="reveal w-full max-w-xs md:max-w-sm rounded-xl overflow-hidden shadow-2xl transform hover:scale-105 transition duration-500 border border-gray-200 dark:border-neutral-800">
+                            <img loading="lazy" src="Graphics/spirit-cover.jpg" alt="Spirit Magazine Cover" class="w-full h-auto">
                         </div>
                         
-                        <div class="reveal max-w-lg text-left paper-card p-6 md:p-8 rounded-2xl w-full">
+                        <div class="reveal max-w-lg text-left styled-card p-6 md:p-8 rounded-2xl w-full">
                             <h3 class="font-serif text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4">The Spirit Magazine 2025</h3>
                             <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mb-6 md:mb-8 leading-relaxed">
                                 Dive into a collection of poetry, short stories, and artwork curated by the finest minds at ICT Mumbai. This edition explores themes of resilience, creativity, and the unspoken bonds that connect us all.
                             </p>
-                            <a href="https://drive.google.com/file/d/1pUaSY6ZayF5A4afZb47oWGztx5Nn3jvd/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition shadow-lg hover:shadow-xl text-sm md:text-base w-full sm:w-auto">
+                            <a href="https://drive.google.com/file/d/1pUaSY6ZayF5A4afZb47oWGztx5Nn3jvd/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center bg-blue-600 dark:bg-white text-white dark:text-black px-6 py-3 md:px-8 md:py-3.5 rounded-xl font-semibold hover:bg-blue-700 dark:hover:bg-gray-200 transition shadow-lg hover:shadow-xl text-sm md:text-base w-full sm:w-auto relative z-20 btn-primary">
                                 <svg class="w-4 h-4 md:w-5 md:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 Read Now
                             </a>
@@ -639,7 +665,7 @@
                 </div>
             </section>
            
-            <!-- Original Team Section (Firebase Dynamic) -->
+            <!-- Team Section (Firebase Dynamic) -->
             <section id="team" class="py-12 md:py-24 content-section">
                 <div class="container mx-auto">
                     <div class="reveal text-center px-4 sm:px-6">
@@ -647,45 +673,45 @@
                         <p class="mt-3 md:mt-4 max-w-2xl mx-auto text-gray-600 dark:text-gray-300 text-base md:text-lg">The dedicated individuals leading our literary journey.</p>
                     </div>
                     <div class="mt-10 md:mt-16 relative team-slider-container max-w-7xl mx-auto">
-                        <button id="scroll-left" class="hidden md:flex absolute top-1/2 -left-4 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-full w-14 h-14 items-center justify-center shadow-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition border border-gray-200 dark:border-gray-700 z-10 text-gray-800 dark:text-gray-200">
+                        <button id="scroll-left" class="hidden md:flex absolute top-1/2 -left-4 -translate-y-1/2 bg-white dark:bg-neutral-900 rounded-xl w-14 h-14 items-center justify-center shadow-xl hover:bg-gray-50 dark:hover:bg-neutral-800 transition border border-gray-200 dark:border-neutral-800 z-10 text-gray-800 dark:text-white active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                         </button>
 
                         <!-- DYNAMIC TEAM SCROLLER -->
-                        <div id="team-scroller" class="flex overflow-x-auto snap-x snap-mandatory gap-8 team-scroller">
+                        <div id="team-scroller" class="flex overflow-x-auto snap-x snap-mandatory gap-8 team-scroller scroll-smooth">
                             <div class="text-center p-8 w-full font-medium text-gray-500 dark:text-gray-400">Loading team members securely from database...</div>
                         </div>
                         
-                        <button id="scroll-right" class="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-full w-14 h-14 items-center justify-center shadow-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition border border-gray-200 dark:border-gray-700 z-10 text-gray-800 dark:text-gray-200">
+                        <button id="scroll-right" class="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 bg-white dark:bg-neutral-900 rounded-xl w-14 h-14 items-center justify-center shadow-xl hover:bg-gray-50 dark:hover:bg-neutral-800 transition border border-gray-200 dark:border-neutral-800 z-10 text-gray-800 dark:text-white active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                        </button>
                     </div>
                 </div>
             </section>
 
-            <!-- Original Contact/Subscribe -->
-            <section id="contact" class="py-16 md:py-24 content-section bg-gradient-to-t from-gray-50 to-white dark:from-slate-950 dark:to-slate-900">
+            <!-- Contact/Subscribe -->
+            <section id="contact" class="py-16 md:py-24 content-section bg-gradient-to-t from-gray-50 to-white dark:from-black dark:to-black">
                 <div class="container mx-auto px-4 sm:px-6 text-center">
-                    <div class="reveal paper-card max-w-3xl mx-auto p-12 rounded-3xl">
+                    <div class="reveal styled-card max-w-3xl mx-auto p-12 rounded-3xl">
                         <h2 class="font-serif text-4xl font-bold text-gray-900 dark:text-white">Join Our Newsletter</h2>
                         <p class="mt-4 text-gray-600 dark:text-gray-300 text-lg">
                             Ready to join the conversation? Subscribe to get updates on all our events and publications.
                         </p>
                         <div class="mt-10">
-                            <a href="./subscribe.html" class="inline-block bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-10 py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition transform">Subscribe Now</a>
+                            <a href="./subscribe.html" class="relative z-20 inline-block bg-gray-900 dark:bg-white text-white dark:text-black px-10 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition btn-primary">Subscribe Now</a>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Original Footer -->
-        <footer id="footer" class="bg-gray-900 text-gray-300">
+        <!-- Footer -->
+        <footer id="footer" class="bg-gray-900 text-gray-300 dark:bg-neutral-950">
             <div class="container mx-auto px-4 sm:px-6 py-16">
                 <div class="grid md:grid-cols-3 gap-12 text-center md:text-left">
                     <div class="flex flex-col items-center md:items-start">
                         <div class="flex items-center mb-4">
-                            <img src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-10 mr-3 brightness-0 invert">
+                            <img loading="lazy" src="Graphics/logos/litclublogo.svg" alt="LitClub Logo" class="h-10 mr-3 brightness-0 invert">
                             <h3 class="font-serif text-2xl font-bold text-white">LitClub ICT</h3>
                         </div>
                         <p class="text-gray-400 max-w-xs leading-relaxed">A haven for bibliophiles and wordsmiths at the Institute of Chemical Technology, Mumbai.</p>
@@ -693,26 +719,26 @@
                     <div>
                         <h4 class="font-bold text-white mb-6 text-lg tracking-wide uppercase">Navigate</h4>
                         <div class="grid grid-cols-2 gap-3">
-                            <a href="#home" class="text-gray-400 hover:text-white footer-link font-medium">Home</a>
-                            <a href="#about" class="text-gray-400 hover:text-white footer-link font-medium">About</a>
-                            <a href="#events" class="text-gray-400 hover:text-white footer-link font-medium">Upcoming</a>
-                            <a href="./gallery.html" class="text-gray-400 hover:text-white footer-link font-medium">Gallery</a>
-                            <a href="#team" class="text-gray-400 hover:text-white footer-link font-medium">Team</a>
+                            <a href="#home" class="text-gray-400 hover:text-white footer-link font-medium relative z-20">Home</a>
+                            <a href="#about" class="text-gray-400 hover:text-white footer-link font-medium relative z-20">About</a>
+                            <a href="#events" class="text-gray-400 hover:text-white footer-link font-medium relative z-20">Upcoming</a>
+                            <a href="./gallery.html" class="text-gray-400 hover:text-white footer-link font-medium relative z-20">Gallery</a>
+                            <a href="#team" class="text-gray-400 hover:text-white footer-link font-medium relative z-20">Team</a>
                         </div>
                     </div>
                     <div>
                         <h4 class="font-bold text-white mb-6 text-lg tracking-wide uppercase">Get in Touch</h4>
-                        <div class="text-gray-400 mb-8">
-                            <a href="mailto:litsecretary.ta@ug.ictmumbai.edu.in" class="text-blue-400 hover:text-blue-300 hover:underline footer-link font-medium">litsecretary.ta@ug.ictmumbai.edu.in</a>
+                        <div class="text-gray-400 mb-8 relative z-20">
+                            <a href="mailto:litsecretary.ta@ug.ictmumbai.edu.in" class="text-blue-400 hover:text-blue-300 hover:underline footer-link font-medium dark:text-gray-300 dark:hover:text-white">litsecretary.ta@ug.ictmumbai.edu.in</a>
                         </div>
-                        <div class="flex justify-center md:justify-start space-x-6">
+                        <div class="flex justify-center md:justify-start space-x-6 relative z-20">
                             <a href="#" class="text-gray-400 hover:text-white social-icon" aria-label="Facebook"><svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg></a>
                             <a href="#" class="text-gray-400 hover:text-white social-icon" aria-label="Twitter"><svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg></a>
                             <a href="https://www.instagram.com/the_lit_club_of_ict/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white social-icon" aria-label="Instagram"><svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.585-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.585.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg></a>
                         </div>
                     </div>
                 </div>
-                <hr class="my-10 border-gray-800">
+                <hr class="my-10 border-gray-800 dark:border-neutral-800">
                 <p class="text-center text-gray-500 text-sm font-medium">&copy; 2026 The Literary Club, ICT Mumbai. All Rights Reserved. | Designed with passion.</p>
             </div>
         </footer>
@@ -733,7 +759,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (Original Configuration Maintained) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
@@ -770,10 +796,10 @@
                     teamHTML += `
                         <div class="reveal text-center team-card snap-center flex-shrink-0">
                             <div class="relative w-48 h-48 mx-auto mb-5 team-card-photo" data-src="${member.imageUrl}">
-                                <img src="${member.imageUrl}" alt="${member.name}" class="w-full h-full rounded-full object-cover object-center shadow-lg border-4 border-white dark:border-gray-800 transition transform hover:scale-105">
+                                <img src="${member.imageUrl}" alt="${member.name}" loading="lazy" class="w-full h-full rounded-full object-cover object-center shadow-lg border-4 border-white dark:border-neutral-800 transition transform hover:scale-105">
                             </div>
                             <h3 class="text-xl font-bold text-gray-900 dark:text-white font-serif">${member.name}</h3>
-                            <p class="text-blue-600 dark:text-blue-400 font-medium text-sm mt-1 uppercase tracking-wide">${member.role}</p>
+                            <p class="text-blue-600 dark:text-gray-300 font-medium text-sm mt-1 uppercase tracking-wide">${member.role}</p>
                         </div>
                     `;
                 });
@@ -793,11 +819,13 @@
         // --- END: Dynamic Team Loading ---
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Init Data
             loadTeamMembers();
 
-            // Init Smooth Scroll
-            const lenis = new Lenis();
+            // Minimal hardware accelerated Lenis Smooth Scroll
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
             function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
 
@@ -806,7 +834,6 @@
             const darkIcons = document.querySelectorAll('#theme-toggle-dark-icon, .theme-dark-icon');
             const lightIcons = document.querySelectorAll('#theme-toggle-light-icon, .theme-light-icon');
 
-            // Set initial icons based on theme
             if (document.documentElement.classList.contains('dark')) {
                 lightIcons.forEach(icon => icon.classList.remove('hidden'));
             } else {
@@ -829,12 +856,12 @@
                 });
             });
 
-            // --- Animated Firefly Canvas Logic ---
+            // --- Optimized Canvas Logic ---
             const canvas = document.getElementById('fireflies-canvas');
             if(canvas) {
                 const ctx = canvas.getContext('2d');
                 let particles = [];
-                const maxParticles = 75;
+                const maxParticles = window.innerWidth < 768 ? 20 : 50;
 
                 function resizeCanvas() {
                     canvas.width = window.innerWidth;
@@ -849,7 +876,7 @@
                         this.y = Math.random() * canvas.height;
                         this.size = Math.random() * 1.5 + 0.5;
                         this.speedX = (Math.random() - 0.5) * 0.5;
-                        this.speedY = (Math.random() - 0.5) * 0.5 - 0.2; // Slight upward float
+                        this.speedY = (Math.random() - 0.5) * 0.5 - 0.2; 
                         this.life = Math.random() * Math.PI * 2; 
                         this.blinkRate = Math.random() * 0.02 + 0.01;
                     }
@@ -864,28 +891,21 @@
                         if (this.y > canvas.height) this.y = 0;
                     }
                     draw(isDark) {
-                        // Pulse opacity calculation
                         const pulse = (Math.sin(this.life) + 1) / 2;
-                        
                         ctx.beginPath();
-                        
                         if (isDark) {
-                            // Dark Mode: Magical Forest Fireflies
                             const opacity = pulse * 0.7 + 0.1;
                             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                             ctx.fillStyle = `rgba(212, 255, 122, ${opacity})`;
-                            ctx.shadowBlur = 12;
+                            ctx.shadowBlur = 10;
                             ctx.shadowColor = `rgba(212, 255, 122, ${opacity})`;
                         } else {
-                            // Light Mode: Golden Dust Motes / Library Sunbeams
                             const opacity = pulse * 0.35 + 0.05;
-                            // Make them slightly larger and much softer for light mode
                             ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
-                            ctx.fillStyle = `rgba(218, 165, 32, ${opacity})`; // Warm Goldenrod
-                            ctx.shadowBlur = 8;
+                            ctx.fillStyle = `rgba(218, 165, 32, ${opacity})`;
+                            ctx.shadowBlur = 6;
                             ctx.shadowColor = `rgba(255, 255, 255, ${opacity * 0.5})`;
                         }
-                        
                         ctx.fill();
                     }
                 }
@@ -896,10 +916,7 @@
 
                 function animateParticles() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    // Check theme state once per frame for high stability
                     const isDark = document.documentElement.classList.contains('dark');
-                    
                     particles.forEach(p => {
                         p.update();
                         p.draw(isDark);
@@ -909,7 +926,7 @@
                 animateParticles();
             }
 
-            // --- Notification System Logic ---
+            // --- Notification System Logic (Globally Accessible) ---
             const bell = document.getElementById('notification-bell');
             const mobileBell = document.getElementById('mobile-notification-bell');
             const notifPanel = document.getElementById('notification-panel');
@@ -917,15 +934,15 @@
             const toggleNotif = (e) => {
                 e.stopPropagation();
                 notifPanel.classList.toggle('active');
-                if(bell) bell.style.animation = 'none'; // stop ringing
+                if(bell) bell.style.animation = 'none'; 
                 if(mobileBell) mobileBell.style.animation = 'none';
             };
 
-            bell.addEventListener('click', toggleNotif);
-            mobileBell.addEventListener('click', toggleNotif);
+            if(bell) bell.addEventListener('click', toggleNotif);
+            if(mobileBell) mobileBell.addEventListener('click', toggleNotif);
 
             document.addEventListener('click', (e) => {
-                if (!notifPanel.contains(e.target) && !bell.contains(e.target) && !mobileBell.contains(e.target)) {
+                if (notifPanel && !notifPanel.contains(e.target) && (bell && !bell.contains(e.target)) && (mobileBell && !mobileBell.contains(e.target))) {
                     notifPanel.classList.remove('active');
                 }
             });
@@ -933,19 +950,19 @@
             // --- Modals Logic ---
             const flyerModal = document.getElementById('flyer-modal');
             const flyerModalCloseBtn = document.getElementById('flyer-modal-close');
-            const viewFlyerBtn = document.getElementById('view-flyer-btn'); // Trigger from notif panel
+            const viewFlyerBtn = document.getElementById('view-flyer-btn'); 
 
-            const openFlyer = () => flyerModal.classList.add('active');
-            const closeFlyer = () => flyerModal.classList.remove('active');
+            const openFlyer = () => flyerModal && flyerModal.classList.add('active');
+            const closeFlyer = () => flyerModal && flyerModal.classList.remove('active');
 
             if(viewFlyerBtn) {
                 viewFlyerBtn.addEventListener('click', () => {
-                    notifPanel.classList.remove('active');
+                    if(notifPanel) notifPanel.classList.remove('active');
                     openFlyer();
                 });
             }
-            flyerModalCloseBtn.addEventListener('click', closeFlyer);
-            flyerModal.addEventListener('click', (e) => { if(e.target === flyerModal) closeFlyer(); });
+            if(flyerModalCloseBtn) flyerModalCloseBtn.addEventListener('click', closeFlyer);
+            if(flyerModal) flyerModal.addEventListener('click', (e) => { if(e.target === flyerModal) closeFlyer(); });
             
             const photoModal = document.getElementById('photo-modal');
             const photoModalImg = document.getElementById('photo-modal-img');
@@ -953,7 +970,7 @@
             
             document.body.addEventListener('dblclick', function(e) {
                 const photoCard = e.target.closest('.team-card-photo');
-                if (photoCard) {
+                if (photoCard && photoModal && photoModalImg) {
                      const imgSrc = photoCard.dataset.src;
                     if(imgSrc) {
                         photoModalImg.src = imgSrc;
@@ -962,20 +979,21 @@
                 }
             });
 
-            const closePhotoModal = () => photoModal.classList.remove('active');
-            photoModalCloseBtn.addEventListener('click', closePhotoModal);
-            photoModal.addEventListener('click', (e) => { if(e.target === photoModal) closePhotoModal(); });
+            const closePhotoModal = () => photoModal && photoModal.classList.remove('active');
+            if(photoModalCloseBtn) photoModalCloseBtn.addEventListener('click', closePhotoModal);
+            if(photoModal) photoModal.addEventListener('click', (e) => { if(e.target === photoModal) closePhotoModal(); });
 
             // --- Navigation & Mobile Menu Logic ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    if (notifPanel) notifPanel.classList.remove('active');
+                });
                 mobileMenu.addEventListener('click', (e) => {
                     if (e.target.tagName === 'A') {
                         mobileMenu.classList.add('hidden');
-                        const targetId = e.target.getAttribute('href');
-                        if (targetId.startsWith('#')) lenis.scrollTo(targetId);
                     }
                 });
             }
@@ -991,16 +1009,31 @@
                 });
             });
             
-            // --- Flip Card Logic ---
+            // --- Mobile Interaction Fix: Flip Card Overriding Links ---
             const heroCardInner = document.getElementById('hero-card-inner');
             const heroCardContainer = document.querySelector('.flip-card');
             if (heroCardInner && heroCardContainer) {
-                const flipCard = () => heroCardInner.classList.toggle('is-flipped');
+                const flipCard = (e) => {
+                    if (e && (e.target.closest('a') || e.target.closest('button'))) return;
+                    heroCardInner.classList.toggle('is-flipped');
+                };
+
                 heroCardContainer.addEventListener('click', flipCard);
+                
                 let touchStartX = 0;
-                heroCardContainer.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+                let touchStartY = 0;
+                heroCardContainer.addEventListener('touchstart', (e) => { 
+                    touchStartX = e.touches[0].clientX; 
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+                
                 heroCardContainer.addEventListener('touchend', (e) => {
-                    if (Math.abs(e.changedTouches[0].clientX - touchStartX) > 50) flipCard();
+                    if (e.target.closest('a') || e.target.closest('button')) return;
+                    const deltaX = Math.abs(e.changedTouches[0].clientX - touchStartX);
+                    const deltaY = Math.abs(e.changedTouches[0].clientY - touchStartY);
+                    if (deltaX > 50 && deltaX > deltaY) {
+                        flipCard(e);
+                    }
                 });
             }
             
